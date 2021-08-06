@@ -66,7 +66,7 @@
       <article class="post" id="post">
   <header class="post-head">
     <h1 class="post-title">
-      <a class="title" href="/2021/08/06/WebGPU%202.1.%20Security%202.2.%20GPU-based%20undefined%20behavior/">
+      <a class="title" href="/2021/08/06/WebGPU%202.1.%20Security/">
         WebGPU 2.1. Security
       </a>
     </h1>
@@ -100,20 +100,10 @@
 <p>为了禁止不安全的使用，WebGPU为任何输入定义了允许的行为范围。一个实现必须验证来自用户的所有输入，并且只使用有效的工作负载到达驱动程序。本文档指定了所有错误条件和处理语义。例如，在copyBufferToBuffer（）的“源”和“目标”中指定具有相交范围的相同缓冲区会导致GPUCommandendCoder生成错误，并且不会发生其他操作。</p>
 <p>See <a target="_blank" rel="noopener" href="https://gpuweb.github.io/gpuweb/#errors-and-debugging">§ 20 Errors &amp; Debugging</a> for more information about error handling.</p>
 <p>见<a target="_blank" rel="noopener" href="https://gpuweb.github.io/gpuweb/#errors-and-debugging">§ 20 Errors &amp; Debugging</a>，了解有关错误处理的更多信息。</p>
-<hr>
-<h2 id="title-2-2-GPU-based-undefined-behavior"><a href="#title-2-2-GPU-based-undefined-behavior" class="headerlink" title="title: 2.2. GPU-based undefined behavior"></a>title: 2.2. GPU-based undefined behavior</h2><p>WebGPU shaders are executed by the compute units inside GPU hardware. In native APIs, some of the shader instructions may result in undefined behavior on the GPU. In order to address that, the shader instruction set and its defined behaviors are strictly defined by WebGPU. When a shader is provided to createShaderModule(), the WebGPU implementation has to validate it before doing any translation (to platform-specific shaders) or transformation passes.</p>
-<p>WebGPU着色器由GPU硬件内的计算单元执行。在本机API中，某些着色器指令可能会导致GPU上出现未定义的行为。为了解决这个问题，着色器指令集及其定义的行为由WebGPU严格定义。当为createShaderModule()提供着色器时，WebGPU实现必须在执行任何转换（到特定于平台的着色器）或转换过程之前对其进行验证。</p>
 
   </div>
 </article>
 
-    <aside class="post-widget">
-        <nav class="post-toc-wrap" id="post-toc">
-            <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#title-2-2-GPU-based-undefined-behavior"><span class="post-toc-number">1.</span> <span class="post-toc-text">title: 2.2. GPU-based undefined behavior</span></a></li></ol>
-        </nav>
-    </aside>
-   
     </div>
     <footer class="footer-nav">
       <div class="footer">
