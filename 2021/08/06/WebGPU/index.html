@@ -67,7 +67,7 @@
   <header class="post-head">
     <h1 class="post-title">
       <a class="title" href="/2021/08/06/WebGPU/">
-        WebGPU
+        WebGPU 1. Introduction
       </a>
     </h1>
   </header>
@@ -91,30 +91,16 @@
   
 
   <div class="article-entry" itemprop="articleBody">
-    <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+    <p>Graphics Processing Units, or GPUs for short, have been essential in enabling rich rendering and computational applications in personal computing. WebGPU is an API that exposes the capabilities of GPU hardware for the Web. The API is designed from the ground up to efficiently map to the Vulkan, Direct3D 12, and Metal native GPU APIs. WebGPU is not related to WebGL and does not explicitly target OpenGL ES.</p>
+<p>图形处理单元，简称GPU，对于在个人计算中实现丰富的渲染和计算应用至关重要。WebGPU是一种API，它暴露了用于Web的GPU硬件的功能。该API从头设计，能够高效地映射到Vulkan、Direct3D 12和Metal原生GPU API。WebGPU与WebGL无关，也不明确对应OpenGL ES。</p>
+<p>WebGPU sees physical GPU hardware as GPUAdapters. It provides a connection to an adapter via GPUDevice, which manages resources, and the device’s GPUQueues, which execute commands. GPUDevice may have its own memory with high-speed access to the processing units. GPUBuffer and GPUTexture are the physical resources backed by GPU memory. GPUCommandBuffer and GPURenderBundle are containers for user-recorded commands. GPUShaderModule contains shader code. The other resources, such as GPUSampler or GPUBindGroup, configure the way physical resources are used by the GPU.</p>
+<p>WebGPU将物理GPU硬件视为GPU适配器。它通过GPUDevice（管理资源）和设备的gpu队列（执行命令）提供到适配器的连接。GPUDevice可能有自己的内存，可以对处理单元进行高速访问。GPUBuffer和GPUTexture是GPU内存支持的物理资源。GPUCommandBuffer和GPURenderBundle是用户记录命令的容器。GPUShaderModule包含着色器代码。其他资源，如GPUSampler或GPUBindGroup，配置GPU使用物理资源的方式。</p>
+<p>GPUs execute commands encoded in GPUCommandBuffers by feeding data through a pipeline, which is a mix of fixed-function and programmable stages. Programmable stages execute shaders, which are special programs designed to run on GPU hardware. Most of the state of a pipeline is defined by a GPURenderPipeline or a GPUComputePipeline object. The state not included in these pipeline objects is set during encoding with commands, such as beginRenderPass() or setBlendConstant().</p>
+<p>GPU执行GPUCommandBuffers中编码的命令，方法是通过管道传送数据，这是固定功能和可编程阶段的混合。可编程阶段执行着色器，着色器是专为在GPU硬件上运行而设计的特殊程序。管道的大部分状态由GPURenderPipeline或GPUComputePipeline对象定义。这些管道对象中未包含的状态是在使用命令（如beginRenderPass()或setBlendConstant()进行编码时设置的。</p>
 
   </div>
 </article>
 
-    <aside class="post-widget">
-        <nav class="post-toc-wrap" id="post-toc">
-            <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Quick-Start"><span class="post-toc-number">1.</span> <span class="post-toc-text">Quick Start</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Create-a-new-post"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">Create a new post</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Run-server"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">Run server</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Generate-static-files"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">Generate static files</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Deploy-to-remote-sites"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
-        </nav>
-    </aside>
-   
     </div>
     <footer class="footer-nav">
       <div class="footer">
