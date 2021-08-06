@@ -1,144 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <title>qianqians'blog - </title>
-    
-      <link rel="icon" href="/img/favicon.ico">
-    
-    <meta name="keyword"  content="">
-    
-<link rel="stylesheet" href="/css/style.css">
-
-<meta name="generator" content="Hexo 5.4.0"></head>
+{% extends '_layout.swig' %}
+{% import '_macro/post.swig' as post_template %}
+{% import '_macro/sidebar.swig' as sidebar_template %}
 
 
-<body>
-  <div class="loading-wrapper">
-    <div class="loading">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-  </div>
-  <div class="page">
-    <div class="head">
-      <header class="head-header">
-  <h1 class="head-authorH">
-    <a href="/" class="head-authorLink">
-      qianqians&#39;blog</a>
-  </h1>
-  <div class="head-right">
-    <!-- <div class="head-search">
-      <input class="head-searchK"></input>
-      <span class="head-searchT">
-        </span>
-    </div> -->
-    <button class="barWrap" id="barWrap-toggle">
-      <span class="bar"></span>
-      <span class="bar"></span>
-      <span class="bar"></span>
-    </button>
-    <div class="head-about" id="head-about">
-      
-      <a class="head-aboutLink" href="/about">
-        关于</a>
-      
-    </div>
-  </div>
-</header>
-    </div>
-    <div class="main">
-      <div class="barShow-head" id="barShow">
-  <ul class="barShow-ul">
-    
-      <li class="barShow-item">
-        <a href="/archives"><span>
-            Archives</span></a>
-      </li>
-    
-  </ul>
-</div>
-      <article class="post" id="post">
-  <header class="post-head">
-    <h1 class="post-title">
-      <a class="title" href="/2021/08/06/WebGPU%202.4.%20Out-of-bounds%20access%20in%20shaders/">
-        WebGPU 2.4. Out-of-bounds access in shaders
-      </a>
-    </h1>
-  </header>
-  <div class="post-datetag">
-    <div class="post-date">
-      <time class="post-time" title="2021-08-06 17:48:34" datetime="2021-08-06T09:48:34.423Z" itemprop="datePublished">
-  2021-08-06</time>
-    </div>
-    <div class="post-tag">
-      
+{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
+
+{% block page_class %}page-post-detail{% endblock %}
+
+
+{% block content %}
+
+  <div id="posts" class="posts-expand">
+    {{ post_template.render(page) }}
+
+    <div class="post-spread">
+      {% if theme.jiathis %}
+        {% include '_partials/share/jiathis.swig' %}
+      {% elseif theme.baidushare %}
+        {% include '_partials/share/baidushare.swig' %}
+      {% elseif theme.add_this_id %}
+        {% include '_partials/share/add-this.swig' %}
+      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
+        {% include '_partials/share/duoshuo_share.swig' %}
+      {% endif %}
     </div>
   </div>
 
-  
-    <div class="post-cc">
-      版权声明：
-        
-          署名-非商业性使用-相同方式共享 | <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/2.5/cn/">CC BY-NC-SA 2.5 CN</a>
-        
-    </div>
-  
+{% endblock %}
 
-  <div class="article-entry" itemprop="articleBody">
-    <p>Shaders can access physical resources either directly (for example, as a “uniform” GPUBufferBinding), or via texture units, which are fixed-function hardware blocks that handle texture coordinate conversions. Validation on the API side can only guarantee that all the inputs to the shader are provided and they have the correct usage and types. The host API side can not guarantee that the data is accessed within bounds if the texture units are not involved.</p>
-<p>着色器可以直接访问物理资源(例如，作为”uniform”GPUBufferBinding)，也可以通过纹理单元访问物理资源，纹理单元是处理纹理坐标转换的固定功能硬件块。API端的验证只能保证提供了着色器的所有输入，并且它们具有正确的用法和类型。如果涉及纹理单元，则宿主API端无法保证在边界内访问数据。</p>
-<p>In order to prevent the shaders from accessing GPU memory an application doesn’t own, the WebGPU implementation may enable a special mode (called “robust buffer access”) in the driver that guarantees that the access is limited to buffer bounds.</p>
-<p>为了防止着色器访问应用程序不拥有的GPU内存，WebGPU实现可以在驱动程序中启用一种特殊模式（称为”robust buffer access”），以确保访问仅限于缓冲区边界内。</p>
-<p>Alternatively, an implementation may transform the shader code by inserting manual bounds checks. When this path is taken, the out-of-bound checks only apply to array indexing. They aren’t needed for plain field access of shader structures due to the minBindingSize validation on the host side.</p>
-<p>或者，WebGPU实现可以通过手动插入边界检查来变换着色器代码。采用此方法时，越界检查仅适用于数组索引。由于主机端的minBindingSize验证，访问着色器结构的普通字段不需要它们。</p>
-<p>If the shader attempts to load data outside of physical resource bounds, the implementation is allowed to:<br> 1.return a value at a different location within the resource bounds<br> 2.return a value vector of “(0, 0, 0, X)” with any “X”<br> 3.partially discard the draw or dispatch call</p>
-<p>如果着色器尝试加载物理资源边界之外的数据，则允许WebGPU实现：<br> 1.在资源范围内的不同位置返回值<br> 2.返回带有任意”X”的(0，0，0，X)向量<br> 3.部分放弃the draw or dispatch call</p>
-<p>If the shader attempts to write data outside of physical resource bounds, the implementation is allowed to:<br> 1.write the value to a different location within the resource bounds<br> 2.discard the write operation<br> 3.partially discard the draw or dispatch call</p>
-<p>如果着色器尝试写入物理资源边界之外的数据，则允许WebGPU实现：<br> 1.将值写入资源边界内的其他位置<br> 2.放弃写入操作<br> 3.部分放弃the draw or dispatch call</p>
+{% block sidebar %}
+  {{ sidebar_template.render(true) }}
+{% endblock %}
 
-  </div>
-</article>
-
-    </div>
-    <footer class="footer-nav">
-      <div class="footer">
-        <span class="footer-msg">
-  
-  
-  
-  
-    <span class="timeDivide">-</span>
-    2021
-  
-  qianqians.&nbsp;
-  Power by
-  <a href="https://hexo.io/" target="_blank" rel="external nofollow">Hexo</a>
-  and
-  <a class="orangelink" href="https://github.com/" target="_blank" rel="">
-    hexo-theme-yuzu</a>
-</span>
-
-      </div>
-    </footer>
-    <div class="back-top" id="back-top">
-      <i class="back-top-icon"></i>
-    </div>
-    
-
-  <script src="/js/jquery/jquery-3.1.1.min.js"></script>
-
-    
-<script src="/js/theme.js"></script>
-
-    
-<script src="/js/index.js"></script>
-
-
-  </div>
-</body>
+{% block script_extra %}
+  {% include '_scripts/pages/post-details.swig' %}
+{% endblock %}

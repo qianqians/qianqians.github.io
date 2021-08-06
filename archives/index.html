@@ -1,218 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <title>qianqians'blog - </title>
-    
-      <link rel="icon" href="/img/favicon.ico">
-    
-    <meta name="keyword"  content="">
-    
-<link rel="stylesheet" href="/css/style.css">
+{% extends '_layout.swig' %}
+{% import '_macro/post-collapse.swig' as post_template %}
+{% import '_macro/sidebar.swig' as sidebar_template %}
 
-<meta name="generator" content="Hexo 5.4.0"></head>
+{% block title %}{{ __('title.archive') }} | {{ config.title }}{% endblock %}
 
+{% block page_class %}page-archive{% endblock %}
 
-<body>
-  <div class="loading-wrapper">
-    <div class="loading">
-      <span></span>
-      <span></span>
-      <span></span>
+{% block content %}
+
+  {#####################}
+  {### ARCHIVE BLOCK ###}
+  {#####################}
+  <div class="post-block archive">
+    <div id="posts" class="posts-collapse">
+      <span class="archive-move-on"></span>
+
+      <span class="archive-page-counter">
+        {% set cheers %}
+        {% set posts_length = site.posts.length %}
+        {% if posts_length > 210 %} {% set cheers = 'excellent' %}
+          {% elif posts_length > 130 %} {% set cheers = 'great' %}
+          {% elif posts_length > 80 %} {% set cheers = 'good' %}
+          {% elif posts_length > 50 %} {% set cheers = 'nice' %}
+          {% elif posts_length > 30 %} {% set cheers = 'ok' %}
+        {% else %}
+          {% set cheers = 'um' %}
+        {% endif %}
+        {{ __('cheers.' + cheers) }}! {{ _p("counter.archive_posts", site.posts.length) }} {{ __('keep_on') }}
+      </span>
+
+      {% for post in page.posts %}
+
+        {# Show year #}
+        {% set year %}
+        {% set post.year = date(post.date, 'YYYY') %}
+
+        {% if post.year !== year %}
+          {% set year = post.year %}
+          <div class="collection-title">
+            <{% if theme.seo %}h2{% else %}h1{% endif %} class="archive-year" id="archive-year-{{ year }}">{{ year }}</{% if theme.seo %}h2{% else %}h1{% endif %}>
+          </div>
+        {% endif %}
+        {# endshow #}
+
+        {{ post_template.render(post) }}
+
+      {% endfor %}
+
     </div>
   </div>
-  <div class="page">
-    <div class="head">
-      <header class="head-header">
-  <h1 class="head-authorH">
-    <a href="/" class="head-authorLink">
-      qianqians&#39;blog</a>
-  </h1>
-  <div class="head-right">
-    <!-- <div class="head-search">
-      <input class="head-searchK"></input>
-      <span class="head-searchT">
-        </span>
-    </div> -->
-    <button class="barWrap" id="barWrap-toggle">
-      <span class="bar"></span>
-      <span class="bar"></span>
-      <span class="bar"></span>
-    </button>
-    <div class="head-about" id="head-about">
-      
-      <a class="head-aboutLink" href="/about">
-        关于</a>
-      
-    </div>
-  </div>
-</header>
-    </div>
-    <div class="main">
-      <div class="barShow-head" id="barShow">
-  <ul class="barShow-ul">
-    
-      <li class="barShow-item">
-        <a href="/archives"><span>
-            Archives</span></a>
-      </li>
-    
-  </ul>
-</div>
-      
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <span class="archive-year">2021</span>
-        </div>
-        <div class="archives-year-cont">
-    
-    <div class="archive-item">
-  <span class="archive-artDate">
-    <time class="post-time" title="2021-08-06 17:48:34" datetime="2021-08-06T09:48:34.423Z" itemprop="datePublished">
-      8月 06
-    </time>
-  </span>
-  <span class="archive-arttitle">
-    
-        
-          <a href="/2021/08/06/WebGPU%202.4.%20Out-of-bounds%20access%20in%20shaders/">
-            WebGPU 2.4. Out-of-bounds access in shaders
-          </a>
-          
-                
-  </span>
-</div>
-  
-    
-    
-    <div class="archive-item">
-  <span class="archive-artDate">
-    <time class="post-time" title="2021-08-06 17:36:33" datetime="2021-08-06T09:36:33.334Z" itemprop="datePublished">
-      8月 06
-    </time>
-  </span>
-  <span class="archive-arttitle">
-    
-        
-          <a href="/2021/08/06/WebGPU%202.3.%20Uninitialized%20data/">
-            WebGPU 2.3. Uninitialized data
-          </a>
-          
-                
-  </span>
-</div>
-  
-    
-    
-    <div class="archive-item">
-  <span class="archive-artDate">
-    <time class="post-time" title="2021-08-06 17:33:10" datetime="2021-08-06T09:33:10.610Z" itemprop="datePublished">
-      8月 06
-    </time>
-  </span>
-  <span class="archive-arttitle">
-    
-        
-          <a href="/2021/08/06/WebGPU%202.2.%20GPU-based%20undefined%20behavior/">
-            WebGPU 2.2. GPU-based undefined behavior
-          </a>
-          
-                
-  </span>
-</div>
-  
-    
-    
-    <div class="archive-item">
-  <span class="archive-artDate">
-    <time class="post-time" title="2021-08-06 17:13:22" datetime="2021-08-06T09:13:22.771Z" itemprop="datePublished">
-      8月 06
-    </time>
-  </span>
-  <span class="archive-arttitle">
-    
-        
-          <a href="/2021/08/06/WebGPU%202.1.%20Security/">
-            WebGPU 2.1. Security
-          </a>
-          
-                
-  </span>
-</div>
-  
-    
-    
-    <div class="archive-item">
-  <span class="archive-artDate">
-    <time class="post-time" title="2021-08-06 15:58:00" datetime="2021-08-06T07:58:00.476Z" itemprop="datePublished">
-      8月 06
-    </time>
-  </span>
-  <span class="archive-arttitle">
-    
-        
-          <a href="/2021/08/06/WebGPU%201.%20Introduction/">
-            WebGPU 1. Introduction
-          </a>
-          
-                
-  </span>
-</div>
-  
-  
-    </div></section>
-  
+  {#########################}
+  {### END ARCHIVE BLOCK ###}
+  {#########################}
 
-<div class="archive-pagination">
-    
-    
+  {% include '_partials/pagination.swig' %}
 
-</div>
+{% endblock %}
 
-    </div>
-    <footer class="footer-nav">
-      <div class="footer">
-        <span class="footer-msg">
-  
-  
-  
-  
-    <span class="timeDivide">-</span>
-    2021
-  
-  qianqians.&nbsp;
-  Power by
-  <a href="https://hexo.io/" target="_blank" rel="external nofollow">Hexo</a>
-  and
-  <a class="orangelink" href="https://github.com/" target="_blank" rel="">
-    hexo-theme-yuzu</a>
-</span>
-
-      </div>
-    </footer>
-    <div class="back-top" id="back-top">
-      <i class="back-top-icon"></i>
-    </div>
-    
-
-  <script src="/js/jquery/jquery-3.1.1.min.js"></script>
-
-    
-<script src="/js/theme.js"></script>
-
-    
-<script src="/js/index.js"></script>
-
-
-  </div>
-</body>
+{% block sidebar %}
+  {{ sidebar_template.render(false) }}
+{% endblock %}

@@ -1,143 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <title>qianqians'blog - </title>
-    
-      <link rel="icon" href="/img/favicon.ico">
-    
-    <meta name="keyword"  content="">
-    
-<link rel="stylesheet" href="/css/style.css">
-
-<meta name="generator" content="Hexo 5.4.0"></head>
+{% extends '_layout.swig' %}
+{% import '_macro/post.swig' as post_template %}
+{% import '_macro/sidebar.swig' as sidebar_template %}
 
 
-<body>
-  <div class="loading-wrapper">
-    <div class="loading">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-  </div>
-  <div class="page">
-    <div class="head">
-      <header class="head-header">
-  <h1 class="head-authorH">
-    <a href="/" class="head-authorLink">
-      qianqians&#39;blog</a>
-  </h1>
-  <div class="head-right">
-    <!-- <div class="head-search">
-      <input class="head-searchK"></input>
-      <span class="head-searchT">
-        </span>
-    </div> -->
-    <button class="barWrap" id="barWrap-toggle">
-      <span class="bar"></span>
-      <span class="bar"></span>
-      <span class="bar"></span>
-    </button>
-    <div class="head-about" id="head-about">
-      
-      <a class="head-aboutLink" href="/about">
-        关于</a>
-      
-    </div>
-  </div>
-</header>
-    </div>
-    <div class="main">
-      <div class="barShow-head" id="barShow">
-  <ul class="barShow-ul">
-    
-      <li class="barShow-item">
-        <a href="/archives"><span>
-            Archives</span></a>
-      </li>
-    
-  </ul>
-</div>
-      <article class="post" id="post">
-  <header class="post-head">
-    <h1 class="post-title">
-      <a class="title" href="/2021/08/06/WebGPU%202.1.%20Security/">
-        WebGPU 2.1. Security
-      </a>
-    </h1>
-  </header>
-  <div class="post-datetag">
-    <div class="post-date">
-      <time class="post-time" title="2021-08-06 17:13:22" datetime="2021-08-06T09:13:22.771Z" itemprop="datePublished">
-  2021-08-06</time>
-    </div>
-    <div class="post-tag">
-      
+{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
+
+{% block page_class %}page-post-detail{% endblock %}
+
+
+{% block content %}
+
+  <div id="posts" class="posts-expand">
+    {{ post_template.render(page) }}
+
+    <div class="post-spread">
+      {% if theme.jiathis %}
+        {% include '_partials/share/jiathis.swig' %}
+      {% elseif theme.baidushare %}
+        {% include '_partials/share/baidushare.swig' %}
+      {% elseif theme.add_this_id %}
+        {% include '_partials/share/add-this.swig' %}
+      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
+        {% include '_partials/share/duoshuo_share.swig' %}
+      {% endif %}
     </div>
   </div>
 
-  
-    <div class="post-cc">
-      版权声明：
-        
-          署名-非商业性使用-相同方式共享 | <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/2.5/cn/">CC BY-NC-SA 2.5 CN</a>
-        
-    </div>
-  
+{% endblock %}
 
-  <div class="article-entry" itemprop="articleBody">
-    <p>The security requirements for WebGPU are the same as ever for the web, and are likewise non-negotiable. The general approach is strictly validating all the commands before they reach GPU, ensuring that a page can only work with its own data.</p>
-<p>WebGPU的安全要求与web的安全要求一样，同样是不可妥协的。一般的方法是在所有命令到达GPU之前严格验证它们，确保页面只能使用自己的数据。</p>
-<p>2.1.1. CPU-based undefined behavior</p>
-<p>A WebGPU implementation translates the workloads issued by the user into API commands specific to the target platform. Native APIs specify the valid usage for the commands (for example, see vkCreateDescriptorSetLayout) and generally don’t guarantee any outcome if the valid usage rules are not followed. This is called “undefined behavior”, and it can be exploited by an attacker to access memory they don’t own, or force the driver to execute arbitrary code.</p>
-<p>WebGPU实现将用户发出的工作请求转换为目标平台的特定API命令。本机API指定命令的有效用法（例如，请参见vkCreateDescriptorSetLayout），如果不遵循有效用法规则，通常不保证任何结果。这被称为“未定义行为”，攻击者可以利用它来访问他们不可访问的内存，或强制驱动程序执行任意代码。</p>
-<p>In order to disallow insecure usage, the range of allowed WebGPU behaviors is defined for any input. An implementation has to validate all the input from the user and only reach the driver with the valid workloads. This document specifies all the error conditions and handling semantics. For example, specifying the same buffer with intersecting ranges in both “source” and “destination” of copyBufferToBuffer() results in GPUCommandEncoder generating an error, and no other operation occurring.</p>
-<p>为了禁止不安全的使用，WebGPU为任何输入定义了允许的行为范围。一个实现必须验证来自用户的所有输入，并且只使用有效的工作负载到达驱动程序。本文档指定了所有错误条件和处理语义。例如，在copyBufferToBuffer（）的“源”和“目标”中指定具有相交范围的相同缓冲区会导致GPUCommandendCoder生成错误，并且不会发生其他操作。</p>
-<p>See <a target="_blank" rel="noopener" href="https://gpuweb.github.io/gpuweb/#errors-and-debugging">§ 20 Errors &amp; Debugging</a> for more information about error handling.</p>
-<p>见<a target="_blank" rel="noopener" href="https://gpuweb.github.io/gpuweb/#errors-and-debugging">§ 20 Errors &amp; Debugging</a>，了解有关错误处理的更多信息。</p>
+{% block sidebar %}
+  {{ sidebar_template.render(true) }}
+{% endblock %}
 
-  </div>
-</article>
-
-    </div>
-    <footer class="footer-nav">
-      <div class="footer">
-        <span class="footer-msg">
-  
-  
-  
-  
-    <span class="timeDivide">-</span>
-    2021
-  
-  qianqians.&nbsp;
-  Power by
-  <a href="https://hexo.io/" target="_blank" rel="external nofollow">Hexo</a>
-  and
-  <a class="orangelink" href="https://github.com/" target="_blank" rel="">
-    hexo-theme-yuzu</a>
-</span>
-
-      </div>
-    </footer>
-    <div class="back-top" id="back-top">
-      <i class="back-top-icon"></i>
-    </div>
-    
-
-  <script src="/js/jquery/jquery-3.1.1.min.js"></script>
-
-    
-<script src="/js/theme.js"></script>
-
-    
-<script src="/js/index.js"></script>
-
-
-  </div>
-</body>
+{% block script_extra %}
+  {% include '_scripts/pages/post-details.swig' %}
+{% endblock %}
