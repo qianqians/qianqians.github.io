@@ -63,102 +63,41 @@
     
   </ul>
 </div>
+      <article class="post" id="post">
+  <header class="post-head">
+    <h1 class="post-title">
+      <a class="title" href="/2021/08/06/WebGPU%202.3.%20Uninitialized%20data/">
+        WebGPU 2.3. Uninitialized data
+      </a>
+    </h1>
+  </header>
+  <div class="post-datetag">
+    <div class="post-date">
+      <time class="post-time" title="2021-08-06 17:36:33" datetime="2021-08-06T09:36:33.334Z" itemprop="datePublished">
+  2021-08-06</time>
+    </div>
+    <div class="post-tag">
       
+    </div>
+  </div>
+
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <span class="archive-year">2021</span>
-        </div>
-        <div class="archives-year-cont">
-    
-    <div class="archive-item">
-  <span class="archive-artDate">
-    <time class="post-time" title="2021-08-06 17:36:33" datetime="2021-08-06T09:36:33.334Z" itemprop="datePublished">
-      8月 06
-    </time>
-  </span>
-  <span class="archive-arttitle">
-    
+    <div class="post-cc">
+      版权声明：
         
-          <a href="/2021/08/06/WebGPU%202.3.%20Uninitialized%20data/">
-            WebGPU 2.3. Uninitialized data
-          </a>
-          
-                
-  </span>
-</div>
-  
-    
-    
-    <div class="archive-item">
-  <span class="archive-artDate">
-    <time class="post-time" title="2021-08-06 17:33:10" datetime="2021-08-06T09:33:10.610Z" itemprop="datePublished">
-      8月 06
-    </time>
-  </span>
-  <span class="archive-arttitle">
-    
+          署名-非商业性使用-相同方式共享 | <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/2.5/cn/">CC BY-NC-SA 2.5 CN</a>
         
-          <a href="/2021/08/06/WebGPU%202.2.%20GPU-based%20undefined%20behavior/">
-            WebGPU 2.2. GPU-based undefined behavior
-          </a>
-          
-                
-  </span>
-</div>
-  
-    
-    
-    <div class="archive-item">
-  <span class="archive-artDate">
-    <time class="post-time" title="2021-08-06 17:13:22" datetime="2021-08-06T09:13:22.771Z" itemprop="datePublished">
-      8月 06
-    </time>
-  </span>
-  <span class="archive-arttitle">
-    
-        
-          <a href="/2021/08/06/WebGPU%202.1.%20Security/">
-            WebGPU 2.1. Security
-          </a>
-          
-                
-  </span>
-</div>
-  
-    
-    
-    <div class="archive-item">
-  <span class="archive-artDate">
-    <time class="post-time" title="2021-08-06 15:58:00" datetime="2021-08-06T07:58:00.476Z" itemprop="datePublished">
-      8月 06
-    </time>
-  </span>
-  <span class="archive-arttitle">
-    
-        
-          <a href="/2021/08/06/WebGPU%201.%20Introduction/">
-            WebGPU 1. Introduction
-          </a>
-          
-                
-  </span>
-</div>
-  
-  
-    </div></section>
+    </div>
   
 
-<div class="archive-pagination">
-    
-    
+  <div class="article-entry" itemprop="articleBody">
+    <p>Generally, allocating new memory may expose the leftover data of other applications running on the system. In order to address that, WebGPU conceptually initializes all the resources to zero, although in practice an implementation may skip this step if it sees the developer initializing the contents manually. This includes variables and shared workgroup memory inside shaders.</p>
+<p>通常，分配新内存可能会暴露系统上运行的其他应用程序的剩余数据。为了解决这一问题，WebGPU在概念上将所有资源初始化为零，尽管在实践中，如果看到开发人员手动初始化内容，则实现可能会跳过此步骤。这包括着色器中的变量和共享工作组内存。</p>
+<p>The precise mechanism of clearing the workgroup memory can differ between platforms. If the native API does not provide facilities to clear it, the WebGPU implementation transforms the compute shader to first do a clear across all invocations, synchronize them, and continue executing developer’s code.</p>
+<p>精确清除工作组内存的机制可能因平台而异。如果本机API不提供清除功能，WebGPU实现会将计算着色器转换为首先在所有调用中执行清除，同步它们，然后继续执行开发人员的代码。</p>
 
-</div>
+  </div>
+</article>
 
     </div>
     <footer class="footer-nav">
