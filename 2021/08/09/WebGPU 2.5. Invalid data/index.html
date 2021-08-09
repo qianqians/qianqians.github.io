@@ -20,19 +20,19 @@
     var CONFIG = {"hostname":"qianqians.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Shaders can access physical resources either directly (for example, as a “uniform” GPUBufferBinding), or via texture units, which are fixed-function hardware blocks that handle texture coordinate conv">
+  <meta name="description" content="When uploading floating-point data from CPU to GPU, or generating it on the GPU, we may end up with a binary representation that doesn’t correspond to a valid number, such as infinity or NaN (not-a-nu">
 <meta property="og:type" content="article">
-<meta property="og:title" content="WebGPU 2.4. Out-of-bounds access in shaders">
-<meta property="og:url" content="https://qianqians.github.io/2021/08/06/WebGPU%202.4.%20Out-of-bounds%20access%20in%20shaders/index.html">
+<meta property="og:title" content="WebGPU 2.5. Invalid data">
+<meta property="og:url" content="https://qianqians.github.io/2021/08/09/WebGPU%202.5.%20Invalid%20data/index.html">
 <meta property="og:site_name" content="qianqians&#39;blog">
-<meta property="og:description" content="Shaders can access physical resources either directly (for example, as a “uniform” GPUBufferBinding), or via texture units, which are fixed-function hardware blocks that handle texture coordinate conv">
+<meta property="og:description" content="When uploading floating-point data from CPU to GPU, or generating it on the GPU, we may end up with a binary representation that doesn’t correspond to a valid number, such as infinity or NaN (not-a-nu">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-08-06T09:48:34.423Z">
-<meta property="article:modified_time" content="2021-08-06T12:22:11.397Z">
+<meta property="article:published_time" content="2021-08-09T02:37:10.443Z">
+<meta property="article:modified_time" content="2021-08-09T04:07:54.342Z">
 <meta property="article:author" content="qianqians">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://qianqians.github.io/2021/08/06/WebGPU%202.4.%20Out-of-bounds%20access%20in%20shaders/">
+<link rel="canonical" href="https://qianqians.github.io/2021/08/09/WebGPU%202.5.%20Invalid%20data/">
 
 
 <script id="page-configurations">
@@ -45,7 +45,7 @@
   };
 </script>
 
-  <title>WebGPU 2.4. Out-of-bounds access in shaders | qianqians'blog</title>
+  <title>WebGPU 2.5. Invalid data | qianqians'blog</title>
   
 
 
@@ -159,7 +159,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2021/08/06/WebGPU%202.4.%20Out-of-bounds%20access%20in%20shaders/">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2021/08/09/WebGPU%202.5.%20Invalid%20data/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -172,7 +172,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          WebGPU 2.4. Out-of-bounds access in shaders
+          WebGPU 2.5. Invalid data
         </h1>
 
         <div class="post-meta">
@@ -183,7 +183,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-08-06 17:48:34 / 修改时间：20:22:11" itemprop="dateCreated datePublished" datetime="2021-08-06T17:48:34+08:00">2021-08-06</time>
+              <time title="创建时间：2021-08-09 10:37:10 / 修改时间：12:07:54" itemprop="dateCreated datePublished" datetime="2021-08-09T10:37:10+08:00">2021-08-09</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -206,16 +206,23 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Shaders can access physical resources either directly (for example, as a “uniform” GPUBufferBinding), or via texture units, which are fixed-function hardware blocks that handle texture coordinate conversions. Validation on the API side can only guarantee that all the inputs to the shader are provided and they have the correct usage and types. The host API side can not guarantee that the data is accessed within bounds if the texture units are not involved.</p>
-<p>着色器可以直接访问物理资源(例如，作为”uniform”GPUBufferBinding)，也可以通过纹理单元访问物理资源，纹理单元是处理纹理坐标转换的固定功能硬件块。API端的验证只能保证提供了着色器的所有输入，并且它们具有正确的用法和类型。如果涉及纹理单元，则宿主API端无法保证在边界内访问数据。</p>
-<p>In order to prevent the shaders from accessing GPU memory an application doesn’t own, the WebGPU implementation may enable a special mode (called “robust buffer access”) in the driver that guarantees that the access is limited to buffer bounds.</p>
-<p>为了防止着色器访问应用程序不拥有的GPU内存，WebGPU实现可以在驱动程序中启用一种特殊模式（称为”robust buffer access”），以确保访问仅限于缓冲区边界内。</p>
-<p>Alternatively, an implementation may transform the shader code by inserting manual bounds checks. When this path is taken, the out-of-bound checks only apply to array indexing. They aren’t needed for plain field access of shader structures due to the minBindingSize validation on the host side.</p>
-<p>或者，WebGPU实现可以通过手动插入边界检查来变换着色器代码。采用此方法时，越界检查仅适用于数组索引。由于主机端的minBindingSize验证，访问着色器结构的普通字段不需要它们。</p>
-<p>If the shader attempts to load data outside of physical resource bounds, the implementation is allowed to:<br> 1.return a value at a different location within the resource bounds<br> 2.return a value vector of “(0, 0, 0, X)” with any “X”<br> 3.partially discard the draw or dispatch call</p>
-<p>如果着色器尝试加载物理资源边界之外的数据，则允许WebGPU实现：<br> 1.在资源范围内的不同位置返回值<br> 2.返回带有任意”X”的(0，0，0，X)向量<br> 3.部分放弃the draw or dispatch call</p>
-<p>If the shader attempts to write data outside of physical resource bounds, the implementation is allowed to:<br> 1.write the value to a different location within the resource bounds<br> 2.discard the write operation<br> 3.partially discard the draw or dispatch call</p>
-<p>如果着色器尝试写入物理资源边界之外的数据，则允许WebGPU实现：<br> 1.将值写入资源边界内的其他位置<br> 2.放弃写入操作<br> 3.部分放弃the draw or dispatch call</p>
+        <p>When uploading floating-point data from CPU to GPU, or generating it on the GPU, we may end up with a binary representation that doesn’t correspond to a valid number, such as infinity or NaN (not-a-number). The GPU behavior in this case is subject to the accuracy of the GPU hardware implementation of the IEEE-754 standard. WebGPU guarantees that introducing invalid floating-point numbers would only affect the results of arithmetic computations and will not have other side effects.</p>
+<p>当从CPU上传浮点数据到GPU，或在GPU上生成浮点数据时，我们可能会得到一个与有效数字不对应的二进制表示，例如无穷大或NaN（非数字）。这种情况下的GPU行为取决于GPU硬件实现的IEEE-754标准的准确性。WebGPU保证引入无效浮点数只会影响算术计算的结果，不会产生其他副作用。</p>
+<p>2.5.1. Driver bugs</p>
+<p>GPU drivers are subject to bugs like any other software. If a bug occurs, an attacker could possibly exploit the incorrect behavior of the driver to get access to unprivileged data. In order to reduce the risk, the WebGPU working group will coordinate with GPU vendors to integrate the WebGPU Conformance Test Suite (CTS) as part of their driver testing process, like it was done for WebGL. WebGPU implementations are expected to have workarounds for some of the discovered bugs, and disable WebGPU on drivers with known bugs that can’t be worked around.</p>
+<p>GPU驱动程序和其他软件一样容易出现bug。如果出现bug，攻击者可能会利用驱动程序的错误行为来访问未经授权的数据。为了降低风险，WebGPU工作组将与GPU供应商协调，将WebGPU一致性测试套件（CTS）集成为其驱动程序测试过程的一部分，就像为WebGL所做的那样。WebGPU实现有望为一些发现的bug提供解决方案，并在存在无法解决的已知bug的驱动程序上禁用WebGPU。</p>
+<p>2.5.2. Timing attacks</p>
+<p>WebGPU is designed for multi-threaded use via Web Workers. As such, it is designed not to open the users to modern high-precision timing attacks. Some of the objects, like GPUBuffer or GPUQueue, have shared state which can be simultaneously accessed. This allows race conditions to occur, similar to those of accessing a SharedArrayBuffer from multiple Web Workers, which makes the thread scheduling observable.</p>
+<p>WebGPU设计用于通过Web Workers进行多线程使用。因此，它的设计不会让用户受到现代高精度定时攻击。一些对象（如GPUBuffer或GPUQueue）具有可同时访问的共享状态。这允许出现竞争条件，类似于从多个Web Workers访问SharedArrayBuffer的情况，这使得线程调度可以观察到。</p>
+<p>WebGPU addresses this by limiting the ability to deserialize (or share) objects only to the agents inside the agent cluster, and only if the cross-origin isolated policies are in place. This restriction matches the mitigations against the malicious SharedArrayBuffer use. Similarly, the user agent may also serialize the agents sharing any handles to prevent any concurrency entirely.</p>
+<p>WebGPU通过将对象反序列化（或共享）的能力仅限于代理集群内的代理，并且仅当跨源隔离策略已就位时，解决此问题。此限制与针对恶意SharedArrayBuffer使用的缓解措施相匹配。类似地，用户代理还可以序列化共享任何句柄的代理，以完全防止任何并发。</p>
+<p>In the end, the attack surface for races on shared state in WebGPU will be a small subset of the SharedArrayBuffer attacks.</p>
+<p>最后，WebGPU中共享状态上的竞争攻击面将是SharedArrayBuffer攻击的一小部分。</p>
+<p>WebGPU also specifies the “timestamp-query” feature, which provides high precision timing of GPU operations. The feature is optional, and a WebGPU implementation may limit its exposure only to those scenarios that are trusted. Alternatively, the timing query results could be processed by a compute shader and aligned to a lower precision.</p>
+<p>WebGPU还指定”timestamp-query”功能，该功能提供GPU操作的高精度计时。该功能是可选的，WebGPU实现可能仅将其暴露限制在那些受信任的场景中。或者，计时查询结果可以由计算着色器处理，并以较低的精度对齐。</p>
+<p>2.5.3. Row hammer attacks</p>
+<p>Row hammer is a class of attacks that exploit the leaking of states in DRAM cells. It could be used on GPU. WebGPU does not have any specific mitigations in place, and relies on platform-level solutions, such as reduced memory refresh intervals.</p>
+<p>Row-hammer是一类利用DRAM单元中状态泄漏的攻击。它可以在GPU上使用。WebGPU没有任何具体的缓解措施，依赖于平台级解决方案，如缩短内存刷新间隔。</p>
 
     </div>
 
@@ -231,7 +238,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://qianqians.github.io/2021/08/06/WebGPU%202.4.%20Out-of-bounds%20access%20in%20shaders/" title="WebGPU 2.4. Out-of-bounds access in shaders">https://qianqians.github.io/2021/08/06/WebGPU 2.4. Out-of-bounds access in shaders/</a>
+    <a href="https://qianqians.github.io/2021/08/09/WebGPU%202.5.%20Invalid%20data/" title="WebGPU 2.5. Invalid data">https://qianqians.github.io/2021/08/09/WebGPU 2.5. Invalid data/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -248,12 +255,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/08/06/WebGPU%202.3.%20Uninitialized%20data/" rel="prev" title="WebGPU 2.3. Uninitialized data">
-      <i class="fa fa-chevron-left"></i> WebGPU 2.3. Uninitialized data
+    <a href="/2021/08/06/WebGPU%202.4.%20Out-of-bounds%20access%20in%20shaders/" rel="prev" title="WebGPU 2.4. Out-of-bounds access in shaders">
+      <i class="fa fa-chevron-left"></i> WebGPU 2.4. Out-of-bounds access in shaders
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/08/09/WebGPU%202.5.%20Invalid%20data/" rel="next" title="WebGPU 2.5. Invalid data">
-      WebGPU 2.5. Invalid data <i class="fa fa-chevron-right"></i>
+    <a href="/2021/08/09/WebGPU%202.6.%20Denial%20of%20service/" rel="next" title="WebGPU 2.6. Denial of service">
+      WebGPU 2.6. Denial of service <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
