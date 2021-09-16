@@ -1,4 +1,433 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2"><meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png"><link rel="mask-icon" href="/images/logo.svg" color="#222"><link rel="manifest" href="/images/manifest.json"><meta name="msapplication-config" content="/images/browserconfig.xml"><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext"><link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css"><script id="hexo-configurations">var NexT=window.NexT||{},CONFIG={hostname:"qianqians.github.io",root:"/",scheme:"Pisces",version:"7.8.0",exturl:!1,sidebar:{position:"left",display:"remove",padding:18,offset:12,onmobile:!0},copycode:{enable:!1,show_result:!1,style:null},back2top:{enable:!0,sidebar:!0,scrollpercent:!0},bookmark:{enable:!0,color:"#222",save:"auto"},fancybox:!1,mediumzoom:!1,lazyload:!1,pangu:!1,comments:{style:"tabs",active:null,storage:!0,lazyload:!1,nav:null},algolia:{hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}},localsearch:{enable:!1,trigger:"auto",top_n_per_article:1,unescape:!1,preload:!1},motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}}}</script><meta name="description" content="What’s a pipeline?If you’re familiar with OpenGL, you may remember using shader programs. You can think of a pipeline as a more robust version of that. A pipeline describes all the actions the gpu wil"><meta property="og:type" content="article"><meta property="og:title" content="Wgpu The Pipeline"><meta property="og:url" content="https://qianqians.github.io/2021/08/20/Wgpu%20The%20Pipeline/index.html"><meta property="og:site_name" content="qianqians&#39;blog"><meta property="og:description" content="What’s a pipeline?If you’re familiar with OpenGL, you may remember using shader programs. You can think of a pipeline as a more robust version of that. A pipeline describes all the actions the gpu wil"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://sotrh.github.io/learn-wgpu/assets/img/tutorial3-pipeline-vertices.5e39e8fc.png"><meta property="article:published_time" content="2021-08-20T07:17:03.384Z"><meta property="article:modified_time" content="2021-08-24T08:28:38.263Z"><meta property="article:author" content="qianqians"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://sotrh.github.io/learn-wgpu/assets/img/tutorial3-pipeline-vertices.5e39e8fc.png"><link rel="canonical" href="https://qianqians.github.io/2021/08/20/Wgpu%20The%20Pipeline/"><script id="page-configurations">CONFIG.page={sidebar:"",isHome:!1,isPost:!0,lang:"zh-CN"}</script><title>Wgpu The Pipeline | qianqians'blog</title><noscript><style>.sidebar-inner,.use-motion .brand,.use-motion .collection-header,.use-motion .comments,.use-motion .menu-item,.use-motion .pagination,.use-motion .post-block,.use-motion .post-body,.use-motion .post-header{opacity:initial}.use-motion .site-subtitle,.use-motion .site-title{opacity:initial;top:initial}.use-motion .logo-line-before i{left:initial}.use-motion .logo-line-after i{right:initial}</style></noscript></head><body itemscope itemtype="http://schema.org/WebPage"><div class="container use-motion"><div class="headband"></div><header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-container"><div class="site-nav-toggle"><div class="toggle" aria-label="切换导航栏"><span class="toggle-line toggle-line-first"></span><span class="toggle-line toggle-line-middle"></span><span class="toggle-line toggle-line-last"></span></div></div><div class="site-meta"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">qianqians'blog</h1><span class="logo-line-after"><i></i></span></a></div><div class="site-nav-right"><div class="toggle popup-trigger"></div></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-fw fa-home"></i> 首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i> 归档<span class="badge">21</span></a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i> 分类<span class="badge">2</span></a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i> 关于</a></li></ul></nav></div></header><a role="button" class="book-mark-link book-mark-link-fixed"></a> <a href="https://github.com/qianqians" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0 0 115 115 130 115 142 142 250 250 250 0Z"></path><path d="M128.3 109C113.8 99.7 119 89.6 119 89.6 122 82.7 120.5 78.6 120.5 78.6 119.2 72 123.4 76.3 123.4 76.3 127.3 80.9 125.5 87.3 125.5 87.3 122.9 97.6 130.6 101.9 134.4 103.2" fill="currentColor" style="transform-origin:130px 106px" class="octo-arm"></path><path d="M115 115C114.9 115.1 118.7 116.5 119.8 115.4L133.7 101.6C136.9 99.2 139.9 98.4 142.2 98.6 133.8 88 127.5 74.4 143.8 58 148.5 53.4 154 51.2 159.7 51 160.3 49.4 163.2 43.6 171.4 40.1 171.4 40.1 176.1 42.5 178.8 56.2 183.1 58.6 187.2 61.8 190.9 65.4 194.5 69 197.7 73.2 200.1 77.6 213.8 80.2 216.3 84.9 216.3 84.9 212.7 93.1 206.9 96 205.4 96.6 205.1 102.4 203 107.8 198.3 112.5 181.9 128.9 168.3 122.5 157.7 114.1 157.9 116.9 156.7 120.9 152.7 124.9L141 136.5C139.8 137.7 141.6 141.9 141.8 141.8Z" fill="currentColor" class="octo-body"></path></svg></a><main class="main"><div class="main-inner"><div class="content-wrap"><div class="content post posts-expand"><article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN"><link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2021/08/20/Wgpu%20The%20Pipeline/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="image" content="/images/avatar.gif"><meta itemprop="name" content="qianqians"><meta itemprop="description" content=""></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="qianqians'blog"></span><header class="post-header"><h1 class="post-title" itemprop="name headline"> Wgpu The Pipeline</h1><div class="post-meta"><span class="post-meta-item"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i></span> <span class="post-meta-item-text">发表于</span> <time title="创建时间：2021-08-20 15:17:03" itemprop="dateCreated datePublished" datetime="2021-08-20T15:17:03+08:00">2021-08-20</time></span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="fa fa-calendar-check-o"></i></span> <span class="post-meta-item-text">更新于</span> <time title="修改时间：2021-08-24 16:28:38" itemprop="dateModified" datetime="2021-08-24T16:28:38+08:00">2021-08-24</time></span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="fa fa-folder-o"></i></span> <span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Wgpu/" itemprop="url" rel="index"><span itemprop="name">Wgpu</span></a></span></span></div></header><div class="post-body" itemprop="articleBody"><h1 id="What’s-a-pipeline"><a href="#What’s-a-pipeline" class="headerlink" title="What’s a pipeline?"></a>What’s a pipeline?</h1><p>If you’re familiar with OpenGL, you may remember using shader programs. You can think of a pipeline as a more robust version of that. A pipeline describes all the actions the gpu will perform when acting on a set of data. In this section, we will be creating a RenderPipeline specifically.</p><p>如果您熟悉OpenGL，可能还记得使用着色器程序。您可以将管道视为更健壮的版本。管道描述了gpu在处理一组数据时将执行的所有操作。在本节中，我们将专门创建渲染管线。</p><h1 id="Wait-shaders"><a href="#Wait-shaders" class="headerlink" title="Wait shaders?"></a>Wait shaders?</h1><p>Shaders are mini programs that you send to the gpu to perform operations on your data. There are 3 main types of shader: vertex, fragment, and compute. There are others such as geometry shaders, but they’re more of an advanced topic. For now we’re just going to use vertex, and fragment shaders.</p><p>着色器是发送到gpu以对数据执行操作的小型程序。着色器有3种主要类型：顶点、片段和计算。还有其他一些，如几何体着色器，但它们更像是一个高级主题。现在我们将使用顶点和片段着色器。</p><h1 id="Vertex-fragment-what-are-those"><a href="#Vertex-fragment-what-are-those" class="headerlink" title="Vertex, fragment.. what are those?"></a>Vertex, fragment.. what are those?</h1><p>A vertex is a point in 3d space (can also be 2d). These vertices are then bundled in groups of 2s to form lines and/or 3s to form triangles.</p><p>顶点是三维空间中的一个点（也可以是二维的）。然后将这些顶点捆绑成2个一组，形成直线或3个一组，形成三角形。</p><p><img src="https://sotrh.github.io/learn-wgpu/assets/img/tutorial3-pipeline-vertices.5e39e8fc.png" alt="vertices"></p><p>Most modern rendering uses triangles to make all shapes, from simple shapes (such as cubes), to complex ones (such as people). These triangles are stored as vertices which are the points that make up the corners of the triangles.</p><p>大多数现代渲染使用三角形生成所有形状，从简单形状（如立方体）到复杂形状（如人）。这些三角形存储为顶点，这些顶点是构成三角形角的点。</p><p>We use a vertex shader to manipulate the vertices, in order to transform the shape to look the way we want it.</p><p>我们使用顶点着色器来操纵顶点，以便将形状变换为我们想要的样子。</p><p>The vertices are then converted into fragments. Every pixel in the result image gets at least one fragment. Each fragment has a color that will be copied to its corresponding pixel. The fragment shader decides what color the fragment will be.</p><p>然后将顶点转换为片段。结果图像中的每个像素至少获得一个片段。每个片段都有一个将被复制到其相应像素的颜色。片段着色器决定片段的颜色。</p><h1 id="WGSL"><a href="#WGSL" class="headerlink" title="WGSL"></a>WGSL</h1><p>WebGPU supports two shader languages natively: SPIR-V, and WGSL. SPIR-V is actually a binary format developed by Kronos to be a compilation target for other languages such as GLSL and HLSL. It allows for easy porting of code. The only problem is that it’s not human readable as it’s a binary language. WGSL is meant to fix that. WGSL’s development focuses on getting it to easily convert into SPIR-V. WGPU even allows us to supply WGSL for our shaders.</p><p>WebGPU本机支持两种着色器语言：SPIR-V和WGSL。SPIR-V实际上是Kronos开发的二进制格式，用于其他语言（如GLSL和HLSL）的编译目标。它允许轻松移植代码。唯一的问题是它不是人类可读的，因为它是一种二进制语言。WGSL旨在解决这一问题。WGSL的开发重点是使其能够轻松转换为SPIR-V。WGPU同样允许我们为着色器提供WGSL。</p><p>If you’ve gone through this tutorial before you’ll likely notice that I’ve switched from using GLSL to using WGSL. Given that GLSL support is a secondary concern and that WGSL is the first class language of WGPU, I’ve elected to convert all the tutorials to use WGSL. Some of the showcase examples still use GLSL, but the main tutorial and all examples going forward will be using WGSL.</p><p>如果您之前阅读过本教程，您可能会注意到我已从使用GLSL切换到使用WGSL。考虑到GLSL支持是第二个问题，而WGSL是WGPU的第一类语言，我选择将所有教程转换为使用WGSL。一些showcase示例仍然使用GLSL，但主教程和所有后续示例将使用WGSL。</p><p>The WGSL spec and it’s inclusion in WGPU is still in development. If you run into trouble using it, you may want the folks at <a target="_blank" rel="noopener" href="https://app.element.io/#/room/#wgpu:matrix.org">https://app.element.io/#/room/#wgpu:matrix.org</a> to take a look at your code.</p><p>WGSL规范及其包含在WGPU中的内容仍在开发中。如果你在使用它时遇到麻烦，你可能想让人们在<a target="_blank" rel="noopener" href="https://app.element.io/#/room/#wgpu:matrix.org">https://app.element.io/#/room/#wgpu:matrix.org</a> 来看看你的代码。</p><h1 id="Writing-the-shaders"><a href="#Writing-the-shaders" class="headerlink" title="Writing the shaders"></a>Writing the shaders</h1><p>In the same folder as main.rs, create a file shader.wgsl. Write the following code in shader.wgsl.</p><p>在与main.rs相同的文件夹中，创建文件shader.wgsl。在shader.wgsl中编写以下代码。</p><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Vertex shader</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">VertexOutput</span></span> &#123;</span><br><span class="line">    [[builtin(position)]] clip_position: vec4&lt;<span class="built_in">f32</span>&gt;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">[[stage(vertex)]]</span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>(</span><br><span class="line">    [[builtin(vertex_index)]] in_vertex_index: <span class="built_in">u32</span>,</span><br><span class="line">) -&gt; VertexOutput &#123;</span><br><span class="line">    var out: VertexOutput;</span><br><span class="line">    <span class="keyword">let</span> x = <span class="built_in">f32</span>(<span class="number">1</span> - <span class="built_in">i32</span>(in_vertex_index)) * <span class="number">0.5</span>;</span><br><span class="line">    <span class="keyword">let</span> y = <span class="built_in">f32</span>(<span class="built_in">i32</span>(in_vertex_index &amp; <span class="number">1</span>u) * <span class="number">2</span> - <span class="number">1</span>) * <span class="number">0.5</span>;</span><br><span class="line">    out.clip_position = vec4&lt;<span class="built_in">f32</span>&gt;(x, y, <span class="number">0.0</span>, <span class="number">1.0</span>);</span><br><span class="line">    <span class="keyword">return</span> out;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>First we declare struct to store the output of our vertex shader. This consists of only one field currently which is our vertex’s clip_position. The [[builtin(position)]] bit tells WGPU that this is the value we want to use as the vertex’s clip coordinates. This is analogous to GLSL’s gl_Position variable.</p><p>首先，我们声明struct来存储顶点着色器的输出。这当前只包含一个字段，它是顶点的剪辑位置。[[builtin（position）]位告诉WGPU这是我们要用作顶点剪辑坐标的值。这类似于GLSL的gl_位置变量。</p><blockquote><p>Vector types such as vec4 are generic. Currently you must specify the type of value the vector will contain. Thus a 3D vector using 32bit floats would be vec3<f32>.</f32></p></blockquote><blockquote><p>向量类型（如vec4）是泛型的。当前必须指定向量将包含的值的类型。因此，使用32位浮点的3D向量将是vec3<f32>。</f32></p></blockquote><p>The next part of the shader code is the main function. We are using [[stage(vertex)]] to mark this function as a valid entry point for a vertex shader. We expect a u32 called in_vertex_index which gets its value from [[builtin(vertex_index)]].</p><p>着色器代码的下一部分是主函数。我们使用[[stage(vertex)]]将此函数标记为顶点着色器的有效入口点。我们期望一个名为in_vertex_index的u32，它的值来自[[builtin(vertex_index)]]。</p><p>We then declare a variable called out using our VertexOutput struct. We create two other variables for the x, and y, of a triangle.</p><p>然后，我们声明一个使用VertexOutput结构调用的变量。我们为三角形创建x和y及另外两个变量。</p><div class="note"><p>The f32() and i32() bits are examples of casts.</p><p>f32()和i32()位是强制转换的示例。</p></div><div class="note"><p>Variables defined with <code>var</code> can be modified, but must specify their type. Variables created with <code>let</code> can have their types inferred, but their value cannot be changed during the shader.</p><p>可以修改用’var’定义的变量，但必须指定其类型。使用’let’创建的变量可以推断其类型，但在着色器期间不能更改其值。</p></div><p>Now we can save our clip_position to out. We then just return out and we’re done with the vertex shader!</p><p>现在我们可以将clip_position保存为out。然后我们返回，顶点着色器就完成了！</p><div class="note"><p>We technically didn’t need a struct for this example, and could have just done something like the following:</p><p>从技术上讲，本例不需要结构，只需执行以下操作即可：</p><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[[stage(vertex)]]</span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>(</span><br><span class="line">    [[builtin(vertex_index)]] in_vertex_index: <span class="built_in">u32</span></span><br><span class="line">) -&gt; [[builtin(position)]] vec4&lt;<span class="built_in">f32</span>&gt; &#123;</span><br><span class="line">    <span class="comment">// Vertex shader code...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>We’ll be adding more fields to VertexOutput later, so we might as well start using it now.</p><p>稍后，我们将向VertexOutput添加更多字段，因此我们不妨现在就开始使用它。</p></div><p>Next up the fragment shader. Still in shader.wgsl add the follow:</p><p>接下来是片段着色器。仍在shader.wgsl中添加以下内容：</p><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Fragment shader</span></span><br><span class="line"></span><br><span class="line">[[stage(fragment)]]</span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>(<span class="keyword">in</span>: VertexOutput) -&gt; [[location(<span class="number">0</span>)]] vec4&lt;<span class="built_in">f32</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> vec4&lt;<span class="built_in">f32</span>&gt;(<span class="number">0.3</span>, <span class="number">0.2</span>, <span class="number">0.1</span>, <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>All this does is set the color of the current fragment to brown color.</p><p>所有这些操作都是将当前片段的颜色设置为棕色。</p><div class="note"><p>Notice that this function is also called main. Because this function is marked as a fragment shader entry point, this is ok. You can change the names around if you like, but I’ve opted to keep them the same.</p><p>请注意，此函数也称为main。因为此函数被标记为片段着色器入口点，所以这是确定的。如果你愿意的话，你可以改变名字，但我还是选择了保持不变。</p></div><p>The [[location(0)]] bit tells WGPU to store the value the vec4 returned by this function in the first color target. We’ll get into what this is later.</p><p>[[location(0)]]位告诉WGPU将此函数返回的vec4值存储在第一个颜色目标中。我们以后再谈这件事。</p><h1 id="How-do-we-use-the-shaders"><a href="#How-do-we-use-the-shaders" class="headerlink" title="How do we use the shaders?"></a>How do we use the shaders?</h1><p>This is the part where we finally make the thing in the title: the pipeline. First let’s modify State to include the following.</p><p>接着我们最终制作标题中的东西的部分：pipeline。首先，让我们修改State以包括以下内容。</p><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.rs</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">State</span></span> &#123;</span><br><span class="line">    surface: wgpu::Surface,</span><br><span class="line">    device: wgpu::Device,</span><br><span class="line">    queue: wgpu::Queue,</span><br><span class="line">    sc_desc: wgpu::SwapChainDescriptor,</span><br><span class="line">    swap_chain: wgpu::SwapChain,</span><br><span class="line">    size: winit::dpi::PhysicalSize&lt;<span class="built_in">u32</span>&gt;,</span><br><span class="line">    <span class="comment">// NEW!</span></span><br><span class="line">    render_pipeline: wgpu::RenderPipeline,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>Now let’s move to the new() method, and start making the pipeline. We’ll have to load in those shaders we made earlier, as the render_pipeline requires those.</p><p>现在让我们转到new()方法，开始制作pipeline。我们必须加载之前制作的着色器，因为render_pipeline需要这些着色器。</p><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> shader = device.create_shader_module(&amp;wgpu::ShaderModuleDescriptor &#123;</span><br><span class="line">    label: <span class="literal">Some</span>(<span class="string">&quot;Shader&quot;</span>),</span><br><span class="line">    flags: wgpu::ShaderFlags::all(),</span><br><span class="line">    source: wgpu::ShaderSource::Wgsl(<span class="built_in">include_str!</span>(<span class="string">&quot;shader.wgsl&quot;</span>).into()),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure><p>One more thing, we need to create a PipelineLayout. We’ll get more into this after we cover Buffers.</p><p>还有一件事，我们需要创建一个PipelineLayout。在我们讨论缓冲区之后，我们将进一步讨论这个问题。</p><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> render_pipeline_layout =</span><br><span class="line">    device.create_pipeline_layout(&amp;wgpu::PipelineLayoutDescriptor &#123;</span><br><span class="line">        label: <span class="literal">Some</span>(<span class="string">&quot;Render Pipeline Layout&quot;</span>),</span><br><span class="line">        bind_group_layouts: &amp;[],</span><br><span class="line">        push_constant_ranges: &amp;[],</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure><p>Finally we have all we need to create the render_pipeline.</p><p>最后，我们有了创建render_pipeline所需的一切。</p><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> render_pipeline = device.create_render_pipeline(&amp;wgpu::RenderPipelineDescriptor &#123;</span><br><span class="line">    label: <span class="literal">Some</span>(<span class="string">&quot;Render Pipeline&quot;</span>),</span><br><span class="line">    layout: <span class="literal">Some</span>(&amp;render_pipeline_layout),</span><br><span class="line">    vertex: wgpu::VertexState &#123;</span><br><span class="line">        module: &amp;shader,</span><br><span class="line">        entry_point: <span class="string">&quot;main&quot;</span>, <span class="comment">// 1.</span></span><br><span class="line">        buffers: &amp;[], <span class="comment">// 2.</span></span><br><span class="line">    &#125;,</span><br><span class="line">    fragment: <span class="literal">Some</span>(wgpu::FragmentState &#123; <span class="comment">// 3.</span></span><br><span class="line">        module: &amp;shader,</span><br><span class="line">        entry_point: <span class="string">&quot;main&quot;</span>,</span><br><span class="line">        targets: &amp;[wgpu::ColorTargetState &#123; <span class="comment">// 4.</span></span><br><span class="line">            format: sc_desc.format,</span><br><span class="line">            blend: <span class="literal">Some</span>(wgpu::BlendState::REPLACE),</span><br><span class="line">            write_mask: wgpu::ColorWrite::ALL,</span><br><span class="line">        &#125;],</span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="comment">// continued ...</span></span><br></pre></td></tr></table></figure><p>Two things to note here:<br>这里需要注意两件事：</p><ol><li>Here you can specify which function inside of the shader should be called, which is known as the entry_point. These are the functions we marked with [[stage(vertex)]] and [[stage(fragment)]]</li><li>The buffers field tells wgpu what type of vertices we want to pass to the vertex shader. We’re specifying the vertices in the vertex shader itself so we’ll leave this empty. We’ll put something there in the next tutorial.</li><li>The fragment is technically optional, so you have to wrap it in Some(). We need it if we want to store color data to the swap_chain.</li><li>The targets field tells wgpu what color outputs it should set up.Currently we only need one for the swap_chain. We use the swap_chain’s format so that copying to it is easy, and we specify that the blending should just replace old pixel data with new data. We also tell wgpu to write to all colors: red, blue, green, and alpha. We’ll talk more aboutcolor_state when we talk about textures.</li></ol><div></div><ol><li>在这里，您可以指定应该调用着色器内部的哪个函数，该函数称为入口点。这些是我们用[[stage(vertex)]]和[[stage(fragment)]标记的函数</li><li>buffers字段告诉wgpu要传递给顶点着色器的顶点类型。我们将在顶点着色器本身中指定顶点，因此将此项留空。我们将在下一个教程中介绍一些内容。</li><li>片段着色器在技术上是可选的，因此您必须将其包装在Some()中。如果我们想将颜色数据存储到交换链，就需要它。</li><li>targets字段告诉wgpu应该设置什么颜色输出。目前，我们只需要一个用于交换链。我们使用swap_chain的格式，以便复制到它是很容易的，并且我们指定混合应该只是用新数据替换旧的像素数据。我们还告诉wgpu写入所有颜色：红色、蓝色、绿色和alpha。在讨论纹理时，我们将更多地讨论颜色状态。</li></ol><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">primitive: wgpu::PrimitiveState &#123;</span><br><span class="line">    topology: wgpu::PrimitiveTopology::TriangleList, <span class="comment">// 1.</span></span><br><span class="line">    strip_index_format: <span class="literal">None</span>,</span><br><span class="line">    front_face: wgpu::FrontFace::Ccw, <span class="comment">// 2.</span></span><br><span class="line">    cull_mode: <span class="literal">Some</span>(wgpu::Face::Back),</span><br><span class="line">    <span class="comment">// Setting this to anything other than Fill requires Features::NON_FILL_POLYGON_MODE</span></span><br><span class="line">    polygon_mode: wgpu::PolygonMode::Fill,</span><br><span class="line">    <span class="comment">// Requires Features::DEPTH_CLAMPING</span></span><br><span class="line">    clamp_depth: <span class="literal">false</span>,</span><br><span class="line">    <span class="comment">// Requires Features::CONSERVATIVE_RASTERIZATION</span></span><br><span class="line">    conservative: <span class="literal">false</span>,</span><br><span class="line">&#125;,</span><br><span class="line"><span class="comment">// continued ...</span></span><br></pre></td></tr></table></figure><p>The primitive field describes how to interpret our vertices when converting them into triangles.<br>primitive字段描述了在将顶点转换为三角形时如何解释顶点。</p><ol><li>Using PrimitiveTopology::TriangleList means that each three vertices will correspond to one triangle.</li><li>The front_face and cull_mode fields tell wgpu how to determine whether a given triangle is facing forward or not. FrontFace::Ccw means that a triangle is facing forward if the vertices are arranged in a counter clockwise direction. Triangles that are not considered facing forward are culled (not included in the render) as specified by CullMode::Back. We’ll cover culling a bit more when we cover Buffers.</li></ol><div></div><ol><li>使用PrimitiveTopology::TriangleList意味着每三个顶点对应一个三角形。</li><li>front_face和cull_mode字段告诉wgpu如何确定给定三角形是否朝前。FrontFace:：Ccw表示如果顶点按逆时针方向排列，则三角形朝前。根据CullMode:：Back的指定，将剔除（不包括在渲染中）不被视为朝前的三角形。当我们讨论缓冲区时，我们将更多地讨论剔除。</li></ol><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    depth_stencil: <span class="literal">None</span>, <span class="comment">// 1.</span></span><br><span class="line">    multisample: wgpu::MultisampleState &#123;</span><br><span class="line">        count: <span class="number">1</span>, <span class="comment">// 2.</span></span><br><span class="line">        mask: !<span class="number">0</span>, <span class="comment">// 3.</span></span><br><span class="line">        alpha_to_coverage_enabled: <span class="literal">false</span>, <span class="comment">// 4.</span></span><br><span class="line">    &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure><p>The rest of the method is pretty simple:<br>该方法的其余部分非常简单：</p><ol><li>We’re not using a depth/stencil buffer currently, so we leave depth_stencil as None. This will change later.</li><li>This determines how many samples this pipeline will use. Multisampling is a complex topic, so we won’t get into it here.</li><li>sample_mask specifies which samples should be active. In this case we are using all of them.</li><li>alpha_to_coverage_enabled has to do with anti-aliasing. We’re not covering anti-aliasing here, so we’ll leave this as false now.</li></ol><div></div><ol><li>我们目前没有使用depth/stencil缓冲区，因此我们将depth/stencil保留为无。这将在以后改变。</li><li>这将确定此pipeline将使用多少个样本。多重采样是一个复杂的主题，因此我们在这里不进行讨论。</li><li>sample_mask指定哪些样本应处于活动状态。在本例中，我们使用了所有这些。</li><li>启用alpha_to_coverage_enabled与抗锯齿有关。我们这里不讨论反走样，所以现在将其保留为false。</li></ol><p>Now all we have to do is save the render_pipeline to State and then we can use it!</p><p>现在我们所要做的就是将render_pipeline保存到State，然后我们就可以使用它了！</p><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// new()</span></span><br><span class="line"><span class="keyword">Self</span> &#123;</span><br><span class="line">    surface,</span><br><span class="line">    device,</span><br><span class="line">    queue,</span><br><span class="line">    sc_desc,</span><br><span class="line">    swap_chain,</span><br><span class="line">    size,</span><br><span class="line">    <span class="comment">// NEW!</span></span><br><span class="line">    render_pipeline,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h1 id="Using-a-pipeline"><a href="#Using-a-pipeline" class="headerlink" title="Using a pipeline"></a>Using a pipeline</h1><p>If you run your program now, it’ll take a little longer to start, but it will still show the blue screen we got in the last section. That’s because while we created the render_pipeline, we need to modify the code in render() to actually use it.</p><p>如果你现在运行你的程序，它将需要更长的时间来启动，但它仍然会显示我们在上一节中得到的蓝屏。这是因为当我们创建render_pipeline时，我们需要修改render()中的代码以实际使用它。</p><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// render()</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 1.</span></span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> render_pass = encoder.begin_render_pass(&amp;wgpu::RenderPassDescriptor &#123;</span><br><span class="line">        label: <span class="literal">Some</span>(<span class="string">&quot;Render Pass&quot;</span>),</span><br><span class="line">        color_attachments: &amp;[</span><br><span class="line">            <span class="comment">// This is what [[location(0)]] in the fragment shader targets</span></span><br><span class="line">            wgpu::RenderPassColorAttachment &#123;</span><br><span class="line">                view: &amp;frame.view,</span><br><span class="line">                resolve_target: <span class="literal">None</span>,</span><br><span class="line">                ops: wgpu::Operations &#123;</span><br><span class="line">                    load: wgpu::LoadOp::Clear(</span><br><span class="line">                        wgpu::Color &#123;</span><br><span class="line">                            r: <span class="number">0.1</span>,</span><br><span class="line">                            g: <span class="number">0.2</span>,</span><br><span class="line">                            b: <span class="number">0.3</span>,</span><br><span class="line">                            a: <span class="number">1.0</span>,</span><br><span class="line">                        &#125;</span><br><span class="line">                    ),</span><br><span class="line">                    store: <span class="literal">true</span>,</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        ],</span><br><span class="line">        depth_stencil_attachment: <span class="literal">None</span>,</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// NEW!</span></span><br><span class="line">    render_pass.set_pipeline(&amp;<span class="keyword">self</span>.render_pipeline); <span class="comment">// 2.</span></span><br><span class="line">    render_pass.draw(<span class="number">0</span>..<span class="number">3</span>, <span class="number">0</span>..<span class="number">1</span>); <span class="comment">// 3.</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure><p>We didn’t change much, but let’s talk about what we did change.<br>我们变化不大，但让我们谈谈我们改变了什么。</p><ol><li>We renamed _render_pass to render_pass and made it mutable.</li><li>We set the pipeline on the render_pass using the one we just created.</li><li>We tell wgpu to draw something with 3 vertices, and 1 instance. This is where [[builtin(vertex_index)]] comes from.</li></ol><div></div><ol><li>我们将_render_pass重命名为render_pass并使其可变。</li><li>我们将刚才创建的pipeline设置在render_pass上。</li><li>我们告诉wgpu用3个顶点和1个实例绘制一些东西。这就是[[builtin(vertex_index)]]的来源。</li></ol><p>With all that you should be seeing a lovely brown triangle.<br>所有这些，你应该看到一个可爱的棕色三角形。</p><h1 id="Challenge"><a href="#Challenge" class="headerlink" title="Challenge"></a>Challenge</h1><p>Create a second pipeline that uses the triangle’s position data to create a color that it then sends to the fragment shader. Have the app swap between these when you press the spacebar. Hint: you’ll need to modify VertexOutput</p><p>创建第二条管道，该管道使用三角形的位置数据创建颜色，然后发送到片段着色器。按空格键时，让应用程序在这两者之间切换。提示：您需要修改VertexOutput</p><p><a target="_blank" rel="noopener" href="https://github.com/sotrh/learn-wgpu/tree/master/code/beginner/tutorial3-pipeline/">Check out the code!</a></p></div><div><ul class="post-copyright"><li class="post-copyright-author"> <strong>本文作者：</strong> qianqians</li><li class="post-copyright-link"> <strong>本文链接：</strong> <a href="https://qianqians.github.io/2021/08/20/Wgpu%20The%20Pipeline/" title="Wgpu The Pipeline">https://qianqians.github.io/2021/08/20/Wgpu The Pipeline/</a></li><li class="post-copyright-license"> <strong>版权声明：</strong> 本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！</li></ul></div><footer class="post-footer"><div class="post-nav"><div class="post-nav-item"><a href="/2021/08/19/Wgpu%20The%20Swapchain/" rel="prev" title="Wgpu The Swapchain"><i class="fa fa-chevron-left"></i> Wgpu The Swapchain</a></div><div class="post-nav-item"> <a href="/2021/08/24/Wgpu%20Buffers%20and%20Indices/" rel="next" title="Wgpu Buffers and Indices">Wgpu Buffers and Indices<i class="fa fa-chevron-right"></i></a></div></div></footer></article></div><script>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="manifest" href="/images/manifest.json">
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"qianqians.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="What’s a pipeline?If you’re familiar with OpenGL, you may remember using shader programs. You can think of a pipeline as a more robust version of that. A pipeline describes all the actions the gpu wil">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wgpu The Pipeline">
+<meta property="og:url" content="https://qianqians.github.io/2021/08/20/Wgpu%20The%20Pipeline/index.html">
+<meta property="og:site_name" content="qianqians&#39;blog">
+<meta property="og:description" content="What’s a pipeline?If you’re familiar with OpenGL, you may remember using shader programs. You can think of a pipeline as a more robust version of that. A pipeline describes all the actions the gpu wil">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://sotrh.github.io/learn-wgpu/assets/img/tutorial3-pipeline-vertices.5e39e8fc.png">
+<meta property="article:published_time" content="2021-08-20T07:17:03.384Z">
+<meta property="article:modified_time" content="2021-08-24T08:28:38.263Z">
+<meta property="article:author" content="qianqians">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sotrh.github.io/learn-wgpu/assets/img/tutorial3-pipeline-vertices.5e39e8fc.png">
+
+<link rel="canonical" href="https://qianqians.github.io/2021/08/20/Wgpu%20The%20Pipeline/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Wgpu The Pipeline | qianqians'blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">qianqians'blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">22</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/qianqians" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2021/08/20/Wgpu%20The%20Pipeline/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="qianqians">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qianqians'blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Wgpu The Pipeline
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-20 15:17:03" itemprop="dateCreated datePublished" datetime="2021-08-20T15:17:03+08:00">2021-08-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-24 16:28:38" itemprop="dateModified" datetime="2021-08-24T16:28:38+08:00">2021-08-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Wgpu/" itemprop="url" rel="index"><span itemprop="name">Wgpu</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="What’s-a-pipeline"><a href="#What’s-a-pipeline" class="headerlink" title="What’s a pipeline?"></a>What’s a pipeline?</h1><p>If you’re familiar with OpenGL, you may remember using shader programs. You can think of a pipeline as a more robust version of that. A pipeline describes all the actions the gpu will perform when acting on a set of data. In this section, we will be creating a RenderPipeline specifically.</p>
+<p>如果您熟悉OpenGL，可能还记得使用着色器程序。您可以将管道视为更健壮的版本。管道描述了gpu在处理一组数据时将执行的所有操作。在本节中，我们将专门创建渲染管线。</p>
+<h1 id="Wait-shaders"><a href="#Wait-shaders" class="headerlink" title="Wait shaders?"></a>Wait shaders?</h1><p>Shaders are mini programs that you send to the gpu to perform operations on your data. There are 3 main types of shader: vertex, fragment, and compute. There are others such as geometry shaders, but they’re more of an advanced topic. For now we’re just going to use vertex, and fragment shaders.</p>
+<p>着色器是发送到gpu以对数据执行操作的小型程序。着色器有3种主要类型：顶点、片段和计算。还有其他一些，如几何体着色器，但它们更像是一个高级主题。现在我们将使用顶点和片段着色器。</p>
+<h1 id="Vertex-fragment-what-are-those"><a href="#Vertex-fragment-what-are-those" class="headerlink" title="Vertex, fragment.. what are those?"></a>Vertex, fragment.. what are those?</h1><p>A vertex is a point in 3d space (can also be 2d). These vertices are then bundled in groups of 2s to form lines and/or 3s to form triangles.</p>
+<p>顶点是三维空间中的一个点（也可以是二维的）。然后将这些顶点捆绑成2个一组，形成直线或3个一组，形成三角形。</p>
+<p><img src="https://sotrh.github.io/learn-wgpu/assets/img/tutorial3-pipeline-vertices.5e39e8fc.png" alt="vertices"></p>
+<p>Most modern rendering uses triangles to make all shapes, from simple shapes (such as cubes), to complex ones (such as people). These triangles are stored as vertices which are the points that make up the corners of the triangles.</p>
+<p>大多数现代渲染使用三角形生成所有形状，从简单形状（如立方体）到复杂形状（如人）。这些三角形存储为顶点，这些顶点是构成三角形角的点。</p>
+<p>We use a vertex shader to manipulate the vertices, in order to transform the shape to look the way we want it.</p>
+<p>我们使用顶点着色器来操纵顶点，以便将形状变换为我们想要的样子。</p>
+<p>The vertices are then converted into fragments. Every pixel in the result image gets at least one fragment. Each fragment has a color that will be copied to its corresponding pixel. The fragment shader decides what color the fragment will be.</p>
+<p>然后将顶点转换为片段。结果图像中的每个像素至少获得一个片段。每个片段都有一个将被复制到其相应像素的颜色。片段着色器决定片段的颜色。</p>
+<h1 id="WGSL"><a href="#WGSL" class="headerlink" title="WGSL"></a>WGSL</h1><p>WebGPU supports two shader languages natively: SPIR-V, and WGSL. SPIR-V is actually a binary format developed by Kronos to be a compilation target for other languages such as GLSL and HLSL. It allows for easy porting of code. The only problem is that it’s not human readable as it’s a binary language. WGSL is meant to fix that. WGSL’s development focuses on getting it to easily convert into SPIR-V. WGPU even allows us to supply WGSL for our shaders.</p>
+<p>WebGPU本机支持两种着色器语言：SPIR-V和WGSL。SPIR-V实际上是Kronos开发的二进制格式，用于其他语言（如GLSL和HLSL）的编译目标。它允许轻松移植代码。唯一的问题是它不是人类可读的，因为它是一种二进制语言。WGSL旨在解决这一问题。WGSL的开发重点是使其能够轻松转换为SPIR-V。WGPU同样允许我们为着色器提供WGSL。</p>
+<p>If you’ve gone through this tutorial before you’ll likely notice that I’ve switched from using GLSL to using WGSL. Given that GLSL support is a secondary concern and that WGSL is the first class language of WGPU, I’ve elected to convert all the tutorials to use WGSL. Some of the showcase examples still use GLSL, but the main tutorial and all examples going forward will be using WGSL.</p>
+<p>如果您之前阅读过本教程，您可能会注意到我已从使用GLSL切换到使用WGSL。考虑到GLSL支持是第二个问题，而WGSL是WGPU的第一类语言，我选择将所有教程转换为使用WGSL。一些showcase示例仍然使用GLSL，但主教程和所有后续示例将使用WGSL。</p>
+<p>The WGSL spec and it’s inclusion in WGPU is still in development. If you run into trouble using it, you may want the folks at <a target="_blank" rel="noopener" href="https://app.element.io/#/room/#wgpu:matrix.org">https://app.element.io/#/room/#wgpu:matrix.org</a> to take a look at your code.</p>
+<p>WGSL规范及其包含在WGPU中的内容仍在开发中。如果你在使用它时遇到麻烦，你可能想让人们在<a target="_blank" rel="noopener" href="https://app.element.io/#/room/#wgpu:matrix.org">https://app.element.io/#/room/#wgpu:matrix.org</a> 来看看你的代码。</p>
+<h1 id="Writing-the-shaders"><a href="#Writing-the-shaders" class="headerlink" title="Writing the shaders"></a>Writing the shaders</h1><p>In the same folder as main.rs, create a file shader.wgsl. Write the following code in shader.wgsl.</p>
+<p>在与main.rs相同的文件夹中，创建文件shader.wgsl。在shader.wgsl中编写以下代码。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Vertex shader</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">VertexOutput</span></span> &#123;</span><br><span class="line">    [[builtin(position)]] clip_position: vec4&lt;<span class="built_in">f32</span>&gt;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">[[stage(vertex)]]</span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>(</span><br><span class="line">    [[builtin(vertex_index)]] in_vertex_index: <span class="built_in">u32</span>,</span><br><span class="line">) -&gt; VertexOutput &#123;</span><br><span class="line">    var out: VertexOutput;</span><br><span class="line">    <span class="keyword">let</span> x = <span class="built_in">f32</span>(<span class="number">1</span> - <span class="built_in">i32</span>(in_vertex_index)) * <span class="number">0.5</span>;</span><br><span class="line">    <span class="keyword">let</span> y = <span class="built_in">f32</span>(<span class="built_in">i32</span>(in_vertex_index &amp; <span class="number">1</span>u) * <span class="number">2</span> - <span class="number">1</span>) * <span class="number">0.5</span>;</span><br><span class="line">    out.clip_position = vec4&lt;<span class="built_in">f32</span>&gt;(x, y, <span class="number">0.0</span>, <span class="number">1.0</span>);</span><br><span class="line">    <span class="keyword">return</span> out;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>First we declare struct to store the output of our vertex shader. This consists of only one field currently which is our vertex’s clip_position. The [[builtin(position)]] bit tells WGPU that this is the value we want to use as the vertex’s clip coordinates. This is analogous to GLSL’s gl_Position variable.</p>
+<p>首先，我们声明struct来存储顶点着色器的输出。这当前只包含一个字段，它是顶点的剪辑位置。[[builtin（position）]位告诉WGPU这是我们要用作顶点剪辑坐标的值。这类似于GLSL的gl_位置变量。</p>
+<blockquote>
+<p>Vector types such as vec4 are generic. Currently you must specify the type of value the vector will contain. Thus a 3D vector using 32bit floats would be vec3<f32>.</p>
+</blockquote>
+<blockquote>
+<p>向量类型（如vec4）是泛型的。当前必须指定向量将包含的值的类型。因此，使用32位浮点的3D向量将是vec3<f32>。</p>
+</blockquote>
+<p>The next part of the shader code is the main function. We are using [[stage(vertex)]] to mark this function as a valid entry point for a vertex shader. We expect a u32 called in_vertex_index which gets its value from [[builtin(vertex_index)]].</p>
+<p>着色器代码的下一部分是主函数。我们使用[[stage(vertex)]]将此函数标记为顶点着色器的有效入口点。我们期望一个名为in_vertex_index的u32，它的值来自[[builtin(vertex_index)]]。</p>
+<p>We then declare a variable called out using our VertexOutput struct. We create two other variables for the x, and y, of a triangle.</p>
+<p>然后，我们声明一个使用VertexOutput结构调用的变量。我们为三角形创建x和y及另外两个变量。</p>
+<div class="note">
+
+<p>The f32() and i32() bits are examples of casts.</p>
+<p>f32()和i32()位是强制转换的示例。</p>
+</div>
+
+<div class="note">
+
+<p>Variables defined with <code>var</code> can be modified, but must specify their type. Variables created with <code>let</code> can have their types inferred, but their value cannot be changed during the shader.</p>
+<p>可以修改用’var’定义的变量，但必须指定其类型。使用’let’创建的变量可以推断其类型，但在着色器期间不能更改其值。</p>
+</div>
+
+<p>Now we can save our clip_position to out. We then just return out and we’re done with the vertex shader!</p>
+<p>现在我们可以将clip_position保存为out。然后我们返回，顶点着色器就完成了！</p>
+<div class="note">
+
+<p>We technically didn’t need a struct for this example, and could have just done something like the following:</p>
+<p>从技术上讲，本例不需要结构，只需执行以下操作即可：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[[stage(vertex)]]</span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>(</span><br><span class="line">    [[builtin(vertex_index)]] in_vertex_index: <span class="built_in">u32</span></span><br><span class="line">) -&gt; [[builtin(position)]] vec4&lt;<span class="built_in">f32</span>&gt; &#123;</span><br><span class="line">    <span class="comment">// Vertex shader code...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>We’ll be adding more fields to VertexOutput later, so we might as well start using it now.</p>
+<p>稍后，我们将向VertexOutput添加更多字段，因此我们不妨现在就开始使用它。</p>
+</div>
+
+<p>Next up the fragment shader. Still in shader.wgsl add the follow:</p>
+<p>接下来是片段着色器。仍在shader.wgsl中添加以下内容：</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Fragment shader</span></span><br><span class="line"></span><br><span class="line">[[stage(fragment)]]</span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>(<span class="keyword">in</span>: VertexOutput) -&gt; [[location(<span class="number">0</span>)]] vec4&lt;<span class="built_in">f32</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> vec4&lt;<span class="built_in">f32</span>&gt;(<span class="number">0.3</span>, <span class="number">0.2</span>, <span class="number">0.1</span>, <span class="number">1.0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>All this does is set the color of the current fragment to brown color.</p>
+<p>所有这些操作都是将当前片段的颜色设置为棕色。</p>
+<div class="note">
+
+<p>Notice that this function is also called main. Because this function is marked as a fragment shader entry point, this is ok. You can change the names around if you like, but I’ve opted to keep them the same.</p>
+<p>请注意，此函数也称为main。因为此函数被标记为片段着色器入口点，所以这是确定的。如果你愿意的话，你可以改变名字，但我还是选择了保持不变。</p>
+</div>
+
+<p>The [[location(0)]] bit tells WGPU to store the value the vec4 returned by this function in the first color target. We’ll get into what this is later.</p>
+<p>[[location(0)]]位告诉WGPU将此函数返回的vec4值存储在第一个颜色目标中。我们以后再谈这件事。</p>
+<h1 id="How-do-we-use-the-shaders"><a href="#How-do-we-use-the-shaders" class="headerlink" title="How do we use the shaders?"></a>How do we use the shaders?</h1><p>This is the part where we finally make the thing in the title: the pipeline. First let’s modify State to include the following.</p>
+<p>接着我们最终制作标题中的东西的部分：pipeline。首先，让我们修改State以包括以下内容。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.rs</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">State</span></span> &#123;</span><br><span class="line">    surface: wgpu::Surface,</span><br><span class="line">    device: wgpu::Device,</span><br><span class="line">    queue: wgpu::Queue,</span><br><span class="line">    sc_desc: wgpu::SwapChainDescriptor,</span><br><span class="line">    swap_chain: wgpu::SwapChain,</span><br><span class="line">    size: winit::dpi::PhysicalSize&lt;<span class="built_in">u32</span>&gt;,</span><br><span class="line">    <span class="comment">// NEW!</span></span><br><span class="line">    render_pipeline: wgpu::RenderPipeline,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Now let’s move to the new() method, and start making the pipeline. We’ll have to load in those shaders we made earlier, as the render_pipeline requires those.</p>
+<p>现在让我们转到new()方法，开始制作pipeline。我们必须加载之前制作的着色器，因为render_pipeline需要这些着色器。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> shader = device.create_shader_module(&amp;wgpu::ShaderModuleDescriptor &#123;</span><br><span class="line">    label: <span class="literal">Some</span>(<span class="string">&quot;Shader&quot;</span>),</span><br><span class="line">    flags: wgpu::ShaderFlags::all(),</span><br><span class="line">    source: wgpu::ShaderSource::Wgsl(<span class="built_in">include_str!</span>(<span class="string">&quot;shader.wgsl&quot;</span>).into()),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>One more thing, we need to create a PipelineLayout. We’ll get more into this after we cover Buffers.</p>
+<p>还有一件事，我们需要创建一个PipelineLayout。在我们讨论缓冲区之后，我们将进一步讨论这个问题。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> render_pipeline_layout =</span><br><span class="line">    device.create_pipeline_layout(&amp;wgpu::PipelineLayoutDescriptor &#123;</span><br><span class="line">        label: <span class="literal">Some</span>(<span class="string">&quot;Render Pipeline Layout&quot;</span>),</span><br><span class="line">        bind_group_layouts: &amp;[],</span><br><span class="line">        push_constant_ranges: &amp;[],</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>Finally we have all we need to create the render_pipeline.</p>
+<p>最后，我们有了创建render_pipeline所需的一切。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> render_pipeline = device.create_render_pipeline(&amp;wgpu::RenderPipelineDescriptor &#123;</span><br><span class="line">    label: <span class="literal">Some</span>(<span class="string">&quot;Render Pipeline&quot;</span>),</span><br><span class="line">    layout: <span class="literal">Some</span>(&amp;render_pipeline_layout),</span><br><span class="line">    vertex: wgpu::VertexState &#123;</span><br><span class="line">        module: &amp;shader,</span><br><span class="line">        entry_point: <span class="string">&quot;main&quot;</span>, <span class="comment">// 1.</span></span><br><span class="line">        buffers: &amp;[], <span class="comment">// 2.</span></span><br><span class="line">    &#125;,</span><br><span class="line">    fragment: <span class="literal">Some</span>(wgpu::FragmentState &#123; <span class="comment">// 3.</span></span><br><span class="line">        module: &amp;shader,</span><br><span class="line">        entry_point: <span class="string">&quot;main&quot;</span>,</span><br><span class="line">        targets: &amp;[wgpu::ColorTargetState &#123; <span class="comment">// 4.</span></span><br><span class="line">            format: sc_desc.format,</span><br><span class="line">            blend: <span class="literal">Some</span>(wgpu::BlendState::REPLACE),</span><br><span class="line">            write_mask: wgpu::ColorWrite::ALL,</span><br><span class="line">        &#125;],</span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="comment">// continued ...</span></span><br></pre></td></tr></table></figure>
+
+<p>Two things to note here:<br>这里需要注意两件事：</p>
+<ol>
+<li>Here you can specify which function inside of the shader should be called, which is known as the entry_point. These are the functions we marked with [[stage(vertex)]] and [[stage(fragment)]]</li>
+<li>The buffers field tells wgpu what type of vertices we want to pass to the vertex shader. We’re specifying the vertices in the vertex shader itself so we’ll leave this empty. We’ll put something there in the next tutorial.</li>
+<li>The fragment is technically optional, so you have to wrap it in Some(). We need it if we want to store color data to the swap_chain.</li>
+<li>The targets field tells wgpu what color outputs it should set up.Currently we only need one for the swap_chain. We use the swap_chain’s format so that copying to it is easy, and we specify that the blending should just replace old pixel data with new data. We also tell wgpu to write to all colors: red, blue, green, and alpha. We’ll talk more aboutcolor_state when we talk about textures.</li>
+</ol>
+<div></div>
+
+<ol>
+<li>在这里，您可以指定应该调用着色器内部的哪个函数，该函数称为入口点。这些是我们用[[stage(vertex)]]和[[stage(fragment)]标记的函数</li>
+<li>buffers字段告诉wgpu要传递给顶点着色器的顶点类型。我们将在顶点着色器本身中指定顶点，因此将此项留空。我们将在下一个教程中介绍一些内容。</li>
+<li>片段着色器在技术上是可选的，因此您必须将其包装在Some()中。如果我们想将颜色数据存储到交换链，就需要它。</li>
+<li>targets字段告诉wgpu应该设置什么颜色输出。目前，我们只需要一个用于交换链。我们使用swap_chain的格式，以便复制到它是很容易的，并且我们指定混合应该只是用新数据替换旧的像素数据。我们还告诉wgpu写入所有颜色：红色、蓝色、绿色和alpha。在讨论纹理时，我们将更多地讨论颜色状态。</li>
+</ol>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">primitive: wgpu::PrimitiveState &#123;</span><br><span class="line">    topology: wgpu::PrimitiveTopology::TriangleList, <span class="comment">// 1.</span></span><br><span class="line">    strip_index_format: <span class="literal">None</span>,</span><br><span class="line">    front_face: wgpu::FrontFace::Ccw, <span class="comment">// 2.</span></span><br><span class="line">    cull_mode: <span class="literal">Some</span>(wgpu::Face::Back),</span><br><span class="line">    <span class="comment">// Setting this to anything other than Fill requires Features::NON_FILL_POLYGON_MODE</span></span><br><span class="line">    polygon_mode: wgpu::PolygonMode::Fill,</span><br><span class="line">    <span class="comment">// Requires Features::DEPTH_CLAMPING</span></span><br><span class="line">    clamp_depth: <span class="literal">false</span>,</span><br><span class="line">    <span class="comment">// Requires Features::CONSERVATIVE_RASTERIZATION</span></span><br><span class="line">    conservative: <span class="literal">false</span>,</span><br><span class="line">&#125;,</span><br><span class="line"><span class="comment">// continued ...</span></span><br></pre></td></tr></table></figure>
+
+<p>The primitive field describes how to interpret our vertices when converting them into triangles.<br>primitive字段描述了在将顶点转换为三角形时如何解释顶点。</p>
+<ol>
+<li>Using PrimitiveTopology::TriangleList means that each three vertices will correspond to one triangle.</li>
+<li>The front_face and cull_mode fields tell wgpu how to determine whether a given triangle is facing forward or not. FrontFace::Ccw means that a triangle is facing forward if the vertices are arranged in a counter clockwise direction. Triangles that are not considered facing forward are culled (not included in the render) as specified by CullMode::Back. We’ll cover culling a bit more when we cover Buffers.</li>
+</ol>
+<div></div>
+
+<ol>
+<li>使用PrimitiveTopology::TriangleList意味着每三个顶点对应一个三角形。</li>
+<li>front_face和cull_mode字段告诉wgpu如何确定给定三角形是否朝前。FrontFace:：Ccw表示如果顶点按逆时针方向排列，则三角形朝前。根据CullMode:：Back的指定，将剔除（不包括在渲染中）不被视为朝前的三角形。当我们讨论缓冲区时，我们将更多地讨论剔除。</li>
+</ol>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    depth_stencil: <span class="literal">None</span>, <span class="comment">// 1.</span></span><br><span class="line">    multisample: wgpu::MultisampleState &#123;</span><br><span class="line">        count: <span class="number">1</span>, <span class="comment">// 2.</span></span><br><span class="line">        mask: !<span class="number">0</span>, <span class="comment">// 3.</span></span><br><span class="line">        alpha_to_coverage_enabled: <span class="literal">false</span>, <span class="comment">// 4.</span></span><br><span class="line">    &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>The rest of the method is pretty simple:<br>该方法的其余部分非常简单：</p>
+<ol>
+<li>We’re not using a depth/stencil buffer currently, so we leave depth_stencil as None. This will change later.</li>
+<li>This determines how many samples this pipeline will use. Multisampling is a complex topic, so we won’t get into it here.</li>
+<li>sample_mask specifies which samples should be active. In this case we are using all of them.</li>
+<li>alpha_to_coverage_enabled has to do with anti-aliasing. We’re not covering anti-aliasing here, so we’ll leave this as false now.</li>
+</ol>
+<div></div>
+
+<ol>
+<li>我们目前没有使用depth/stencil缓冲区，因此我们将depth/stencil保留为无。这将在以后改变。</li>
+<li>这将确定此pipeline将使用多少个样本。多重采样是一个复杂的主题，因此我们在这里不进行讨论。</li>
+<li>sample_mask指定哪些样本应处于活动状态。在本例中，我们使用了所有这些。</li>
+<li>启用alpha_to_coverage_enabled与抗锯齿有关。我们这里不讨论反走样，所以现在将其保留为false。</li>
+</ol>
+<p>Now all we have to do is save the render_pipeline to State and then we can use it!</p>
+<p>现在我们所要做的就是将render_pipeline保存到State，然后我们就可以使用它了！</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// new()</span></span><br><span class="line"><span class="keyword">Self</span> &#123;</span><br><span class="line">    surface,</span><br><span class="line">    device,</span><br><span class="line">    queue,</span><br><span class="line">    sc_desc,</span><br><span class="line">    swap_chain,</span><br><span class="line">    size,</span><br><span class="line">    <span class="comment">// NEW!</span></span><br><span class="line">    render_pipeline,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Using-a-pipeline"><a href="#Using-a-pipeline" class="headerlink" title="Using a pipeline"></a>Using a pipeline</h1><p>If you run your program now, it’ll take a little longer to start, but it will still show the blue screen we got in the last section. That’s because while we created the render_pipeline, we need to modify the code in render() to actually use it.</p>
+<p>如果你现在运行你的程序，它将需要更长的时间来启动，但它仍然会显示我们在上一节中得到的蓝屏。这是因为当我们创建render_pipeline时，我们需要修改render()中的代码以实际使用它。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// render()</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 1.</span></span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> render_pass = encoder.begin_render_pass(&amp;wgpu::RenderPassDescriptor &#123;</span><br><span class="line">        label: <span class="literal">Some</span>(<span class="string">&quot;Render Pass&quot;</span>),</span><br><span class="line">        color_attachments: &amp;[</span><br><span class="line">            <span class="comment">// This is what [[location(0)]] in the fragment shader targets</span></span><br><span class="line">            wgpu::RenderPassColorAttachment &#123;</span><br><span class="line">                view: &amp;frame.view,</span><br><span class="line">                resolve_target: <span class="literal">None</span>,</span><br><span class="line">                ops: wgpu::Operations &#123;</span><br><span class="line">                    load: wgpu::LoadOp::Clear(</span><br><span class="line">                        wgpu::Color &#123;</span><br><span class="line">                            r: <span class="number">0.1</span>,</span><br><span class="line">                            g: <span class="number">0.2</span>,</span><br><span class="line">                            b: <span class="number">0.3</span>,</span><br><span class="line">                            a: <span class="number">1.0</span>,</span><br><span class="line">                        &#125;</span><br><span class="line">                    ),</span><br><span class="line">                    store: <span class="literal">true</span>,</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        ],</span><br><span class="line">        depth_stencil_attachment: <span class="literal">None</span>,</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// NEW!</span></span><br><span class="line">    render_pass.set_pipeline(&amp;<span class="keyword">self</span>.render_pipeline); <span class="comment">// 2.</span></span><br><span class="line">    render_pass.draw(<span class="number">0</span>..<span class="number">3</span>, <span class="number">0</span>..<span class="number">1</span>); <span class="comment">// 3.</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+
+<p>We didn’t change much, but let’s talk about what we did change.<br>我们变化不大，但让我们谈谈我们改变了什么。</p>
+<ol>
+<li>We renamed _render_pass to render_pass and made it mutable.</li>
+<li>We set the pipeline on the render_pass using the one we just created.</li>
+<li>We tell wgpu to draw something with 3 vertices, and 1 instance. This is where [[builtin(vertex_index)]] comes from.</li>
+</ol>
+<div></div>
+
+<ol>
+<li>我们将_render_pass重命名为render_pass并使其可变。</li>
+<li>我们将刚才创建的pipeline设置在render_pass上。</li>
+<li>我们告诉wgpu用3个顶点和1个实例绘制一些东西。这就是[[builtin(vertex_index)]]的来源。</li>
+</ol>
+<p>With all that you should be seeing a lovely brown triangle.<br>所有这些，你应该看到一个可爱的棕色三角形。</p>
+<h1 id="Challenge"><a href="#Challenge" class="headerlink" title="Challenge"></a>Challenge</h1><p>Create a second pipeline that uses the triangle’s position data to create a color that it then sends to the fragment shader. Have the app swap between these when you press the spacebar. Hint: you’ll need to modify VertexOutput</p>
+<p>创建第二条管道，该管道使用三角形的位置数据创建颜色，然后发送到片段着色器。按空格键时，让应用程序在这两者之间切换。提示：您需要修改VertexOutput</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/sotrh/learn-wgpu/tree/master/code/beginner/tutorial3-pipeline/">Check out the code!</a></p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>qianqians
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://qianqians.github.io/2021/08/20/Wgpu%20The%20Pipeline/" title="Wgpu The Pipeline">https://qianqians.github.io/2021/08/20/Wgpu The Pipeline/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/08/19/Wgpu%20The%20Swapchain/" rel="prev" title="Wgpu The Swapchain">
+      <i class="fa fa-chevron-left"></i> Wgpu The Swapchain
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/08/24/Wgpu%20Buffers%20and%20Indices/" rel="next" title="Wgpu Buffers and Indices">
+      Wgpu Buffers and Indices <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
   window.addEventListener('tabs:register', () => {
     let { activeClass } = CONFIG.comments;
     if (CONFIG.comments.storage) {
@@ -18,4 +447,82 @@
       localStorage.setItem('comments_active', commentClass);
     });
   }
-</script></div></div></main><footer class="footer"><div class="footer-inner"><div class="copyright"> &copy; <span itemprop="copyrightYear">2021</span><span class="with-love"><i class="fa fa-user"></i></span> <span class="author" itemprop="copyrightHolder">qianqians</span></div><div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动</div></div></footer></div><script src="/lib/anime.min.js"></script><script src="/lib/velocity/velocity.min.js"></script><script src="/lib/velocity/velocity.ui.min.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/pisces.js"></script><script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script></body></html>
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">qianqians</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
