@@ -22,19 +22,15 @@
     var CONFIG = {"hostname":"qianqians.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="WebGPU provides access to constrained global resources shared between different programs (and web pages) running on the same machine. An application can try to indirectly probe how constrained these g">
-<meta property="og:type" content="article">
-<meta property="og:title" content="WebGPU 2.7. Workload identification">
-<meta property="og:url" content="https://qianqians.github.io/2021/08/09/WebGPU%202.7.%20Workload%20identification/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="qianqians&#39;blog">
+<meta property="og:url" content="https://qianqians.github.io/archives/2023/05/index.html">
 <meta property="og:site_name" content="qianqians&#39;blog">
-<meta property="og:description" content="WebGPU provides access to constrained global resources shared between different programs (and web pages) running on the same machine. An application can try to indirectly probe how constrained these g">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-08-09T04:13:34.811Z">
-<meta property="article:modified_time" content="2021-08-09T06:48:05.366Z">
 <meta property="article:author" content="qianqians">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://qianqians.github.io/2021/08/09/WebGPU%202.7.%20Workload%20identification/">
+<link rel="canonical" href="https://qianqians.github.io/archives/2023/05/">
 
 
 <script id="page-configurations">
@@ -42,12 +38,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : true,
+    isPost : false,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>WebGPU 2.7. Workload identification | qianqians'blog</title>
+  <title>归档 | qianqians'blog</title>
   
 
 
@@ -154,117 +150,50 @@
         <div class="content-wrap">
           
 
-          <div class="content post posts-expand">
+          <div class="content archive">
             
 
-    
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2021/08/09/WebGPU%202.7.%20Workload%20identification/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="qianqians">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qianqians'blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          WebGPU 2.7. Workload identification
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-08-09 12:13:34 / 修改时间：14:48:05" itemprop="dateCreated datePublished" datetime="2021-08-09T12:13:34+08:00">2021-08-09</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/WebGPU/" itemprop="url" rel="index"><span itemprop="name">WebGPU</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
+  
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        <span class="collection-header">嗯..! 目前共计 23 篇日志。 继续努力。</span>
+      </div>
 
       
-        <p>WebGPU provides access to constrained global resources shared between different programs (and web pages) running on the same machine. An application can try to indirectly probe how constrained these global resources are, in order to reason about workloads performed by other open web pages, based on the patterns of usage of these shared resources. These issues are generally analogous to issues with Javascript, such as system memory and CPU execution throughput. WebGPU does not provide any additional mitigations for this.</p>
-<p>WebGPU提供对在同一台计算机上运行的不同程序（和网页）之间共享的受限全局资源的访问。应用程序可以尝试间接探测这些全局资源的约束程度，以便根据这些共享资源的使用模式推断其他开放网页执行的工作负载。这些问题通常类似于Javascript的问题，例如系统内存和CPU执行吞吐量。WebGPU不为此提供任何其他缓解措施。</p>
-<p>2.7.1. Memory resources</p>
-<p>WebGPU exposes fallible allocations from machine-global memory heaps, such as VRAM. This allows for probing the size of the system’s remaining available memory (for a given heap type) by attempting to allocate and watching for allocation failures.</p>
-<p>WebGPU暴露了来自硬件的全局内存堆（如VRAM）的易出错的分配。这允许通过尝试分配和观察分配失败来探测系统剩余可用内存的大小（对于给定堆类型）。</p>
-<p>GPUs internally have one or more (typically only two) heaps of memory shared by all running applications. When a heap is depleted, WebGPU would fail to create a resource. This is observable, which may allow a malicious application to guess what heaps are used by other applications, and how much they allocate from them.</p>
-<p>GPU内部有一个或多个（通常只有两个）由所有运行的应用程序共享的内存堆。当堆耗尽时，WebGPU将无法创建资源。这是可以观察到的，这可能允许恶意应用程序猜测其他应用程序使用了哪些堆，以及它们从中分配了多少。</p>
-<p>2.7.2. Computation resources</p>
-<p>If one site uses WebGPU at the same time as another, it may observe the increase in time it takes to process some work. For example, if a site constantly submits compute workloads and tracks completion of work on the queue, it may observe that something else also started using the GPU.</p>
-<p>如果一个站点与其他页面同时使用WebGPU，它可能会观察到处理某些工作所需的时间增加。例如，如果站点不断提交计算工作负载并跟踪队列上的工作完成情况，那么它可能会发现其他东西也开始使用GPU。</p>
-<p>A GPU has many parts that can be tested independently, such as the arithmetic units, texture sampling units, atomic units, etc. A malicious application may sense when some of these units are stressed, and attempt to guess the workload of another application by analyzing the stress patterns. This is analogous to the realities of CPU execution of Javascript.</p>
-<p>GPU有许多可以独立测试的部分，如算术单元、纹理采样单元、原子单元等。恶意应用程序可能会感知其中一些单元何时受到压力，并试图通过分析压力模式来猜测另一个应用程序的工作负载。这类似于Javascript的CPU执行。</p>
-
+    <div class="collection-year">
+      <span class="collection-header">2023</span>
     </div>
 
-    
-    
-    
-        
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
 
-<div>
-<ul class="post-copyright">
-  <li class="post-copyright-author">
-    <strong>本文作者： </strong>qianqians
-  </li>
-  <li class="post-copyright-link">
-    <strong>本文链接：</strong>
-    <a href="https://qianqians.github.io/2021/08/09/WebGPU%202.7.%20Workload%20identification/" title="WebGPU 2.7. Workload identification">https://qianqians.github.io/2021/08/09/WebGPU 2.7. Workload identification/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
-  </li>
-</ul>
-</div>
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2023-05-22T14:24:07+08:00"
+              content="2023-05-22">
+          05-22
+        </time>
+      </div>
 
+      <div class="post-title">
+          <a class="post-title-link" href="/2023/05/22/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E6%B8%B8%E6%88%8F%E7%99%BB%E5%BD%95%E6%B5%81%E7%A8%8B/" itemprop="url">
+            <span itemprop="name">微信小游戏登录流程</span>
+          </a>
+      </div>
 
-      <footer class="post-footer">
-
-        
-
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2021/08/09/WebGPU%202.6.%20Denial%20of%20service/" rel="prev" title="WebGPU 2.6. Denial of service">
-      <i class="fa fa-chevron-left"></i> WebGPU 2.6. Denial of service
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/08/09/WebGPU%202.8.%20Privacy/" rel="next" title="WebGPU 2.8. Privacy">
-      WebGPU 2.8. Privacy <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
+    </header>
   </article>
+
+
+    </div>
+  </div>
   
   
+  
+
   
 
 
