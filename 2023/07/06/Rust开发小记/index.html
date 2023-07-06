@@ -22,19 +22,19 @@
     var CONFIG = {"hostname":"qianqians.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Once a GPUDevice has been obtained during an application initialization routine, we can describe the WebGPU platform as consisting of the following layers:  User agent implementing the specification.">
+  <meta name="description" content="多线程共享trait 1234trait T &amp;#123;&amp;#125;struct B &amp;#123;&amp;#125;impl T for B &amp;#123;&amp;#125;let p Arc&lt;Mutex&lt;Box&lt;dyn T&gt;&gt;&gt; &#x3D; Arc::new(Mutex::new(Box::new(B&amp;#123;&amp;#125;))) trait中声明async函数 1234#[a">
 <meta property="og:type" content="article">
-<meta property="og:title" content="WebGPU 3.4.2. Memory Model">
-<meta property="og:url" content="https://qianqians.github.io/2021/08/17/WebGPU%203.4.2.%20Memory%20Model/index.html">
+<meta property="og:title" content="Rust开发小记">
+<meta property="og:url" content="https://qianqians.github.io/2023/07/06/Rust%E5%BC%80%E5%8F%91%E5%B0%8F%E8%AE%B0/index.html">
 <meta property="og:site_name" content="qianqians&#39;blog">
-<meta property="og:description" content="Once a GPUDevice has been obtained during an application initialization routine, we can describe the WebGPU platform as consisting of the following layers:  User agent implementing the specification.">
+<meta property="og:description" content="多线程共享trait 1234trait T &amp;#123;&amp;#125;struct B &amp;#123;&amp;#125;impl T for B &amp;#123;&amp;#125;let p Arc&lt;Mutex&lt;Box&lt;dyn T&gt;&gt;&gt; &#x3D; Arc::new(Mutex::new(Box::new(B&amp;#123;&amp;#125;))) trait中声明async函数 1234#[a">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-08-17T08:53:49.131Z">
-<meta property="article:modified_time" content="2021-08-17T09:25:58.125Z">
+<meta property="article:published_time" content="2023-07-06T06:05:07.853Z">
+<meta property="article:modified_time" content="2023-07-06T06:23:43.010Z">
 <meta property="article:author" content="qianqians">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://qianqians.github.io/2021/08/17/WebGPU%203.4.2.%20Memory%20Model/">
+<link rel="canonical" href="https://qianqians.github.io/2023/07/06/Rust%E5%BC%80%E5%8F%91%E5%B0%8F%E8%AE%B0/">
 
 
 <script id="page-configurations">
@@ -47,7 +47,7 @@
   };
 </script>
 
-  <title>WebGPU 3.4.2. Memory Model | qianqians'blog</title>
+  <title>Rust开发小记 | qianqians'blog</title>
   
 
 
@@ -161,7 +161,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2021/08/17/WebGPU%203.4.2.%20Memory%20Model/">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2023/07/06/Rust%E5%BC%80%E5%8F%91%E5%B0%8F%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -174,7 +174,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          WebGPU 3.4.2. Memory Model
+          Rust开发小记
         </h1>
 
         <div class="post-meta">
@@ -185,7 +185,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-08-17 16:53:49 / 修改时间：17:25:58" itemprop="dateCreated datePublished" datetime="2021-08-17T16:53:49+08:00">2021-08-17</time>
+              <time title="创建时间：2023-07-06 14:05:07 / 修改时间：14:23:43" itemprop="dateCreated datePublished" datetime="2023-07-06T14:05:07+08:00">2023-07-06</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -193,7 +193,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/WebGPU/" itemprop="url" rel="index"><span itemprop="name">WebGPU</span></a>
+                  <a href="/categories/Rust/" itemprop="url" rel="index"><span itemprop="name">Rust</span></a>
                 </span>
             </span>
 
@@ -208,40 +208,20 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Once a GPUDevice has been obtained during an application initialization routine, we can describe the WebGPU platform as consisting of the following layers:</p>
-<ol>
-<li>User agent implementing the specification.</li>
-<li>Operating system with low-level native API drivers for this device.</li>
-<li>Actual CPU and GPU hardware.</li>
+        <ol>
+<li><p>多线程共享trait</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">T</span></span> &#123;&#125;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">B</span></span> &#123;&#125;</span><br><span class="line"><span class="keyword">impl</span> T <span class="keyword">for</span> B &#123;&#125;</span><br><span class="line"><span class="keyword">let</span> p Arc&lt;Mutex&lt;<span class="built_in">Box</span>&lt;<span class="keyword">dyn</span> T&gt;&gt;&gt; = Arc::new(Mutex::new(<span class="built_in">Box</span>::new(B&#123;&#125;)))</span><br></pre></td></tr></table></figure></li>
+<li><p>trait中声明async函数</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#[async_trait]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">trait</span> <span class="title">T</span></span> &#123;</span><br><span class="line">    <span class="keyword">async</span> <span class="function"><span class="keyword">fn</span> <span class="title">send</span></span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, buf: &amp;[<span class="built_in">u8</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>生命周期标注</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::fs;</span><br><span class="line"><span class="keyword">use</span> std::io;</span><br><span class="line"><span class="keyword">use</span> serde::&#123;Deserialize, Serialize&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">load_data_from_file</span></span>(cfg_file: <span class="built_in">String</span>) -&gt; <span class="built_in">Result</span>&lt;<span class="built_in">String</span>, io::Error&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> data = fs::read_to_string(cfg_file)?;</span><br><span class="line">    <span class="literal">Ok</span>(data)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">load_cfg_from_data</span></span>&lt;<span class="symbol">&#x27;a</span>, C: Deserialize&lt;<span class="symbol">&#x27;a</span>&gt; + Serialize&gt;(data: &amp;<span class="symbol">&#x27;a</span> <span class="built_in">String</span>) -&gt; <span class="built_in">Result</span>&lt;C, io::Error&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> cfg: C = serde_json::from_str::&lt;C&gt;(&amp;data)?;</span><br><span class="line">    <span class="literal">Ok</span>(cfg)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>data在外部调用load_data_from_file获取,然后调用load_cfg_from_data时传入<br>如在load_cfg_from_data中读取写做:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::fs;</span><br><span class="line"><span class="keyword">use</span> std::io;</span><br><span class="line"><span class="keyword">use</span> serde::&#123;Deserialize, Serialize&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">load_data_from_file</span></span>(cfg_file: <span class="built_in">String</span>) -&gt; <span class="built_in">Result</span>&lt;<span class="built_in">String</span>, io::Error&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> data = fs::read_to_string(cfg_file)?;</span><br><span class="line">    <span class="literal">Ok</span>(data)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">load_cfg_from_data</span></span>&lt;<span class="symbol">&#x27;a</span>, C: Deserialize&lt;<span class="symbol">&#x27;a</span>&gt; + Serialize&gt;(cfg_file: <span class="built_in">String</span>) -&gt; <span class="built_in">Result</span>&lt;C, io::Error&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> data = load_data_from_file(cfg_file)?;</span><br><span class="line">    <span class="keyword">let</span> cfg: C = serde_json::from_str::&lt;C&gt;(&amp;data)?;</span><br><span class="line">    <span class="literal">Ok</span>(cfg)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>会编译不过</p>
+</li>
+<li><p>tokio::spawn拉起线程,传入的变量使用Arc&lt;Mutex<H>&gt;,clone后传入</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">pub</span> <span class="keyword">async</span> <span class="function"><span class="keyword">fn</span> <span class="title">f</span></span>(_handle: Arc&lt;Mutex&lt;H&gt;&gt;) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">let</span> _clone_h = _handle.clone();</span><br><span class="line">    <span class="keyword">let</span> _join = tokio::spawn(<span class="keyword">async</span> <span class="keyword">move</span> &#123;</span><br><span class="line">        <span class="keyword">loop</span> &#123;</span><br><span class="line">            <span class="comment">//...</span></span><br><span class="line">            </span><br><span class="line">            <span class="keyword">let</span> _clone_handle = _clone_h.clone();</span><br><span class="line">            <span class="comment">//...              </span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ol>
-<p>在应用程序初始化例程中获得GPU设备后，我们可以将WebGPU平台描述为由以下层组成:</p>
-<ol>
-<li>实现规范的用户代理。</li>
-<li>此设备具有低级本机API驱动的操作系统。</li>
-<li>实际的CPU和GPU硬件。</li>
-</ol>
-<p>Each layer of the WebGPU platform may have different memory types that the user agent needs to consider when implementing the specification:</p>
-<ul>
-<li>The script-owned memory, such as an ArrayBuffer created by the script, is generally not accessible by a GPU driver.</li>
-<li>A user agent may have different processes responsible for running the content and communication to the GPU driver. In this case, it uses inter-process shared memory to transfer data.</li>
-<li>Dedicated GPUs have their own memory with high bandwidth, while integrated GPUs typically share memory with the system.</li>
-</ul>
-<p>WebGPU平台的每一层可能有不同的内存类型，用户代理在执行规范时需要考虑:</p>
-<ul>
-<li>脚本拥有的内存（如脚本创建的ArrayBuffer）通常不可由GPU驱动程序访问。</li>
-<li>用户代理可以具有负责运行内容和与GPU驱动程序通信的不同进程。在这种情况下，它使用进程间共享内存来传输数据。</li>
-<li>专用GPU拥有自己的高带宽内存，而集成GPU通常与系统共享内存。</li>
-</ul>
-<p>Most physical resources are allocated in the memory of type that is efficient for computation or rendering by the GPU. When the user needs to provide new data to the GPU, the data may first need to cross the process boundary in order to reach the user agent part that communicates with the GPU driver. Then it may need to be made visible to the driver, which sometimes requires a copy into driver-allocated staging memory. Finally, it may need to be transferred to the dedicated GPU memory, potentially changing the internal layout into one that is most efficient for GPUs to operate on.</p>
-<p>大多数物理资源都分配在GPU高效计算或渲染的内存中。当用户需要向GPU提供新数据时，数据可能首先需要跨越进程边界以到达与GPU驱动程序通信的用户代理部分。然后可能需要使其对驱动程序可见，这有时需要将副本复制到驱动程序分配的暂存内存中。最后，可能需要将其传输到专用GPU内存，从而可能会将内部布局更改为GPU操作最有效的布局。</p>
-<p>All of these transitions are done by the WebGPU implementation of the user agent.</p>
-<p>所有这些转换都由用户代理的WebGPU实现完成。</p>
-<blockquote>
-<p>Note: This example describes the worst case, while in practice the implementation may not need to cross the process boundary, or may be able to expose the driver-managed memory directly to the user behind an ArrayBuffer, thus avoiding any data copies.</p>
-</blockquote>
-<blockquote>
-<p>注: 本例描述了最坏的情况，而实际上实现可能不需要跨越进程边界，或者可能能够将驱动程序管理的内存直接暴露给ArrayBuffer后面的用户，从而避免任何数据拷贝。</p>
-</blockquote>
 
     </div>
 
@@ -257,7 +237,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://qianqians.github.io/2021/08/17/WebGPU%203.4.2.%20Memory%20Model/" title="WebGPU 3.4.2. Memory Model">https://qianqians.github.io/2021/08/17/WebGPU 3.4.2. Memory Model/</a>
+    <a href="https://qianqians.github.io/2023/07/06/Rust%E5%BC%80%E5%8F%91%E5%B0%8F%E8%AE%B0/" title="Rust开发小记">https://qianqians.github.io/2023/07/06/Rust开发小记/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -274,13 +254,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/08/13/WebGPU%203.4.1.%20Timelines/" rel="prev" title="WebGPU 3.4.1. Timelines">
-      <i class="fa fa-chevron-left"></i> WebGPU 3.4.1. Timelines
+    <a href="/2023/05/31/%E9%A3%9E%E8%A1%8C%E6%A3%8B%E5%BC%80%E5%8F%91%E6%89%8B%E8%AE%B0/" rel="prev" title="飞行棋开发手记">
+      <i class="fa fa-chevron-left"></i> 飞行棋开发手记
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/08/19/Wgpu%20The%20Swapchain/" rel="next" title="Wgpu The Swapchain">
-      Wgpu The Swapchain <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     

@@ -117,12 +117,12 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">24</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">25</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">3</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">4</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -152,6 +152,83 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2021/08/06/WebGPU%202.4.%20Out-of-bounds%20access%20in%20shaders/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="qianqians">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qianqians'blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/06/WebGPU%202.4.%20Out-of-bounds%20access%20in%20shaders/" class="post-title-link" itemprop="url">WebGPU 2.4. Out-of-bounds access in shaders</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-08-06 17:48:34 / 修改时间：20:22:11" itemprop="dateCreated datePublished" datetime="2021-08-06T17:48:34+08:00">2021-08-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WebGPU/" itemprop="url" rel="index"><span itemprop="name">WebGPU</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Shaders can access physical resources either directly (for example, as a “uniform” GPUBufferBinding), or via texture units, which are fixed-function hardware blocks that handle texture coordinate conversions. Validation on the API side can only guarantee that all the inputs to the shader are provided and they have the correct usage and types. The host API side can not guarantee that the data is accessed within bounds if the texture units are not involved.</p>
+<p>着色器可以直接访问物理资源(例如，作为”uniform”GPUBufferBinding)，也可以通过纹理单元访问物理资源，纹理单元是处理纹理坐标转换的固定功能硬件块。API端的验证只能保证提供了着色器的所有输入，并且它们具有正确的用法和类型。如果涉及纹理单元，则宿主API端无法保证在边界内访问数据。</p>
+<p>In order to prevent the shaders from accessing GPU memory an application doesn’t own, the WebGPU implementation may enable a special mode (called “robust buffer access”) in the driver that guarantees that the access is limited to buffer bounds.</p>
+<p>为了防止着色器访问应用程序不拥有的GPU内存，WebGPU实现可以在驱动程序中启用一种特殊模式（称为”robust buffer access”），以确保访问仅限于缓冲区边界内。</p>
+<p>Alternatively, an implementation may transform the shader code by inserting manual bounds checks. When this path is taken, the out-of-bound checks only apply to array indexing. They aren’t needed for plain field access of shader structures due to the minBindingSize validation on the host side.</p>
+<p>或者，WebGPU实现可以通过手动插入边界检查来变换着色器代码。采用此方法时，越界检查仅适用于数组索引。由于主机端的minBindingSize验证，访问着色器结构的普通字段不需要它们。</p>
+<p>If the shader attempts to load data outside of physical resource bounds, the implementation is allowed to:<br> 1.return a value at a different location within the resource bounds<br> 2.return a value vector of “(0, 0, 0, X)” with any “X”<br> 3.partially discard the draw or dispatch call</p>
+<p>如果着色器尝试加载物理资源边界之外的数据，则允许WebGPU实现：<br> 1.在资源范围内的不同位置返回值<br> 2.返回带有任意”X”的(0，0，0，X)向量<br> 3.部分放弃the draw or dispatch call</p>
+<p>If the shader attempts to write data outside of physical resource bounds, the implementation is allowed to:<br> 1.write the value to a different location within the resource bounds<br> 2.discard the write operation<br> 3.partially discard the draw or dispatch call</p>
+<p>如果着色器尝试写入物理资源边界之外的数据，则允许WebGPU实现：<br> 1.将值写入资源边界内的其他位置<br> 2.放弃写入操作<br> 3.部分放弃the draw or dispatch call</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
