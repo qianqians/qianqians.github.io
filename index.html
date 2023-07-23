@@ -156,7 +156,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2023/07/06/Rust%E5%BC%80%E5%8F%91%E5%B0%8F%E8%AE%B0/">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2023/07/09/Rust%E5%BC%80%E5%8F%91%E5%B0%8F%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -170,7 +170,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2023/07/06/Rust%E5%BC%80%E5%8F%91%E5%B0%8F%E8%AE%B0/" class="post-title-link" itemprop="url">Rust开发小记</a>
+            <a href="/2023/07/09/Rust%E5%BC%80%E5%8F%91%E5%B0%8F%E8%AE%B0/" class="post-title-link" itemprop="url">Rust开发小记</a>
         </h2>
 
         <div class="post-meta">
@@ -180,14 +180,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2023-07-06 20:05:45" itemprop="dateCreated datePublished" datetime="2023-07-06T20:05:45+08:00">2023-07-06</time>
+              <time title="创建时间：2023-07-09 13:34:31" itemprop="dateCreated datePublished" datetime="2023-07-09T13:34:31+08:00">2023-07-09</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-07-15 23:10:48" itemprop="dateModified" datetime="2023-07-15T23:10:48+08:00">2023-07-15</time>
+                <time title="修改时间：2023-07-23 14:54:14" itemprop="dateModified" datetime="2023-07-23T14:54:14+08:00">2023-07-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -212,7 +212,9 @@
       
           <ol>
 <li><p>多线程共享trait</p>
-<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">trait</span> <span class="title class_">T</span> &#123;&#125;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">B</span> &#123;&#125;</span><br><span class="line"><span class="keyword">impl</span> <span class="title class_">T</span> <span class="keyword">for</span> <span class="title class_">B</span> &#123;&#125;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">p</span>: Arc&lt;Mutex&lt;<span class="type">Box</span>&lt;<span class="keyword">dyn</span> T&gt;&gt;&gt; = Arc::<span class="title function_ invoke__">new</span>(Mutex::<span class="title function_ invoke__">new</span>(<span class="type">Box</span>::<span class="title function_ invoke__">new</span>(B&#123;&#125;)))</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">trait</span> <span class="title class_">T</span> &#123;&#125;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">B</span> &#123;&#125;</span><br><span class="line"><span class="keyword">impl</span> <span class="title class_">T</span> <span class="keyword">for</span> <span class="title class_">B</span> &#123;&#125;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">p</span>: Arc&lt;Mutex&lt;<span class="type">Box</span>&lt;<span class="keyword">dyn</span> T&gt;&gt;&gt; = Arc::<span class="title function_ invoke__">new</span>(Mutex::<span class="title function_ invoke__">new</span>(<span class="type">Box</span>::<span class="title function_ invoke__">new</span>(B&#123;&#125;)))</span><br></pre></td></tr></table></figure>
+<p>需要注意struct类型的对象和trait之间不能互转,比如:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">trait</span> <span class="title class_">T</span> &#123;&#125;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">B</span> &#123;&#125;</span><br><span class="line"><span class="keyword">impl</span> <span class="title class_">T</span> <span class="keyword">for</span> <span class="title class_">B</span> &#123;&#125;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">p</span>: Arc&lt;Mutex&lt;<span class="type">Box</span>&lt;B&gt;&gt;&gt; = Arc::<span class="title function_ invoke__">new</span>(Mutex::<span class="title function_ invoke__">new</span>(<span class="type">Box</span>::<span class="title function_ invoke__">new</span>(B&#123;&#125;)))</span><br><span class="line"><span class="keyword">let</span> <span class="variable">p_trait</span>: Arc&lt;Mutex&lt;<span class="type">Box</span>&lt;<span class="keyword">dyn</span> T&gt;&gt;&gt; = p <span class="comment">//会编译不过</span></span><br></pre></td></tr></table></figure></li>
 <li><p>trait中声明async函数</p>
 <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#[async_trait]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">trait</span> <span class="title class_">T</span> &#123;</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">fn</span> <span class="title function_">send</span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, buf: &amp;[<span class="type">u8</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 <li><p>生命周期标注</p>
