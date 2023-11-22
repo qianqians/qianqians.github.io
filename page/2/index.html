@@ -117,7 +117,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">29</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">30</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -152,6 +152,156 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2021/09/02/Wgpu%20Instancing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="qianqians">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qianqians'blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/09/02/Wgpu%20Instancing/" class="post-title-link" itemprop="url">Wgpu Instancing</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-09-02 14:49:22 / 修改时间：15:33:51" itemprop="dateCreated datePublished" datetime="2021-09-02T14:49:22+08:00">2021-09-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Wgpu/" itemprop="url" rel="index"><span itemprop="name">Wgpu</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Our scene right now is very simple: we have one object centered at (0,0,0). What if we wanted more objects? This is were instancing comes in.</p>
+<p>我们现在的场景非常简单：我们有一个以（0,0,0）为中心的对象。如果我们想要更多的东西呢？这是实例的目标。</p>
+<p>Instancing allows us to draw the same object multiple times with different properties (position, orientation, size, color, etc.). There are multiple ways of doing instancing. One way would be to modify the uniform buffer to include these properties and then update it before we draw each instance of our object.</p>
+<p>实例化允许我们使用不同的属性（位置、方向、大小、颜色等）多次绘制同一对象。有多种方法可以进行实例化。一种方法是修改uniform缓冲区以包含这些属性，然后在绘制对象的每个实例之前更新它。</p>
+<p>We don’t want to use this method for performance reasons. Updating the uniform buffer for each instance would require multiple buffer copies each frame. On top of that, our method to update the uniform buffer currently requires use to create a new buffer to store the updated data. That’s a lot of time wasted between draw calls.</p>
+<p>出于性能原因，我们不希望使用此方法。更新每个实例的uniform缓冲区将需要每个帧有多个缓冲区副本。除此之外，我们更新uniform缓冲区的方法目前需要创建一个新的缓冲区来存储更新后的数据。在两次draw calls之间浪费了很多时间。</p>
+<p>If we look at the parameters for the draw_indexed function in the wgpu docs, we can see a solution to our problem.</p>
+<p>如果我们查看wgpu文档中draw_indexed函数的参数，我们可以看到问题的解决方案。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">draw_indexed</span></span>(</span><br><span class="line">    &amp;<span class="keyword">mut</span> <span class="keyword">self</span>,</span><br><span class="line">    indices: Range&lt;<span class="built_in">u32</span>&gt;,</span><br><span class="line">    base_vertex: <span class="built_in">i32</span>,</span><br><span class="line">    instances: Range&lt;<span class="built_in">u32</span>&gt; <span class="comment">// &lt;-- This right here</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>The instances parameter takes a Range<u32>. This parameter tells the GPU how many copies, or instances, of our model we want to draw. Currently we are specifying 0..1, which instructs the GPU to draw our model once, and then stop. If we used 0..5, our code would draw 5 instances.</p>
+<p>instances的参数为Range<u32>。此参数告诉GPU我们要绘制模型的多少副本或实例。目前我们正在指定0..1，它指示GPU绘制一次我们的模型，然后停止。如果我们使用0..5，我们的代码将绘制5个实例。</p>
+<p>The fact that instances is a Range<u32> may seem weird as using 1..2 for instances would still draw 1 instance of our object. Seems like it would be simpler to just use a u32 right? The reason it’s a range is because sometimes we don’t want to draw all of our objects. Sometimes we want to draw a selection of them, because others are not in frame, or we are debugging and want to look at a particular set of instances.</p>
+<p>instances是一个Range<u32>的事实可能看起来很奇怪，因为使用1..2 for instances仍然会绘制对象的一个实例。看起来使用u32会更简单，对吗？它是一个Range的原因是因为有时我们不想绘制所有的对象。有时，我们希望选择它们，因为其他的不在视野中，或者我们正在调试并希望查看一组特定的实例。</p>
+<p>Ok, now we know how to draw multiple instances of an object, how do we tell wgpu what particular instance to draw? We are going to use something known as an instance buffer.</p>
+<p>好的，现在我们知道了如何绘制一个对象的多个实例，我们如何告诉wgpu要绘制的特定实例？我们将使用实例缓冲区。</p>
+<h1 id="The-Instance-Buffer"><a href="#The-Instance-Buffer" class="headerlink" title="The Instance Buffer"></a>The Instance Buffer</h1><p>We’ll create an instance buffer in a similar way to how we create a uniform buffer. First we’ll create a struct called Instance.</p>
+<p>我们将以类似于创建uniform缓冲区的方式创建instance缓冲区。首先，我们将创建一个名为Instance的结构。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.rs</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// NEW!</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Instance</span></span> &#123;</span><br><span class="line">    position: cgmath::Vector3&lt;<span class="built_in">f32</span>&gt;,</span><br><span class="line">    rotation: cgmath::Quaternion&lt;<span class="built_in">f32</span>&gt;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<div class="note">
+
+<p>A Quaternion is a mathematical structure often used to represent rotation. The math behind them is beyond me (it involves imaginary numbers and 4D space) so I won’t be covering them here. If you really want to dive into them <a target="_blank" rel="noopener" href="https://mathworld.wolfram.com/Quaternion.html">here’s a Wolfram Alpha article</a>.</p>
+<p>四元数是一种常用于表示旋转的数学结构。它们背后的数学是我无法理解的(它涉及虚数和4D空间)，所以我不会在这里讨论它们。如果你真的想深入了解它们，<a target="_blank" rel="noopener" href="https://mathworld.wolfram.com/Quaternion.html">这里有一篇Wolfram Alpha文章</a>。</p>
+</div>
+
+<p>Using these values directly in the shader would be a pain as quaternions don’t have a WGSL analog. I don’t feel like writing the math in the shader, so we’ll convert the Instance data into a matrix and store it into a struct called InstanceRaw.</p>
+<p>直接在着色器中使用这些值会很痛苦，因为WGSL没有四元数模拟。我不想在着色器中编写数学，所以我们将实例数据转换为矩阵，并将其存储到名为InstanceRaw的结构中。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// NEW!</span></span><br><span class="line"><span class="meta">#[repr(C)]</span></span><br><span class="line"><span class="meta">#[derive(Copy, Clone, bytemuck::Pod, bytemuck::Zeroable)]</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">InstanceRaw</span></span> &#123;</span><br><span class="line">    model: [[<span class="built_in">f32</span>; <span class="number">4</span>]; <span class="number">4</span>],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>This is the data that will go into the wgpu::Buffer. We keep these separate so that we can update the Instance as much as we want without needing to mess with matrices. We only need to update the raw data before we draw.</p>
+<p>这是将进入wgpu::Buffer的数据。我们将它们分开，这样我们就可以随心所欲地更新实例，而无需弄乱矩阵。我们只需要在绘制之前更新原始数据。</p>
+<p>Let’s create a method on Instance to convert to InstanceRaw.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// NEW!</span></span><br><span class="line"><span class="keyword">impl</span> Instance &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">to_raw</span></span>(&amp;<span class="keyword">self</span>) -&gt; InstanceRaw &#123;</span><br><span class="line">        InstanceRaw &#123;</span><br><span class="line">            model: (cgmath::Matrix4::from_translation(<span class="keyword">self</span>.position) * cgmath::Matrix4::from(<span class="keyword">self</span>.rotation)).into(),</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Now we need to add 2 fields to State: instances, and instance_buffer.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">State</span></span> &#123;</span><br><span class="line">    instances: <span class="built_in">Vec</span>&lt;Instance&gt;,</span><br><span class="line">    instance_buffer: wgpu::Buffer,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>We’ll create the instances in new(). We’ll use some constants to simplify things. We’ll display our instances in 10 rows of 10, and they’ll be spaced evenly apart.</p>
+<p>我们将在new()中创建实例。我们将使用一些常量来简化事情。我们将以10行10列的形式显示我们的实例，并且它们将均匀地间隔开。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> NUM_INSTANCES_PER_ROW: <span class="built_in">u32</span> = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">const</span> NUM_INSTANCES: <span class="built_in">u32</span> = NUM_INSTANCES_PER_ROW * NUM_INSTANCES_PER_ROW;</span><br><span class="line"><span class="keyword">const</span> INSTANCE_DISPLACEMENT: cgmath::Vector3&lt;<span class="built_in">f32</span>&gt; = cgmath::Vector3::new(NUM_INSTANCES_PER_ROW <span class="keyword">as</span> <span class="built_in">f32</span> * <span class="number">0.5</span>, <span class="number">0.0</span>, NUM_INSTANCES_PER_ROW <span class="keyword">as</span> <span class="built_in">f32</span> * <span class="number">0.5</span>);</span><br></pre></td></tr></table></figure>
+
+<p>Now we can create the actual instances.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">impl</span> State &#123;</span><br><span class="line">    <span class="keyword">async</span> <span class="function"><span class="keyword">fn</span> <span class="title">new</span></span>(window: &amp;Window) -&gt; <span class="keyword">Self</span> &#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        <span class="keyword">let</span> instances = (<span class="number">0</span>..NUM_INSTANCES_PER_ROW).flat_map(|z| &#123;</span><br><span class="line">            (<span class="number">0</span>..NUM_INSTANCES_PER_ROW).map(<span class="keyword">move</span> |x| &#123;</span><br><span class="line">                <span class="keyword">let</span> position = cgmath::Vector3 &#123; x: x <span class="keyword">as</span> <span class="built_in">f32</span>, y: <span class="number">0.0</span>, z: z <span class="keyword">as</span> <span class="built_in">f32</span> &#125; - INSTANCE_DISPLACEMENT;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">let</span> rotation = <span class="keyword">if</span> position.is_zero() &#123;</span><br><span class="line">                    <span class="comment">// this is needed so an object at (0, 0, 0) won&#x27;t get scaled to zero</span></span><br><span class="line">                    <span class="comment">// as Quaternions can effect scale if they&#x27;re not created correctly</span></span><br><span class="line">                    cgmath::Quaternion::from_axis_angle(cgmath::Vector3::unit_z(), cgmath::Deg(<span class="number">0.0</span>))</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    cgmath::Quaternion::from_axis_angle(position.normalize(), cgmath::Deg(<span class="number">45.0</span>))</span><br><span class="line">                &#125;;</span><br><span class="line"></span><br><span class="line">                Instance &#123;</span><br><span class="line">                    position, rotation,</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;).collect::&lt;<span class="built_in">Vec</span>&lt;_&gt;&gt;();</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Now that we have our data, we can create the actual instance_buffer.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> instance_data = instances.iter().map(Instance::to_raw).collect::&lt;<span class="built_in">Vec</span>&lt;_&gt;&gt;();</span><br><span class="line"><span class="keyword">let</span> instance_buffer = device.create_buffer_init(</span><br><span class="line">    &amp;wgpu::util::BufferInitDescriptor &#123;</span><br><span class="line">        label: <span class="literal">Some</span>(<span class="string">&quot;Instance Buffer&quot;</span>),</span><br><span class="line">        contents: bytemuck::cast_slice(&amp;instance_data),</span><br><span class="line">        usage: wgpu::BufferUsage::VERTEX,</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>We’re going to need to create a new VertexBufferLayout for InstanceRaw.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">impl</span> InstanceRaw &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">desc</span></span>&lt;<span class="symbol">&#x27;a</span>&gt;() -&gt; wgpu::VertexBufferLayout&lt;<span class="symbol">&#x27;a</span>&gt; &#123;</span><br><span class="line">        <span class="keyword">use</span> std::mem;</span><br><span class="line">        wgpu::VertexBufferLayout &#123;</span><br><span class="line">            array_stride: mem::size_of::&lt;InstanceRaw&gt;() <span class="keyword">as</span> wgpu::BufferAddress,</span><br><span class="line">            <span class="comment">// We need to switch from using a step mode of Vertex to Instance</span></span><br><span class="line">            <span class="comment">// This means that our shaders will only change to use the next</span></span><br><span class="line">            <span class="comment">// instance when the shader starts processing a new instance</span></span><br><span class="line">            step_mode: wgpu::InputStepMode::Instance,</span><br><span class="line">            attributes: &amp;[</span><br><span class="line">                wgpu::VertexAttribute &#123;</span><br><span class="line">                    offset: <span class="number">0</span>,</span><br><span class="line">                    <span class="comment">// While our vertex shader only uses locations 0, and 1 now, in later tutorials we&#x27;ll</span></span><br><span class="line">                    <span class="comment">// be using 2, 3, and 4, for Vertex. We&#x27;ll start at slot 5 not conflict with them later</span></span><br><span class="line">                    shader_location: <span class="number">5</span>,</span><br><span class="line">                    format: wgpu::VertexFormat::Float32x4,</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="comment">// A mat4 takes up 4 vertex slots as it is technically 4 vec4s. We need to define a slot</span></span><br><span class="line">                <span class="comment">// for each vec4. We&#x27;ll have to reassemble the mat4 in</span></span><br><span class="line">                <span class="comment">// the shader.</span></span><br><span class="line">                wgpu::VertexAttribute &#123;</span><br><span class="line">                    offset: mem::size_of::&lt;[<span class="built_in">f32</span>; <span class="number">4</span>]&gt;() <span class="keyword">as</span> wgpu::BufferAddress,</span><br><span class="line">                    shader_location: <span class="number">6</span>,</span><br><span class="line">                    format: wgpu::VertexFormat::Float32x4,</span><br><span class="line">                &#125;,</span><br><span class="line">                wgpu::VertexAttribute &#123;</span><br><span class="line">                    offset: mem::size_of::&lt;[<span class="built_in">f32</span>; <span class="number">8</span>]&gt;() <span class="keyword">as</span> wgpu::BufferAddress,</span><br><span class="line">                    shader_location: <span class="number">7</span>,</span><br><span class="line">                    format: wgpu::VertexFormat::Float32x4,</span><br><span class="line">                &#125;,</span><br><span class="line">                wgpu::VertexAttribute &#123;</span><br><span class="line">                    offset: mem::size_of::&lt;[<span class="built_in">f32</span>; <span class="number">12</span>]&gt;() <span class="keyword">as</span> wgpu::BufferAddress,</span><br><span class="line">                    shader_location: <span class="number">8</span>,</span><br><span class="line">                    format: wgpu::VertexFormat::Float32x4,</span><br><span class="line">                &#125;,</span><br><span class="line">            ],</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>We need to add this descriptor to the render pipeline so that we can use it when we render.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> render_pipeline = device.create_render_pipeline(&amp;wgpu::RenderPipelineDescriptor &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    vertex: wgpu::VertexState &#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        <span class="comment">// UPDATED!</span></span><br><span class="line">        buffers: &amp;[Vertex::desc(), InstanceRaw::desc()],</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>Don’t forget to return our new variables!</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Self</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="comment">// NEW!</span></span><br><span class="line">    instances,</span><br><span class="line">    instance_buffer,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The last change we need to make is in the render() method. We need to bind our instance_buffer and we need to change the range we’re using in draw_indexed() to include the number of instances.</p>
+<p>我们需要做的最后一个更改是render()方法。我们需要绑定实例缓冲区，并且需要更改在draw_indexed()中使用的范围，以包括实例数。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">render_pass.set_pipeline(&amp;<span class="keyword">self</span>.render_pipeline);</span><br><span class="line">render_pass.set_bind_group(<span class="number">0</span>, &amp;<span class="keyword">self</span>.diffuse_bind_group, &amp;[]);</span><br><span class="line">render_pass.set_bind_group(<span class="number">1</span>, &amp;<span class="keyword">self</span>.camera_bind_group, &amp;[]);</span><br><span class="line">render_pass.set_vertex_buffer(<span class="number">0</span>, <span class="keyword">self</span>.vertex_buffer.slice(..));</span><br><span class="line"><span class="comment">// NEW!</span></span><br><span class="line">render_pass.set_vertex_buffer(<span class="number">1</span>, <span class="keyword">self</span>.instance_buffer.slice(..));</span><br><span class="line">render_pass.set_index_buffer(<span class="keyword">self</span>.index_buffer.slice(..), wgpu::IndexFormat::Uint16);</span><br><span class="line"></span><br><span class="line"><span class="comment">// UPDATED!</span></span><br><span class="line">render_pass.draw_indexed(<span class="number">0</span>..<span class="keyword">self</span>.num_indices, <span class="number">0</span>, <span class="number">0</span>..<span class="keyword">self</span>.instances.len() <span class="keyword">as</span> _);</span><br></pre></td></tr></table></figure>
+
+<div class="note">
+
+<p>Make sure if you add new instances to the Vec, that you recreate the instance_buffer and as well as camera_bind_group, otherwise your new instances won’t show up correctly.</p>
+<p>如果向Vec添加新实例，请确保重新创建instance_buffer和camera_bind_group，否则新实例将无法正确显示。</p>
+</div>
+
+<p>We need to reference the parts of our new matrix in shader.wgsl so that we can use it for our instances. Add the following to the top of shader.wgsl.</p>
+<p>我们需要在shader.wgsl中引用新矩阵的部分，以便将其用于实例。将以下内容添加到shader.wgsl的顶部。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">InstanceInput</span></span> &#123;</span><br><span class="line">    [[location(<span class="number">5</span>)]] model_matrix_0: vec4&lt;<span class="built_in">f32</span>&gt;;</span><br><span class="line">    [[location(<span class="number">6</span>)]] model_matrix_1: vec4&lt;<span class="built_in">f32</span>&gt;;</span><br><span class="line">    [[location(<span class="number">7</span>)]] model_matrix_2: vec4&lt;<span class="built_in">f32</span>&gt;;</span><br><span class="line">    [[location(<span class="number">8</span>)]] model_matrix_3: vec4&lt;<span class="built_in">f32</span>&gt;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>We need to reassemble the matrix before we can use it.</p>
+<p>我们需要重新组装矩阵才能使用它。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[[stage(vertex)]]</span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>(</span><br><span class="line">    model: VertexInput,</span><br><span class="line">    instance: InstanceInput,</span><br><span class="line">) -&gt; VertexOutput &#123;</span><br><span class="line">    <span class="keyword">let</span> model_matrix = mat4x4&lt;<span class="built_in">f32</span>&gt;(</span><br><span class="line">        instance.model_matrix_0,</span><br><span class="line">        instance.model_matrix_1,</span><br><span class="line">        instance.model_matrix_2,</span><br><span class="line">        instance.model_matrix_3,</span><br><span class="line">    );</span><br><span class="line">    <span class="comment">// Continued...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>We’ll apply the model_matrix before we apply camera_uniform.view_proj. We do this because the camera_uniform.view_proj changes the coordinate system from world space to camera space. Our model_matrix is a world space transformation, so we don’t want to be in camera space when using it.</p>
+<p>在应用camera_uniform.view_proj项目之前，我们将应用model_matrix。我们这样做是因为camera_uniform.view_proj将坐标系从世界空间更改为camera空间。我们的model_matrix是一个世界空间变换，所以我们不希望在使用它时处于摄影机空间。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[[stage(vertex)]]</span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>(</span><br><span class="line">    model: VertexInput,</span><br><span class="line">    instance: InstanceInput,</span><br><span class="line">) -&gt; VertexOutput &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    var out: VertexOutput;</span><br><span class="line">    out.tex_coords = model.tex_coords;</span><br><span class="line">    out.clip_position = camera.view_proj * model_matrix * vec4&lt;<span class="built_in">f32</span>&gt;(model.position, <span class="number">1.0</span>);</span><br><span class="line">    <span class="keyword">return</span> out;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>With all that done, we should have a forest of trees!</p>
+<p><img src="https://sotrh.github.io/learn-wgpu/assets/img/forest.5c5cf3ad.png" alt="trees"></p>
+<h1 id="Challenge"><a href="#Challenge" class="headerlink" title="Challenge"></a>Challenge</h1><p>Modify the position and/or rotation of the instances every frame.</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/sotrh/learn-wgpu/tree/master/code/beginner/tutorial7-instancing/">Check out the code!</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1626,112 +1776,6 @@
 <p>无效对象由多种情况造成，包括：<br>&nbsp;如果在创建对象时出错，则该对象立即无效。例如，如果对象描述符没有描述有效的对象，或者没有足够的内存来分配资源，就会发生这种情况。<br>&nbsp;如果对象被显式销毁(例如GPUBuffer.destroy())，则该对象将无效。<br>&nbsp;如果拥有对象的设备丢失，该对象将无效。</p>
 <p>To determine if a given GPUObjectBase object is valid to use with a targetObject, run the following steps:<br>&nbsp;1.If any of the following conditions are unsatisfied return false:<br>&nbsp;&nbsp;object is valid<br>&nbsp;&nbsp;object.[[device]] is valid.<br>&nbsp;&nbsp;object.[[device]] is targetObject.[[device]].<br>&nbsp;2.Return true.</p>
 <p>要确定给定的GPUObjectBase对象是否可与targetObject一起使用，请运行以下步骤：<br>&nbsp;1.如果以下任一条件不满足，则返回false：<br>&nbsp;&nbsp;对象是有效的<br>&nbsp;&nbsp;object.[[device]]是有效的<br>&nbsp;&nbsp;object.[[device]]是targetObject.[[device]].<br>&nbsp;2.返回true.</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2021/08/10/WebGPU%203.1.%20Conventions/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="qianqians">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qianqians'blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/10/WebGPU%203.1.%20Conventions/" class="post-title-link" itemprop="url">WebGPU 3.1. Conventions</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-08-10 10:24:11 / 修改时间：11:35:30" itemprop="dateCreated datePublished" datetime="2021-08-10T10:24:11+08:00">2021-08-10</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/WebGPU/" itemprop="url" rel="index"><span itemprop="name">WebGPU</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>3.1.1. Dot Syntax</p>
-<p>In this specification, the . (“dot”) syntax, common in programming languages, is used. The phrasing “Foo.Bar” means “the Bar member of the value (or interface) Foo.”</p>
-<p>在本规范中，使用编程语言中常见的(“点”)语法。短语”Foo.Bar”表示”对象(或接口)Foo的Bar成员”</p>
-<p>The ?. (“optional chaining”) syntax, adopted from JavaScript, is also used. The phrasing “Foo?.Bar” means “if Foo is null or undefined, Foo; otherwise, Foo.Bar”.</p>
-<p>采纳自JavaScript的”?.”语法同样被使用。”Foo?.Bar”表示”如果Foo为null或undefined，则为undefined；否则，Foo.Bar”。</p>
-<p>For example, where buffer is a GPUBuffer, buffer?.[[device]].[[adapter]] means “if buffer is null or undefined, then undefined, otherwise, the [[adapter]] internal slot of the [[device]] internal slot of buffer.</p>
-<p>例如，buffer是一个GPUBuffer对象，buffer?.[[device]].[[adapter]]表示”如果buffer为null或undefined，则为undefined，否则buffer的内部插槽[[device]]的内部插槽[[adapter]]”</p>
-<p>3.1.2. Internal Objects</p>
-<p>An internal object is a conceptual, non-exposed WebGPU object. Internal objects track the state of an API object and hold any underlying implementation. If the state of a particular internal object can change in parallel from multiple agents, those changes are always atomic with respect to all agents.</p>
-<p>内部对象是概念性的、未公开的WebGPU对象。内部对象跟踪API对象的状态并保存任何底层实现。如果特定内部对象的状态可以从多个代理并行更改，那么这些更改对于所有代理来说都是原子性的。</p>
-<p>Note: An “agent” refers to a JavaScript “thread” (i.e. main thread, or Web Worker).</p>
-<p>注：”agent”是指JavaScript”线程”(即主线程或Web工作线程)。</p>
-<p>3.1.3. WebGPU Interfaces</p>
-<p>A WebGPU interface is an exposed interface which encapsulates an internal object. It provides the interface through which the internal object’s state is changed.</p>
-<p>WebGPU接口是封装内部对象的公开接口。它提供用于更改内部对象状态的接口。</p>
-<p>As a matter of convention, if a WebGPU interface is referred to as invalid, it means that the internal object it encapsulates is invalid.</p>
-<p>按照惯例，如果WebGPU接口被援引为无效，则意味着它封装的内部对象无效。</p>
-<p>Any interface which includes GPUObjectBase is a WebGPU interface.</p>
-<p>任何包含GPUObjectBase的接口都是WebGPU接口。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">interface mixin GPUObjectBase &#123;</span><br><span class="line">    attribute USVString? label;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>GPUObjectBase has the following attributes:</p>
-<p>GPUObjectBase具有以下属性:</p>
-<p>label, of type USVString, nullable<br>A label which can be used by development tools (such as error/warning messages, browser developer tools, or platform debugging utilities) to identify the underlying internal object to the developer. It has no specified format, and therefore cannot be reliably machine-parsed.</p>
-<p>In any given situation, the user agent may or may not choose to use this label.</p>
-<p>label, USVString类型，可为空<br>开发工具（如错误/警告消息、浏览器开发工具或平台调试实用程序）可以使用的标签，用于向开发人员标识底层内部对象。它没有指定的格式，因此无法可靠地进行机器分析。</p>
-<p>在任何给定的情况下，用户代理都可能或可能不选择使用此标签。</p>
-<p>GPUObjectBase has the following internal slots:</p>
-<p>[[device]], of type device, readonly<br>    An internal slot holding the device which owns the internal object.</p>
-<p>[[device]], 类型device, 只读<br>    一个内部插槽持有拥有内部对象的设备</p>
-<p>3.1.4. Object Descriptors</p>
-<p>An object descriptor holds the information needed to create an object, which is typically done via one of the create* methods of GPUDevice.</p>
-<p>对象描述符保存创建对象所需的信息，这通常通过GPUDevice的create*方法之一完成。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dictionary GPUObjectDescriptorBase &#123;</span><br><span class="line">    USVString label;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>GPUObjectDescriptorBase has the following members:</p>
-<p>label, of type USVString<br>    The initial value of GPUObjectBase.label.</p>
-<p>GPUObjectDescriptorBase有如下成员:</p>
-<p>label, USVString类型<br>    GPUObjectBase.label的初始值。</p>
 
       
     </div>
