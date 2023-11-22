@@ -29,13 +29,13 @@
 <meta property="og:site_name" content="qianqians&#39;blog">
 <meta property="og:description" content="Slice Compilation CompilationA Slice compiler produces source files that must be combined with application code to produce client and server executables. Slice 编译器生成的源文件必须与应用程序代码组合才能生成客户端和服务器可执行文件。 Si">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://qianqians.github.io/2023/11/22/ice_Slice_Compilation/image.png">
-<meta property="og:image" content="https://qianqians.github.io/2023/11/22/ice_Slice_Compilation/image-1.png">
+<meta property="og:image" content="https://doc.zeroc.com/ice/files/3.7/14026220/25591829/1/1515168282000/Client_server_same_development_environment.gif">
+<meta property="og:image" content="https://doc.zeroc.com/ice/files/3.7/14026220/25591831/1/1515168283000/Development_process_different_development_environment.gif">
 <meta property="article:published_time" content="2023-11-22T13:36:12.792Z">
-<meta property="article:modified_time" content="2023-11-22T13:43:54.564Z">
+<meta property="article:modified_time" content="2023-11-22T13:52:05.856Z">
 <meta property="article:author" content="qianqians">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://qianqians.github.io/2023/11/22/ice_Slice_Compilation/image.png">
+<meta name="twitter:image" content="https://doc.zeroc.com/ice/files/3.7/14026220/25591829/1/1515168282000/Client_server_same_development_environment.gif">
 
 <link rel="canonical" href="https://qianqians.github.io/2023/11/22/ice_Slice_Compilation/">
 
@@ -188,7 +188,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2023-11-22 21:36:12 / 修改时间：21:43:54" itemprop="dateCreated datePublished" datetime="2023-11-22T21:36:12+08:00">2023-11-22</time>
+              <time title="创建时间：2023-11-22 21:36:12 / 修改时间：21:52:05" itemprop="dateCreated datePublished" datetime="2023-11-22T21:36:12+08:00">2023-11-22</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -217,7 +217,7 @@
 <p>Single Development Environment for Client and Server</p>
 <p>The figure below shows the situation when both client and server are developed in C++. The Slice compiler generates two files from a Slice definition in a source file Printer.ice: a header file (Printer.h) and a source file (Printer.cpp)</p>
 <p>下图展示了客户端和服务器端均采用C++开发时的情况。 Slice 编译器根据源文件 Printer.ice 中的 Slice 定义生成两个文件：头文件 (Printer.h) 和源文件 (Printer.cpp)</p>
-<p><img src="image.png" alt="Alt text"></p>
+<p><img src="https://doc.zeroc.com/ice/files/3.7/14026220/25591829/1/1515168282000/Client_server_same_development_environment.gif" alt="Alt text"></p>
 <p>Development process if client and server share the same development environment.</p>
 <p>The Printer.h header file contains definitions that correspond to the types used in the Slice definition. It is included in the source code of both client and server to ensure that client and server agree about the types and interfaces used by the application.<br>The Printer.cpp source file provides an API to the client for sending messages to remote objects. The client source code (Client.cpp, written by the client developer) contains the client-side application logic. The generated source code and the client code are compiled and linked into the client executable.</p>
 <p>客户端和服务器共享相同开发环境的开发流程。</p>
@@ -235,7 +235,7 @@
 <p>如果客户端和服务器使用不同语言开发，则不能共享任何源代码或二进制组件。 例如，用 Java 编写的客户端不能包含 C++ 头文件。</p>
 <p>This figure shows the situation when a client written in Java and the corresponding server is written in C++. In this case, the client and server developers are completely independent, and each uses his or her own development environment and language mapping. The only link between client and server developers is the Slice definition each one uses.</p>
 <p>该图显示了当客户端用Java编写而相应的服务器用C++编写时的情况。 在这种情况下，客户端和服务器开发人员是完全独立的，并且各自使用自己的开发环境和语言映射。 客户端和服务器开发人员之间的唯一联系是各自使用的 Slice 定义。</p>
-<p><img src="image-1.png" alt="Alt text"></p>
+<p><img src="https://doc.zeroc.com/ice/files/3.7/14026220/25591831/1/1515168283000/Development_process_different_development_environment.gif" alt="Alt text"></p>
 <p>Development process for different development environments.</p>
 <p>For Java, the slice compiler creates a number of files whose names depend on the names of various Slice constructs. (These files are collectively referred to as *.java in the above figure.)</p>
 <p>针对不同开发环境的开发流程。</p>
