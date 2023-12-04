@@ -117,7 +117,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">32</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">33</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -152,6 +152,138 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2021/08/13/WebGPU%203.4.1.%20Timelines/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="qianqians">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qianqians'blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/13/WebGPU%203.4.1.%20Timelines/" class="post-title-link" itemprop="url">WebGPU 3.4.1. Timelines</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-08-13 15:10:14" itemprop="dateCreated datePublished" datetime="2021-08-13T15:10:14+08:00">2021-08-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-17 16:45:14" itemprop="dateModified" datetime="2021-08-17T16:45:14+08:00">2021-08-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WebGPU/" itemprop="url" rel="index"><span itemprop="name">WebGPU</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>A computer system with a user agent at the front-end and GPU at the back-end has components working on different timelines in parallel:</p>
+<p>Content timeline<br>Associated with the execution of the Web script. It includes calling all methods described by this specification.<br>Steps executed on the content timeline look like this.</p>
+<p>Device timeline<br>Associated with the GPU device operations that are issued by the user agent. It includes creation of adapters, devices, and GPU resources and state objects, which are typically synchronous operations from the point of view of the user agent part that controls the GPU, but can live in a separate OS process.<br>Steps executed on the device timeline look like this.</p>
+<p>Queue timeline<br>Associated with the execution of operations on the compute units of the GPU. It includes actual draw, copy, and compute jobs that run on the GPU.<br>Steps executed on the queue timeline look like this.</p>
+<p>一个前端有用户代理，后端有GPU的计算机系统的组件在不同的时间线上并行工作：</p>
+<p>内容时间轴<br>与Web脚本的执行关联。它包括调用本规范描述的所有方法。<br>在内容时间轴上执行的步骤如下所示。</p>
+<p>设备时间轴<br>与用户代理发出的GPU设备操作关联。它包括创建适配器、设备、GPU资源和状态对象，从控制GPU的用户代理部分的角度来看，这些通常是同步操作，并且可以存在于单独的操作系统进程中。<br>在设备时间轴上执行的步骤如下所示。</p>
+<p>队列时间轴<br>与在GPU的计算单元上执行操作有关。它包括在GPU上运行的实际绘制、复制和计算作业。<br>在队列时间轴上执行的步骤如下所示。</p>
+<p>In this specification, asynchronous operations are used when the result value depends on work that happens on any timeline other than the Content timeline. They are represented by callbacks and promises in JavaScript.</p>
+<p>在本规范中，当结果值取决于除内容时间线以外的任何时间线上发生的工作时，将使用异步操作。它们由JavaScript中的回调和promises表示。</p>
+<blockquote>
+<p>EXAMPLE 1<br>GPUComputePassEncoder.dispatch():</p>
+<blockquote>
+<ol>
+<li>User encodes a dispatch command by calling a method of the GPUComputePassEncoder which happens on the Content timeline.</li>
+<li>User issues GPUQueue.submit() that hands over the GPUCommandBuffer to the user agent, which processes it on the Device timeline by calling the OS driver to do a low-level submission.</li>
+<li>The submit gets dispatched by the GPU invocation scheduler onto the actual compute units for execution, which happens on the Queue timeline.</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol>
+<li>用户通过调用发生在内容时间轴上的GPUComputePassEncoder方法对调度命令进行编码。</li>
+<li>用户发出GPUQueue.submit()，将GPUCommandBuffer移交给用户代理，用户代理通过调用操作系统驱动程序进行低级提交，在设备时间轴上对其进行处理。</li>
+<li>提交由GPU调用调度器调度到实际的计算单元上执行，这发生在队列时间线上。</li>
+</ol>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>EXAMPLE 2<br>GPUDevice.createBuffer():</p>
+<blockquote>
+<ol>
+<li>User fills out a GPUBufferDescriptor and creates a GPUBuffer with it, which happens on the Content timeline.</li>
+<li>User agent creates a low-level buffer on the Device timeline.</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol>
+<li>用户填写一个GPUBufferDescriptor并用它创建一个GPUBuffer，这发生在内容时间轴上。</li>
+<li>用户代理在设备时间轴上创建低级缓冲区。</li>
+</ol>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>EXAMPLE 3<br>GPUBuffer.mapAsync():</p>
+<blockquote>
+<ol>
+<li>User requests to map a GPUBuffer on the Content timeline and gets a promise in return.</li>
+<li>User agent checks if the buffer is currently used by the GPU and makes a reminder to itself to check back when this usage is over.</li>
+<li>After the GPU operating on Queue timeline is done using the buffer, the user agent maps it to memory and resolves the promise.</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol>
+<li>用户请求将GPUBuffer映射到内容时间轴上，并得到一个promise作为返回值。</li>
+<li>用户代理检查缓冲区当前是否由GPU使用，并提醒自己在使用结束时检查。</li>
+<li>在GPU使用缓冲区对队列时间轴进行操作之后，用户代理将其映射到内存并resolves the promise。</li>
+</ol>
+</blockquote>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -882,75 +1014,6 @@
 <p>通常，分配新内存可能会暴露系统上运行的其他应用程序的剩余数据。为了解决这一问题，WebGPU在概念上将所有资源初始化为零，尽管在实践中，如果看到开发人员手动初始化内容，则实现可能会跳过此步骤。这包括着色器中的变量和共享工作组内存。</p>
 <p>The precise mechanism of clearing the workgroup memory can differ between platforms. If the native API does not provide facilities to clear it, the WebGPU implementation transforms the compute shader to first do a clear across all invocations, synchronize them, and continue executing developer’s code.</p>
 <p>精确清除工作组内存的机制可能因平台而异。如果本机API不提供清除功能，WebGPU实现会将计算着色器转换为首先在所有调用中执行清除，同步它们，然后继续执行开发人员的代码。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2021/08/06/WebGPU%202.2.%20GPU-based%20undefined%20behavior/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="qianqians">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qianqians'blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/06/WebGPU%202.2.%20GPU-based%20undefined%20behavior/" class="post-title-link" itemprop="url">WebGPU 2.2. GPU-based undefined behavior</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-08-06 17:33:10 / 修改时间：20:22:04" itemprop="dateCreated datePublished" datetime="2021-08-06T17:33:10+08:00">2021-08-06</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/WebGPU/" itemprop="url" rel="index"><span itemprop="name">WebGPU</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>WebGPU shaders are executed by the compute units inside GPU hardware. In native APIs, some of the shader instructions may result in undefined behavior on the GPU. In order to address that, the shader instruction set and its defined behaviors are strictly defined by WebGPU. When a shader is provided to createShaderModule(), the WebGPU implementation has to validate it before doing any translation (to platform-specific shaders) or transformation passes.</p>
-<p>WebGPU着色器由GPU硬件内的计算单元执行。在本机API中，某些着色器指令可能会导致GPU上出现未定义的行为。为了解决这个问题，着色器指令集及其定义的行为由WebGPU严格定义。当为createShaderModule()提供着色器时，WebGPU实现必须在执行任何转换（到特定于平台的着色器）或转换过程之前对其进行验证。</p>
 
       
     </div>
