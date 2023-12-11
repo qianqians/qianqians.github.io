@@ -22,19 +22,19 @@
     var CONFIG = {"hostname":"qianqians.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="The security requirements for WebGPU are the same as ever for the web, and are likewise non-negotiable. The general approach is strictly validating all the commands before they reach GPU, ensuring tha">
+  <meta name="description" content="Enumeration Syntax and Semantics Slice 枚举类型定义看起来与 C++ 相同： 1234module M&amp;#123;    enum Fruit &amp;#123; Apple, Pear, Orange &amp;#125;&amp;#125;  This definition introduces a type named Fruit that becomes a new typ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="WebGPU 2.1. Security">
-<meta property="og:url" content="https://qianqians.github.io/2021/08/06/WebGPU%202.1.%20Security/index.html">
+<meta property="og:title" content="Enumerations">
+<meta property="og:url" content="https://qianqians.github.io/2023/12/11/ice_Enumerations/index.html">
 <meta property="og:site_name" content="qianqians&#39;blog">
-<meta property="og:description" content="The security requirements for WebGPU are the same as ever for the web, and are likewise non-negotiable. The general approach is strictly validating all the commands before they reach GPU, ensuring tha">
+<meta property="og:description" content="Enumeration Syntax and Semantics Slice 枚举类型定义看起来与 C++ 相同： 1234module M&amp;#123;    enum Fruit &amp;#123; Apple, Pear, Orange &amp;#125;&amp;#125;  This definition introduces a type named Fruit that becomes a new typ">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-08-06T09:13:22.771Z">
-<meta property="article:modified_time" content="2021-08-06T12:22:00.946Z">
+<meta property="article:published_time" content="2023-12-11T15:01:14.955Z">
+<meta property="article:modified_time" content="2023-12-11T15:07:26.647Z">
 <meta property="article:author" content="qianqians">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://qianqians.github.io/2021/08/06/WebGPU%202.1.%20Security/">
+<link rel="canonical" href="https://qianqians.github.io/2023/12/11/ice_Enumerations/">
 
 
 <script id="page-configurations">
@@ -47,7 +47,7 @@
   };
 </script>
 
-  <title>WebGPU 2.1. Security | qianqians'blog</title>
+  <title>Enumerations | qianqians'blog</title>
   
 
 
@@ -161,7 +161,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2021/08/06/WebGPU%202.1.%20Security/">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2023/12/11/ice_Enumerations/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -174,7 +174,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          WebGPU 2.1. Security
+          Enumerations
         </h1>
 
         <div class="post-meta">
@@ -185,7 +185,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-08-06 17:13:22 / 修改时间：20:22:00" itemprop="dateCreated datePublished" datetime="2021-08-06T17:13:22+08:00">2021-08-06</time>
+              <time title="创建时间：2023-12-11 23:01:14 / 修改时间：23:07:26" itemprop="dateCreated datePublished" datetime="2023-12-11T23:01:14+08:00">2023-12-11</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -193,7 +193,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/WebGPU/" itemprop="url" rel="index"><span itemprop="name">WebGPU</span></a>
+                  <a href="/categories/ice/" itemprop="url" rel="index"><span itemprop="name">ice</span></a>
                 </span>
             </span>
 
@@ -208,15 +208,41 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>The security requirements for WebGPU are the same as ever for the web, and are likewise non-negotiable. The general approach is strictly validating all the commands before they reach GPU, ensuring that a page can only work with its own data.</p>
-<p>WebGPU的安全要求与web的安全要求一样，同样是不可妥协的。一般的方法是在所有命令到达GPU之前严格验证它们，确保页面只能使用自己的数据。</p>
-<p>2.1.1. CPU-based undefined behavior</p>
-<p>A WebGPU implementation translates the workloads issued by the user into API commands specific to the target platform. Native APIs specify the valid usage for the commands (for example, see vkCreateDescriptorSetLayout) and generally don’t guarantee any outcome if the valid usage rules are not followed. This is called “undefined behavior”, and it can be exploited by an attacker to access memory they don’t own, or force the driver to execute arbitrary code.</p>
-<p>WebGPU实现将用户发出的工作请求转换为目标平台的特定API命令。本机API指定命令的有效用法（例如，请参见vkCreateDescriptorSetLayout），如果不遵循有效用法规则，通常不保证任何结果。这被称为“未定义行为”，攻击者可以利用它来访问他们不可访问的内存，或强制驱动程序执行任意代码。</p>
-<p>In order to disallow insecure usage, the range of allowed WebGPU behaviors is defined for any input. An implementation has to validate all the input from the user and only reach the driver with the valid workloads. This document specifies all the error conditions and handling semantics. For example, specifying the same buffer with intersecting ranges in both “source” and “destination” of copyBufferToBuffer() results in GPUCommandEncoder generating an error, and no other operation occurring.</p>
-<p>为了禁止不安全的使用，WebGPU为任何输入定义了允许的行为范围。一个实现必须验证来自用户的所有输入，并且只使用有效的工作负载到达驱动程序。本文档指定了所有错误条件和处理语义。例如，在copyBufferToBuffer（）的“源”和“目标”中指定具有相交范围的相同缓冲区会导致GPUCommandendCoder生成错误，并且不会发生其他操作。</p>
-<p>See <a target="_blank" rel="noopener" href="https://gpuweb.github.io/gpuweb/#errors-and-debugging">§ 20 Errors &amp; Debugging</a> for more information about error handling.</p>
-<p>见<a target="_blank" rel="noopener" href="https://gpuweb.github.io/gpuweb/#errors-and-debugging">§ 20 Errors &amp; Debugging</a>，了解有关错误处理的更多信息。</p>
+        <p>Enumeration Syntax and Semantics</p>
+<p>Slice 枚举类型定义看起来与 C++ 相同：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> M</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">enum</span> <span class="title class_">Fruit</span> &#123; Apple, Pear, Orange &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>This definition introduces a type named Fruit that becomes a new type in its own right. Slice guarantees that the values of enumerators increase from left to right, so Apple compares less than Pear in every language mapping. By default, the first enumerator has a value of zero, with sequentially increasing values for subsequent enumerators.</p>
+<p>A Slice enum type introduces a new namespace scope, so the following is legal:</p>
+<p>这个定义引入了一个名为 Fruit 的类型，它本身就成为一种新类型。 Slice 保证枚举数的值从左到右递增，因此 Apple 在每种语言映射中都比 Pear 进行比较。 默认情况下，第一个枚举数的值为零，后续枚举数的值依次增加。</p>
+<p>Slice 枚举类型引入了新的命名空间范围，因此以下内容是合法的：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> M</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">enum</span> <span class="title class_">Fruit</span> &#123; Apple, Pear, Orange &#125;</span><br><span class="line">    <span class="keyword">enum</span> <span class="title class_">ComputerBrands</span> &#123; Apple, Dell, HP, Lenovo &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The example below shows how to refer to an enumerator from a different scope:</p>
+<p>下面的示例展示了如何从不同的范围引用枚举：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> M</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">enum</span> <span class="title class_">Color</span> &#123; Red, Green, Blue &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">module</span> N</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">Pixel</span></span><br><span class="line">    &#123;</span><br><span class="line">        M::Color c = Blue;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Slice does not permit empty enumerations.</p>
+<p>Slice 不允许空枚举。</p>
+<p>In Ice releases prior to Ice 3.7, an enum type did not create a new namespace and its enumerators were in the same namespace as the enum type itself. With these releases, you had to select longer enumerator names to avoid a naming clash.</p>
+<p>在 Ice 3.7 之前的 Ice 版本中，枚举类型不会创建新的命名空间，并且其枚举器与枚举类型本身位于同一命名空间中。 在这些版本中，您必须选择更长的枚举器名称以避免命名冲突。</p>
+<p>Custom Enumerator Values</p>
+<p>Slice also permits you to assign custom values to enumerators:</p>
+<p>Slice 还允许您为枚举器分配自定义值：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> PearValue = <span class="number">7</span>;</span><br><span class="line"><span class="keyword">enum</span> <span class="title class_">Fruit</span> &#123; Apple = <span class="number">0</span>, Pear = PearValue, Orange &#125;</span><br></pre></td></tr></table></figure>
+
+<p>Custom values must be unique and non-negative, and may refer to Slice constants of integer types. If no custom value is specified for an enumerator, its value is one greater than the enumerator that immediately precedes it. In the example above, Orange has the value 8.</p>
+<p>The maximum value for an enumerator value is the same as the maximum value for int, 2 31 - 1.</p>
+<p>Slice does not require custom enumerator values to be declared in increasing order:</p>
+<p>自定义值必须是唯一且非负的，并且可以引用整数类型的 Slice 常量。 如果没有为枚举器指定自定义值，则其值比紧邻其前面的枚举器大 1。 在上面的示例中，Orange的值为 8。</p>
+<p>枚举值的最大值与 int 的最大值相同，即 2^31 - 1。</p>
+<p>Slice 不需要按升序声明自定义枚举值：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">Fruit</span> &#123; Apple = <span class="number">5</span>, Pear = <span class="number">3</span>, Orange = <span class="number">1</span> &#125;   <span class="comment">// 合法的</span></span><br></pre></td></tr></table></figure>
+
+<p>Note however that when there is an inconsistency between the declaration order and the numerical order of the enumerators, the behavior of comparison operations may vary between language mappings.</p>
+<p>但请注意，当声明顺序与枚举数的数字顺序不一致时，比较操作的行为可能会因语言映射而异。</p>
+<p>For an application that is still using version 1.0 of the Ice encoding, changing the definition of an enumerated type may break backward compatibility with existing applications. For more information, please refer to the encoding rules for enumerators.</p>
+<p>对于仍在使用 Ice 编码 1.0 版的应用程序，更改枚举类型的定义可能会破坏与现有应用程序的向后兼容性。 更多信息请参考枚举数的编码规则。</p>
 
     </div>
 
@@ -232,7 +258,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://qianqians.github.io/2021/08/06/WebGPU%202.1.%20Security/" title="WebGPU 2.1. Security">https://qianqians.github.io/2021/08/06/WebGPU 2.1. Security/</a>
+    <a href="https://qianqians.github.io/2023/12/11/ice_Enumerations/" title="Enumerations">https://qianqians.github.io/2023/12/11/ice_Enumerations/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -249,13 +275,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/08/06/WebGPU%201.%20Introduction/" rel="prev" title="WebGPU 1. Introduction">
-      <i class="fa fa-chevron-left"></i> WebGPU 1. Introduction
+    <a href="/2023/12/06/ice_Basic_Types/" rel="prev" title="Basic Types">
+      <i class="fa fa-chevron-left"></i> Basic Types
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/08/06/WebGPU%202.2.%20GPU-based%20undefined%20behavior/" rel="next" title="WebGPU 2.2. GPU-based undefined behavior">
-      WebGPU 2.2. GPU-based undefined behavior <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     

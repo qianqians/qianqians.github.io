@@ -117,7 +117,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">34</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">35</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -152,6 +152,108 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2023/12/11/ice_Enumerations/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="qianqians">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qianqians'blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/12/11/ice_Enumerations/" class="post-title-link" itemprop="url">Enumerations</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-12-11 23:01:14 / 修改时间：23:07:26" itemprop="dateCreated datePublished" datetime="2023-12-11T23:01:14+08:00">2023-12-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ice/" itemprop="url" rel="index"><span itemprop="name">ice</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Enumeration Syntax and Semantics</p>
+<p>Slice 枚举类型定义看起来与 C++ 相同：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> M</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">enum</span> <span class="title class_">Fruit</span> &#123; Apple, Pear, Orange &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>This definition introduces a type named Fruit that becomes a new type in its own right. Slice guarantees that the values of enumerators increase from left to right, so Apple compares less than Pear in every language mapping. By default, the first enumerator has a value of zero, with sequentially increasing values for subsequent enumerators.</p>
+<p>A Slice enum type introduces a new namespace scope, so the following is legal:</p>
+<p>这个定义引入了一个名为 Fruit 的类型，它本身就成为一种新类型。 Slice 保证枚举数的值从左到右递增，因此 Apple 在每种语言映射中都比 Pear 进行比较。 默认情况下，第一个枚举数的值为零，后续枚举数的值依次增加。</p>
+<p>Slice 枚举类型引入了新的命名空间范围，因此以下内容是合法的：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> M</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">enum</span> <span class="title class_">Fruit</span> &#123; Apple, Pear, Orange &#125;</span><br><span class="line">    <span class="keyword">enum</span> <span class="title class_">ComputerBrands</span> &#123; Apple, Dell, HP, Lenovo &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The example below shows how to refer to an enumerator from a different scope:</p>
+<p>下面的示例展示了如何从不同的范围引用枚举：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> M</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">enum</span> <span class="title class_">Color</span> &#123; Red, Green, Blue &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">module</span> N</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">Pixel</span></span><br><span class="line">    &#123;</span><br><span class="line">        M::Color c = Blue;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Slice does not permit empty enumerations.</p>
+<p>Slice 不允许空枚举。</p>
+<p>In Ice releases prior to Ice 3.7, an enum type did not create a new namespace and its enumerators were in the same namespace as the enum type itself. With these releases, you had to select longer enumerator names to avoid a naming clash.</p>
+<p>在 Ice 3.7 之前的 Ice 版本中，枚举类型不会创建新的命名空间，并且其枚举器与枚举类型本身位于同一命名空间中。 在这些版本中，您必须选择更长的枚举器名称以避免命名冲突。</p>
+<p>Custom Enumerator Values</p>
+<p>Slice also permits you to assign custom values to enumerators:</p>
+<p>Slice 还允许您为枚举器分配自定义值：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> PearValue = <span class="number">7</span>;</span><br><span class="line"><span class="keyword">enum</span> <span class="title class_">Fruit</span> &#123; Apple = <span class="number">0</span>, Pear = PearValue, Orange &#125;</span><br></pre></td></tr></table></figure>
+
+<p>Custom values must be unique and non-negative, and may refer to Slice constants of integer types. If no custom value is specified for an enumerator, its value is one greater than the enumerator that immediately precedes it. In the example above, Orange has the value 8.</p>
+<p>The maximum value for an enumerator value is the same as the maximum value for int, 2 31 - 1.</p>
+<p>Slice does not require custom enumerator values to be declared in increasing order:</p>
+<p>自定义值必须是唯一且非负的，并且可以引用整数类型的 Slice 常量。 如果没有为枚举器指定自定义值，则其值比紧邻其前面的枚举器大 1。 在上面的示例中，Orange的值为 8。</p>
+<p>枚举值的最大值与 int 的最大值相同，即 2^31 - 1。</p>
+<p>Slice 不需要按升序声明自定义枚举值：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> <span class="title class_">Fruit</span> &#123; Apple = <span class="number">5</span>, Pear = <span class="number">3</span>, Orange = <span class="number">1</span> &#125;   <span class="comment">// 合法的</span></span><br></pre></td></tr></table></figure>
+
+<p>Note however that when there is an inconsistency between the declaration order and the numerical order of the enumerators, the behavior of comparison operations may vary between language mappings.</p>
+<p>但请注意，当声明顺序与枚举数的数字顺序不一致时，比较操作的行为可能会因语言映射而异。</p>
+<p>For an application that is still using version 1.0 of the Ice encoding, changing the definition of an enumerated type may break backward compatibility with existing applications. For more information, please refer to the encoding rules for enumerators.</p>
+<p>对于仍在使用 Ice 编码 1.0 版的应用程序，更改枚举类型的定义可能会破坏与现有应用程序的向后兼容性。 更多信息请参考枚举数的编码规则。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1145,97 +1247,6 @@
           <ol>
 <li><a target="_blank" rel="noopener" href="https://github.com/wechat-miniprogram/minigame-unity-webgl-transform">https://github.com/wechat-miniprogram/minigame-unity-webgl-transform</a></li>
 <li>websocket使用<a target="_blank" rel="noopener" href="https://github.com/psygames/UnityWebSocket">https://github.com/psygames/UnityWebSocket</a></li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2023/07/06/Rust%E5%BC%80%E5%8F%91%E5%B0%8F%E8%AE%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="qianqians">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qianqians'blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/07/06/Rust%E5%BC%80%E5%8F%91%E5%B0%8F%E8%AE%B0/" class="post-title-link" itemprop="url">Rust开发小记</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-07-06 20:05:45" itemprop="dateCreated datePublished" datetime="2023-07-06T20:05:45+08:00">2023-07-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-11-20 11:23:32" itemprop="dateModified" datetime="2023-11-20T11:23:32+08:00">2023-11-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Rust/" itemprop="url" rel="index"><span itemprop="name">Rust</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ol>
-<li><p>多线程共享trait</p>
-<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">trait</span> <span class="title class_">T</span> &#123;&#125;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">B</span> &#123;&#125;</span><br><span class="line"><span class="keyword">impl</span> <span class="title class_">T</span> <span class="keyword">for</span> <span class="title class_">B</span> &#123;&#125;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">p</span>: Arc&lt;Mutex&lt;<span class="type">Box</span>&lt;<span class="keyword">dyn</span> T&gt;&gt;&gt; = Arc::<span class="title function_ invoke__">new</span>(Mutex::<span class="title function_ invoke__">new</span>(<span class="type">Box</span>::<span class="title function_ invoke__">new</span>(B&#123;&#125;)))</span><br></pre></td></tr></table></figure>
-<p>需要注意struct类型的对象和trait之间不能互转,比如:</p>
-<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">trait</span> <span class="title class_">T</span> &#123;&#125;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">B</span> &#123;&#125;</span><br><span class="line"><span class="keyword">impl</span> <span class="title class_">T</span> <span class="keyword">for</span> <span class="title class_">B</span> &#123;&#125;</span><br><span class="line"><span class="keyword">let</span> <span class="variable">p</span>: Arc&lt;Mutex&lt;<span class="type">Box</span>&lt;B&gt;&gt;&gt; = Arc::<span class="title function_ invoke__">new</span>(Mutex::<span class="title function_ invoke__">new</span>(<span class="type">Box</span>::<span class="title function_ invoke__">new</span>(B&#123;&#125;)))</span><br><span class="line"><span class="keyword">let</span> <span class="variable">p_trait</span>: Arc&lt;Mutex&lt;<span class="type">Box</span>&lt;<span class="keyword">dyn</span> T&gt;&gt;&gt; = p <span class="comment">//会编译不过</span></span><br></pre></td></tr></table></figure></li>
-<li><p>trait中声明async函数</p>
-<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#[async_trait]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">trait</span> <span class="title class_">T</span> &#123;</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">fn</span> <span class="title function_">send</span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, buf: &amp;[<span class="type">u8</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>生命周期标注</p>
-<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::fs;</span><br><span class="line"><span class="keyword">use</span> std::io;</span><br><span class="line"><span class="keyword">use</span> serde::&#123;Deserialize, Serialize&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">load_data_from_file</span>(cfg_file: <span class="type">String</span>) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;<span class="type">String</span>, io::Error&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">data</span> = fs::<span class="title function_ invoke__">read_to_string</span>(cfg_file)?;</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(data)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">load_cfg_from_data</span>&lt;<span class="symbol">&#x27;a</span>, C: Deserialize&lt;<span class="symbol">&#x27;a</span>&gt; + Serialize&gt;(data: &amp;<span class="symbol">&#x27;a</span> <span class="type">String</span>) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;C, io::Error&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">cfg</span>: C = serde_json::from_str::&lt;C&gt;(&amp;data)?;</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(cfg)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>data在外部调用load_data_from_file获取,然后调用load_cfg_from_data时传入<br>如在load_cfg_from_data中读取写做:</p>
-<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::fs;</span><br><span class="line"><span class="keyword">use</span> std::io;</span><br><span class="line"><span class="keyword">use</span> serde::&#123;Deserialize, Serialize&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">load_data_from_file</span>(cfg_file: <span class="type">String</span>) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;<span class="type">String</span>, io::Error&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">data</span> = fs::<span class="title function_ invoke__">read_to_string</span>(cfg_file)?;</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(data)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">load_cfg_from_data</span>&lt;<span class="symbol">&#x27;a</span>, C: Deserialize&lt;<span class="symbol">&#x27;a</span>&gt; + Serialize&gt;(cfg_file: <span class="type">String</span>) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;C, io::Error&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">data</span> = <span class="title function_ invoke__">load_data_from_file</span>(cfg_file)?;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">cfg</span>: C = serde_json::from_str::&lt;C&gt;(&amp;data)?;</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(cfg)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>会编译不过</p>
-</li>
-<li><p>tokio::spawn拉起线程,传入的变量使用Arc&lt;Mutex<H>&gt;,clone后传入</p>
-<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">pub</span> <span class="keyword">async</span> <span class="keyword">fn</span> <span class="title function_">f</span>(_handle: Arc&lt;Mutex&lt;H&gt;&gt;) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">_clone_h</span> = _handle.<span class="title function_ invoke__">clone</span>();</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">_join</span> = tokio::<span class="title function_ invoke__">spawn</span>(<span class="keyword">async</span> <span class="keyword">move</span> &#123;</span><br><span class="line">        <span class="keyword">loop</span> &#123;</span><br><span class="line">            <span class="comment">//...</span></span><br><span class="line">            </span><br><span class="line">            <span class="keyword">let</span> <span class="variable">_clone_handle</span> = _clone_h.<span class="title function_ invoke__">clone</span>();</span><br><span class="line">            <span class="comment">//...              </span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>Future:<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903973950849031">https://juejin.cn/post/6844903973950849031</a></p>
-</li>
 </ol>
 
       
