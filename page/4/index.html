@@ -117,7 +117,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">35</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">36</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -152,6 +152,90 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2021/08/09/WebGPU%202.5.%20Invalid%20data/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="qianqians">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qianqians'blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/09/WebGPU%202.5.%20Invalid%20data/" class="post-title-link" itemprop="url">WebGPU 2.5. Invalid data</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-08-09 10:37:10 / 修改时间：12:07:54" itemprop="dateCreated datePublished" datetime="2021-08-09T10:37:10+08:00">2021-08-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WebGPU/" itemprop="url" rel="index"><span itemprop="name">WebGPU</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>When uploading floating-point data from CPU to GPU, or generating it on the GPU, we may end up with a binary representation that doesn’t correspond to a valid number, such as infinity or NaN (not-a-number). The GPU behavior in this case is subject to the accuracy of the GPU hardware implementation of the IEEE-754 standard. WebGPU guarantees that introducing invalid floating-point numbers would only affect the results of arithmetic computations and will not have other side effects.</p>
+<p>当从CPU上传浮点数据到GPU，或在GPU上生成浮点数据时，我们可能会得到一个与有效数字不对应的二进制表示，例如无穷大或NaN（非数字）。这种情况下的GPU行为取决于GPU硬件实现的IEEE-754标准的准确性。WebGPU保证引入无效浮点数只会影响算术计算的结果，不会产生其他副作用。</p>
+<p>2.5.1. Driver bugs</p>
+<p>GPU drivers are subject to bugs like any other software. If a bug occurs, an attacker could possibly exploit the incorrect behavior of the driver to get access to unprivileged data. In order to reduce the risk, the WebGPU working group will coordinate with GPU vendors to integrate the WebGPU Conformance Test Suite (CTS) as part of their driver testing process, like it was done for WebGL. WebGPU implementations are expected to have workarounds for some of the discovered bugs, and disable WebGPU on drivers with known bugs that can’t be worked around.</p>
+<p>GPU驱动程序和其他软件一样容易出现bug。如果出现bug，攻击者可能会利用驱动程序的错误行为来访问未经授权的数据。为了降低风险，WebGPU工作组将与GPU供应商协调，将WebGPU一致性测试套件（CTS）集成为其驱动程序测试过程的一部分，就像为WebGL所做的那样。WebGPU实现有望为一些发现的bug提供解决方案，并在存在无法解决的已知bug的驱动程序上禁用WebGPU。</p>
+<p>2.5.2. Timing attacks</p>
+<p>WebGPU is designed for multi-threaded use via Web Workers. As such, it is designed not to open the users to modern high-precision timing attacks. Some of the objects, like GPUBuffer or GPUQueue, have shared state which can be simultaneously accessed. This allows race conditions to occur, similar to those of accessing a SharedArrayBuffer from multiple Web Workers, which makes the thread scheduling observable.</p>
+<p>WebGPU设计用于通过Web Workers进行多线程使用。因此，它的设计不会让用户受到现代高精度定时攻击。一些对象（如GPUBuffer或GPUQueue）具有可同时访问的共享状态。这允许出现竞争条件，类似于从多个Web Workers访问SharedArrayBuffer的情况，这使得线程调度可以观察到。</p>
+<p>WebGPU addresses this by limiting the ability to deserialize (or share) objects only to the agents inside the agent cluster, and only if the cross-origin isolated policies are in place. This restriction matches the mitigations against the malicious SharedArrayBuffer use. Similarly, the user agent may also serialize the agents sharing any handles to prevent any concurrency entirely.</p>
+<p>WebGPU通过将对象反序列化（或共享）的能力仅限于代理集群内的代理，并且仅当跨源隔离策略已就位时，解决此问题。此限制与针对恶意SharedArrayBuffer使用的缓解措施相匹配。类似地，用户代理还可以序列化共享任何句柄的代理，以完全防止任何并发。</p>
+<p>In the end, the attack surface for races on shared state in WebGPU will be a small subset of the SharedArrayBuffer attacks.</p>
+<p>最后，WebGPU中共享状态上的竞争攻击面将是SharedArrayBuffer攻击的一小部分。</p>
+<p>WebGPU also specifies the “timestamp-query” feature, which provides high precision timing of GPU operations. The feature is optional, and a WebGPU implementation may limit its exposure only to those scenarios that are trusted. Alternatively, the timing query results could be processed by a compute shader and aligned to a lower precision.</p>
+<p>WebGPU还指定”timestamp-query”功能，该功能提供GPU操作的高精度计时。该功能是可选的，WebGPU实现可能仅将其暴露限制在那些受信任的场景中。或者，计时查询结果可以由计算着色器处理，并以较低的精度对齐。</p>
+<p>2.5.3. Row hammer attacks</p>
+<p>Row hammer is a class of attacks that exploit the leaking of states in DRAM cells. It could be used on GPU. WebGPU does not have any specific mitigations in place, and relies on platform-level solutions, such as reduced memory refresh intervals.</p>
+<p>Row-hammer是一类利用DRAM单元中状态泄漏的攻击。它可以在GPU上使用。WebGPU没有任何具体的缓解措施，依赖于平台级解决方案，如缩短内存刷新间隔。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -564,7 +648,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

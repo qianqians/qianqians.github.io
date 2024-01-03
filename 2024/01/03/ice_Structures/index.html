@@ -22,19 +22,19 @@
     var CONFIG = {"hostname":"qianqians.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Modules Reduce Clutter A common problem in large systems is pollution of the global namespace: over time, as isolated systems are integrated, name clashes become quite likely. Slice provides the modul">
+  <meta name="description" content="Slice supports structures containing one or more named members of arbitrary type, including user-defined complex types. For example: Slice 支持包含一个或多个任意类型的命名成员的结构，包括用户定义的复杂类型。 例如： 123456789module M&amp;#123">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Modules">
-<meta property="og:url" content="https://qianqians.github.io/2023/12/04/ice_Modules/index.html">
+<meta property="og:title" content="Structures">
+<meta property="og:url" content="https://qianqians.github.io/2024/01/03/ice_Structures/index.html">
 <meta property="og:site_name" content="qianqians&#39;blog">
-<meta property="og:description" content="Modules Reduce Clutter A common problem in large systems is pollution of the global namespace: over time, as isolated systems are integrated, name clashes become quite likely. Slice provides the modul">
+<meta property="og:description" content="Slice supports structures containing one or more named members of arbitrary type, including user-defined complex types. For example: Slice 支持包含一个或多个任意类型的命名成员的结构，包括用户定义的复杂类型。 例如： 123456789module M&amp;#123">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-12-04T12:51:43.983Z">
-<meta property="article:modified_time" content="2023-12-04T12:58:47.147Z">
+<meta property="article:published_time" content="2024-01-03T15:13:38.764Z">
+<meta property="article:modified_time" content="2024-01-03T15:21:10.235Z">
 <meta property="article:author" content="qianqians">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://qianqians.github.io/2023/12/04/ice_Modules/">
+<link rel="canonical" href="https://qianqians.github.io/2024/01/03/ice_Structures/">
 
 
 <script id="page-configurations">
@@ -47,7 +47,7 @@
   };
 </script>
 
-  <title>Modules | qianqians'blog</title>
+  <title>Structures | qianqians'blog</title>
   
 
 
@@ -161,7 +161,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2023/12/04/ice_Modules/">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2024/01/03/ice_Structures/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -174,7 +174,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Modules
+          Structures
         </h1>
 
         <div class="post-meta">
@@ -185,7 +185,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2023-12-04 20:51:43 / 修改时间：20:58:47" itemprop="dateCreated datePublished" datetime="2023-12-04T20:51:43+08:00">2023-12-04</time>
+              <time title="创建时间：2024-01-03 23:13:38 / 修改时间：23:21:10" itemprop="dateCreated datePublished" datetime="2024-01-03T23:13:38+08:00">2024-01-03</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -208,37 +208,34 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Modules Reduce Clutter</p>
-<p>A common problem in large systems is pollution of the global namespace: over time, as isolated systems are integrated, name clashes become quite likely. Slice provides the module construct to alleviate this problem:</p>
-<p>大型系统中的一个常见问题是全局名称空间的污染：随着时间的推移，随着孤立的系统的集成，名称冲突变得很可能。 Slice 提供了模块构造来缓解这个问题：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> ZeroC </span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">module</span> Client </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Definitions here...</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">module</span> Server </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Definitions here...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <p>Slice supports structures containing one or more named members of arbitrary type, including user-defined complex types. For example:</p>
+<p>Slice 支持包含一个或多个任意类型的命名成员的结构，包括用户定义的复杂类型。 例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> M</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">TimeOfDay</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">short</span> hour;         <span class="comment">// 0 - 23</span></span><br><span class="line">        <span class="type">short</span> minute;       <span class="comment">// 0 - 59</span></span><br><span class="line">        <span class="type">short</span> second;       <span class="comment">// 0 - 59</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>A module can contain any legal Slice construct, including other module definitions. Using modules to group related definitions together avoids polluting the global namespace and makes accidental name clashes quite unlikely. (You can use a well-known name, such as a company or product name, as the name of the outermost module.)</p>
-<p>模块可以包含任何合法的 Slice 构造，包括其他模块定义。 使用模块将相关定义分组在一起可以避免污染全局名称空间，并且不太可能发生意外的名称冲突。 （您可以使用众所周知的名称，例如公司或产品名称，作为最外层模块的名称。）</p>
-<p>Modules are Mandatory</p>
-<p>Slice requires all definitions to be nested inside a module, that is, you cannot define anything other than a module at global scope. For example, the following is illegal:</p>
-<p>Slice 要求所有定义都嵌套在模块内，也就是说，您不能在全局范围内定义除模块之外的任何内容。 例如，以下行为是非法的：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">interface I   <span class="comment">// Error: only modules can appear at global scope</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>As in C++, this definition introduces a new type called TimeOfDay. Structure definitions form a namespace, so the names of the structure members need to be unique only within their enclosing structure.</p>
+<p>Data member definitions using a named type are the only construct that can appear inside a structure. It is impossible to, for example, define a structure inside a structure:</p>
+<p>与 C++ 中一样，此定义引入了一种称为 TimeOfDay 的新类型。 结构定义形成命名空间，因此结构成员的名称仅在其封闭结构内必须是唯一的。</p>
+<p>使用确定类型的数据成员定义是唯一可以出现在结构内部的构造。 例如，不可能在结构内定义结构：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">TwoPoints</span> </span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">Point</span>      <span class="comment">// 非法!</span></span><br><span class="line">    &#123;            </span><br><span class="line">        <span class="type">short</span> x;</span><br><span class="line">        <span class="type">short</span> y;</span><br><span class="line">    &#125;</span><br><span class="line">    Point coord1;</span><br><span class="line">    Point coord2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>Definitions at global scope are prohibited because they cause problems with some implementation languages (such as Python, which does not have a true global scope).</p>
-<p>禁止在全局范围内进行定义，因为它们会导致某些实现语言（例如 Python，它没有真正的全局范围）出现问题。</p>
-<p>Throughout the Ice manual, you will occasionally see Slice definitions that are not nested inside a module. This is to keep the examples short and free of clutter. Whenever you see such a definition, assume that it is nested in module M.</p>
-<p>在整个 Ice 手册中，您偶尔会看到未嵌套在模块内的 Slice 定义。 这是为了保持示例简短且整洁。 每当您看到这样的定义时，请假设它嵌套在模块 M 中。</p>
-<p>Reopening Modules</p>
-<p>Modules can be reopened:</p>
-<p>可以重新打开模块：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> ZeroC</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Definitions here...</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// Possibly in a different source file:</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">module</span> ZeroC <span class="comment">// OK, reopened module</span></span><br><span class="line">&#123;  </span><br><span class="line">    <span class="comment">// More definitions here...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>This rule applies to Slice in general: type definitions cannot be nested (except for modules, which do support nesting). The reason for this rule is that nested type definitions can be difficult to implement for some target languages and, even if implementable, greatly complicate the scope resolution rules. For a specification language, such as Slice, nested type definitions are unnecessary – you can always write the above definitions as follows (which is stylistically cleaner as well):</p>
+<p>此规则一般适用于 Slice：类型定义不能嵌套（模块除外，模块支持嵌套）。 此规则的原因是嵌套类型定义对于某些目标语言可能难以实现，并且即使可以实现，也会使范围解析规则变得非常复杂。 对于规范语言，例如 Slice，嵌套类型定义是不必要的 - 您始终可以按如下方式编写上述定义（这在风格上也更清晰）：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">short</span> x;</span><br><span class="line">    <span class="type">short</span> y;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">TwoPoints</span>      <span class="comment">// Legal (and cleaner!)</span></span><br><span class="line">&#123;   </span><br><span class="line">    Point coord1;</span><br><span class="line">    Point coord2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>Reopened modules are useful for larger projects: they allow you to split the contents of a module over several different source files. The advantage of doing this is that, when a developer makes a change to one part of the module, only files dependent on the changed part need be recompiled (instead of having to recompile all files that use the module).</p>
-<p>重新打开的模块对于较大的项目很有用：它们允许您将模块的内容拆分为多个不同的源文件。 这样做的好处是，当开发人员对模块的一部分进行更改时，只需重新编译依赖于更改部分的文件（而不需要重新编译使用该模块的所有文件）。</p>
-<p>Module Mapping</p>
-<p>Modules map to a corresponding scoping construct in each programming language. (For example, for C++ and C#, Slice modules map to namespaces whereas, for Java, they map to packages.) This allows you to use an appropriate C++ using or Java import declaration to avoid excessively long identifiers in your source code.</p>
-<p>模块映射到每种编程语言中相应的作用域构造。 （例如，对于 C++ 和 C#，Slice 模块映射到命名空间，而对于 Java，它们映射到包。）这允许您使用适当的 C++ using 或 Java import 声明来避免源代码中的标识符过长。</p>
-<p>The Ice Module</p>
-<p>APIs for the Ice run time, apart from a small number of language-specific calls that cannot be expressed in Ice, are defined in the Ice module. In other words, most of the Ice API is actually expressed as Slice definitions. The advantage of doing this is that a single Slice definition is sufficient to define the API for the Ice run time for all supported languages. The respective language mapping rules then determine the exact shape of each Ice API for each implementation language.</p>
-<p>We will incrementally explore the contents of the Ice module throughout this manual.</p>
-<p>Ice 运行时的 API，除了少数无法在 Ice 中表达的特定于语言的调用之外，均在 Ice 模块中定义。 换句话说，大部分 Ice API 实际上都是表达为 Slice 定义的。 这样做的优点是单个 Slice 定义足以为所有支持的语言定义 Ice 运行时的 API。 然后，相应的语言映射规则确定每种实现语言的每个 Ice API 的确切形态。</p>
-<p>我们将在本手册中逐步探索 Ice 模块的内容。</p>
+<p>You can specify a default value for a data member that has one of the following types:</p>
+<p>您可以为具有以下类型之一的数据成员指定默认值：</p>
+<ol>
+<li>An integral type (byte, short, int, long)</li>
+<li>A floating point type (float or double)</li>
+<li>string</li>
+<li>bool</li>
+<li>enum</li>
+</ol>
+<p>For example:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Location</span></span><br><span class="line">&#123;</span><br><span class="line">    string name;</span><br><span class="line">    Point pt;</span><br><span class="line">    <span class="type">bool</span> display = <span class="literal">true</span>;</span><br><span class="line">    string source = <span class="string">&quot;GPS&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The legal syntax for literal values is the same as for Slice constants, and you may also use a constant as a default value. The language mapping guarantees that data members are initialized to their declared default values using a language-specific mechanism.</p>
+<p>字符值的合法语法与 Slice 常量相同，您也可以使用常量作为默认值。 语言映射保证使用特定于语言的机制将数据成员初始化为其声明的默认值。</p>
 
     </div>
 
@@ -254,7 +251,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://qianqians.github.io/2023/12/04/ice_Modules/" title="Modules">https://qianqians.github.io/2023/12/04/ice_Modules/</a>
+    <a href="https://qianqians.github.io/2024/01/03/ice_Structures/" title="Structures">https://qianqians.github.io/2024/01/03/ice_Structures/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -271,13 +268,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/11/26/ice_Lexical_Rules/" rel="prev" title="Lexical Rules">
-      <i class="fa fa-chevron-left"></i> Lexical Rules
+    <a href="/2023/12/11/ice_Enumerations/" rel="prev" title="Enumerations">
+      <i class="fa fa-chevron-left"></i> Enumerations
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2023/12/06/ice_Basic_Types/" rel="next" title="Basic Types">
-      Basic Types <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     

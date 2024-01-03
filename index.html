@@ -117,7 +117,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">35</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">36</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -152,6 +152,101 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2024/01/03/ice_Structures/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="qianqians">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qianqians'blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/03/ice_Structures/" class="post-title-link" itemprop="url">Structures</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-01-03 23:13:38 / 修改时间：23:21:10" itemprop="dateCreated datePublished" datetime="2024-01-03T23:13:38+08:00">2024-01-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ice/" itemprop="url" rel="index"><span itemprop="name">ice</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Slice supports structures containing one or more named members of arbitrary type, including user-defined complex types. For example:</p>
+<p>Slice 支持包含一个或多个任意类型的命名成员的结构，包括用户定义的复杂类型。 例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> M</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">TimeOfDay</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">short</span> hour;         <span class="comment">// 0 - 23</span></span><br><span class="line">        <span class="type">short</span> minute;       <span class="comment">// 0 - 59</span></span><br><span class="line">        <span class="type">short</span> second;       <span class="comment">// 0 - 59</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>As in C++, this definition introduces a new type called TimeOfDay. Structure definitions form a namespace, so the names of the structure members need to be unique only within their enclosing structure.</p>
+<p>Data member definitions using a named type are the only construct that can appear inside a structure. It is impossible to, for example, define a structure inside a structure:</p>
+<p>与 C++ 中一样，此定义引入了一种称为 TimeOfDay 的新类型。 结构定义形成命名空间，因此结构成员的名称仅在其封闭结构内必须是唯一的。</p>
+<p>使用确定类型的数据成员定义是唯一可以出现在结构内部的构造。 例如，不可能在结构内定义结构：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">TwoPoints</span> </span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">Point</span>      <span class="comment">// 非法!</span></span><br><span class="line">    &#123;            </span><br><span class="line">        <span class="type">short</span> x;</span><br><span class="line">        <span class="type">short</span> y;</span><br><span class="line">    &#125;</span><br><span class="line">    Point coord1;</span><br><span class="line">    Point coord2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>This rule applies to Slice in general: type definitions cannot be nested (except for modules, which do support nesting). The reason for this rule is that nested type definitions can be difficult to implement for some target languages and, even if implementable, greatly complicate the scope resolution rules. For a specification language, such as Slice, nested type definitions are unnecessary – you can always write the above definitions as follows (which is stylistically cleaner as well):</p>
+<p>此规则一般适用于 Slice：类型定义不能嵌套（模块除外，模块支持嵌套）。 此规则的原因是嵌套类型定义对于某些目标语言可能难以实现，并且即使可以实现，也会使范围解析规则变得非常复杂。 对于规范语言，例如 Slice，嵌套类型定义是不必要的 - 您始终可以按如下方式编写上述定义（这在风格上也更清晰）：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">short</span> x;</span><br><span class="line">    <span class="type">short</span> y;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">TwoPoints</span>      <span class="comment">// Legal (and cleaner!)</span></span><br><span class="line">&#123;   </span><br><span class="line">    Point coord1;</span><br><span class="line">    Point coord2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>You can specify a default value for a data member that has one of the following types:</p>
+<p>您可以为具有以下类型之一的数据成员指定默认值：</p>
+<ol>
+<li>An integral type (byte, short, int, long)</li>
+<li>A floating point type (float or double)</li>
+<li>string</li>
+<li>bool</li>
+<li>enum</li>
+</ol>
+<p>For example:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Location</span></span><br><span class="line">&#123;</span><br><span class="line">    string name;</span><br><span class="line">    Point pt;</span><br><span class="line">    <span class="type">bool</span> display = <span class="literal">true</span>;</span><br><span class="line">    string source = <span class="string">&quot;GPS&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The legal syntax for literal values is the same as for Slice constants, and you may also use a constant as a default value. The language mapping guarantees that data members are initialized to their declared default values using a language-specific mechanism.</p>
+<p>字符值的合法语法与 Slice 常量相同，您也可以使用常量作为默认值。 语言映射保证使用特定于语言的机制将数据成员初始化为其声明的默认值。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1192,77 +1287,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2023/07/23/unity%E5%BE%AE%E4%BF%A1%E5%B0%8F%E6%B8%B8%E6%88%8F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="qianqians">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qianqians'blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/07/23/unity%E5%BE%AE%E4%BF%A1%E5%B0%8F%E6%B8%B8%E6%88%8F/" class="post-title-link" itemprop="url">微信小游戏 unity websocket</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-07-23 15:20:31 / 修改时间：15:25:21" itemprop="dateCreated datePublished" datetime="2023-07-23T15:20:31+08:00">2023-07-23</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E6%B8%B8%E6%88%8F/" itemprop="url" rel="index"><span itemprop="name">微信小游戏</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ol>
-<li><a target="_blank" rel="noopener" href="https://github.com/wechat-miniprogram/minigame-unity-webgl-transform">https://github.com/wechat-miniprogram/minigame-unity-webgl-transform</a></li>
-<li>websocket使用<a target="_blank" rel="noopener" href="https://github.com/psygames/UnityWebSocket">https://github.com/psygames/UnityWebSocket</a></li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1309,7 +1333,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
