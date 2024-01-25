@@ -22,19 +22,19 @@
     var CONFIG = {"hostname":"qianqians.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Sequences are variable-length collections of elements: Sequences是可变长度的元素集合： 1234module M&amp;#123;    sequence&lt;Fruit&gt; FruitPlatter;&amp;#125;  A sequence can be empty — that is, it can contain no elemen">
+  <meta name="description" content="Dictionary Syntax and Semantics A dictionary is a mapping from a key type to a value type. dictionary是从键类型到值类型的映射 For example: 1234567891011module M&amp;#123;    struct Employee    &amp;#123;        long   nu">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Sequences">
-<meta property="og:url" content="https://qianqians.github.io/2024/01/24/ice_Sequences/index.html">
+<meta property="og:title" content="Dictionaries">
+<meta property="og:url" content="https://qianqians.github.io/2024/01/25/ice_Dictionaries/index.html">
 <meta property="og:site_name" content="qianqians&#39;blog">
-<meta property="og:description" content="Sequences are variable-length collections of elements: Sequences是可变长度的元素集合： 1234module M&amp;#123;    sequence&lt;Fruit&gt; FruitPlatter;&amp;#125;  A sequence can be empty — that is, it can contain no elemen">
+<meta property="og:description" content="Dictionary Syntax and Semantics A dictionary is a mapping from a key type to a value type. dictionary是从键类型到值类型的映射 For example: 1234567891011module M&amp;#123;    struct Employee    &amp;#123;        long   nu">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-01-24T14:39:43.679Z">
-<meta property="article:modified_time" content="2024-01-24T14:44:06.640Z">
+<meta property="article:published_time" content="2024-01-25T14:41:09.492Z">
+<meta property="article:modified_time" content="2024-01-25T14:50:32.616Z">
 <meta property="article:author" content="qianqians">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://qianqians.github.io/2024/01/24/ice_Sequences/">
+<link rel="canonical" href="https://qianqians.github.io/2024/01/25/ice_Dictionaries/">
 
 
 <script id="page-configurations">
@@ -47,7 +47,7 @@
   };
 </script>
 
-  <title>Sequences | qianqians'blog</title>
+  <title>Dictionaries | qianqians'blog</title>
   
 
 
@@ -161,7 +161,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2024/01/24/ice_Sequences/">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2024/01/25/ice_Dictionaries/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -174,7 +174,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Sequences
+          Dictionaries
         </h1>
 
         <div class="post-meta">
@@ -185,7 +185,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2024-01-24 22:39:43 / 修改时间：22:44:06" itemprop="dateCreated datePublished" datetime="2024-01-24T22:39:43+08:00">2024-01-24</time>
+              <time title="创建时间：2024-01-25 22:41:09 / 修改时间：22:50:32" itemprop="dateCreated datePublished" datetime="2024-01-25T22:41:09+08:00">2024-01-25</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -208,18 +208,32 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Sequences are variable-length collections of elements:</p>
-<p>Sequences是可变长度的元素集合：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> M</span><br><span class="line">&#123;</span><br><span class="line">    sequence&lt;Fruit&gt; FruitPlatter;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <p>Dictionary Syntax and Semantics</p>
+<p>A dictionary is a mapping from a key type to a value type.</p>
+<p>dictionary是从键类型到值类型的映射</p>
+<p>For example:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> M</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">Employee</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">long</span>   number;</span><br><span class="line">        string firstName;</span><br><span class="line">        string lastName;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    dictionary&lt;<span class="type">long</span>, Employee&gt; EmployeeMap;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>A sequence can be empty — that is, it can contain no elements, or it can hold any number of elements up to the memory limits of your platform.</p>
-<p>Sequences can contain elements that are themselves sequences. This arrangement allows you to create lists of lists:</p>
-<p>sequence可以是空的，即不包含任何元素，也可以包含任意数量的元素，但不得超过平台的内存限制。</p>
-<p>sequence可以包含本身就是sequence的元素。通过这种安排，您可以创建列表的列表：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> M</span><br><span class="line">&#123;</span><br><span class="line">    sequence&lt;FruitPlatter&gt; FruitBanquet;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>This definition creates a dictionary named EmployeeMap that maps from an employee number to a structure containing the details for an employee. Whether or not the key type (the employee number, of type long in this example) is also part of the value type (the Employee structure in this example) is up to you — as far as Slice is concerned, there is no need to include the key as part of the value.</p>
+<p>此定义创建一个名为 EmployeeMap 的dictionary，该dictionary从员工编号映射到包含员工详细信息的结构。 键类型（员工编号，本例中为 long 类型）是否也是值类型（本例中为 Employee 结构）的一部分取决于您 — 就 Slice 而言，不需要 包含键作为值的一部分。</p>
+<p>Dictionaries can be used to implement sparse arrays, or any lookup data structure with non-integral key type. Even though a sequence of structures containing key-value pairs could be used to model the same thing, a dictionary is more appropriate:</p>
+<p>dictionary可用于实现稀疏数组或任何具有非整数键类型的查找数据结构。 尽管包含键值对的结构序列可用于对同一事物进行建模，但dictionary更合适：</p>
+<p>A dictionary clearly signals the intent of the designer, namely, to provide a mapping from a domain of values to a range of values. (A sequence of structures of key-value pairs does not signal that same intent as clearly.)</p>
+<p>dictionary清楚地表明了设计者的意图，即提供从值域到值范围的映射。 （键值对结构的sequence并不能清楚地表明相同的意图。）</p>
+<p>At the programming language level, sequences are implemented as vectors (or possibly lists), that is, they are not well suited to model sparsely populated domains and require a linear search to locate an element with a particular value. On the other hand, dictionaries are implemented as a data structure (typically a hash table or red-black tree) that supports efficient searching in O(log n) average time or better.</p>
+<p>在编程语言级别，sequences被实现为数组（或可能是list），也就是说，它们不太适合对稀疏填充的域进行建模，并且需要线性搜索来定位具有特定值的元素。 另一方面，dictionary被实现为另一种数据结构（通常是哈希表或红黑树），支持平均时间为 O(log n) 或更好的高效搜索。</p>
+<p>Allowable Types for Dictionary Keys and Values</p>
+<p>The key type of a dictionary need not be an integral type. For example, we could use the following definition to translate the names of the days of the week:</p>
+<p>dictionary的键类型不必是整型。 例如，我们可以使用以下定义来翻译一周中各天的名称：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dictionary&lt;string, string&gt; WeekdaysEnglishToGerman;</span><br></pre></td></tr></table></figure>
 
-<p>Sequences are used to model a variety of collections, such as vectors, lists, queues, sets, bags, or trees. (It is up to the application to decide whether or not order is important; by discarding order, a sequence serves as a set or bag.)</p>
-<p>Sequences用于对各种集合建模，例如向量、列表、队列、集合、包或树。 （由应用程序决定顺序是否重要；通过丢弃顺序，Sequences充当集合或包。）</p>
+<p>The server implementation would take care of initializing this map with the key-value pairs Monday-Montag, Tuesday-Dienstag, and so on.</p>
+<p>服务器实现将负责使用键值对 Monday-Montag、Tuesday-Dienstag 等初始化该映射。</p>
+<p>The value type of a dictionary can be any Slice type. However, the key type of a dictionary is limited to one of the following types:</p>
+<p>dictionary的值类型可以是任何 Slice 类型。 但是，字典的键类型仅限于以下类型之一：</p>
+<p>Integral types (short, int, long)<br>bool<br>byte<br>string<br>enum<br>Structures containing only data members of legal key types</p>
+<p>Other complex types, such as dictionaries, and floating-point types (float and double) cannot be used as the key type. Complex types are disallowed because they complicate the language mappings for dictionaries, and floating-point types are disallowed because representational changes of values as they cross machine boundaries can lead to ill-defined semantics for equality.</p>
+<p>其他复杂类型，例如dictionary和浮点类型（float 和 double）不能用作键类型。 不允许使用复杂类型，因为它们使dictionary的语言映射变得复杂；并且不允许使用浮点类型，因为跨机器边界时值的表示变化可能会导致平等语义定义不明确。</p>
 
     </div>
 
@@ -235,7 +249,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://qianqians.github.io/2024/01/24/ice_Sequences/" title="Sequences">https://qianqians.github.io/2024/01/24/ice_Sequences/</a>
+    <a href="https://qianqians.github.io/2024/01/25/ice_Dictionaries/" title="Dictionaries">https://qianqians.github.io/2024/01/25/ice_Dictionaries/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -252,13 +266,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2024/01/03/ice_Structures/" rel="prev" title="Structures">
-      <i class="fa fa-chevron-left"></i> Structures
+    <a href="/2024/01/24/ice_Sequences/" rel="prev" title="Sequences">
+      <i class="fa fa-chevron-left"></i> Sequences
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2024/01/25/ice_Dictionaries/" rel="next" title="Dictionaries">
-      Dictionaries <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
