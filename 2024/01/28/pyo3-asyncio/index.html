@@ -22,19 +22,19 @@
     var CONFIG = {"hostname":"qianqians.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="3.1.1. Dot Syntax In this specification, the . (“dot”) syntax, common in programming languages, is used. The phrasing “Foo.Bar” means “the Bar member of the value (or interface) Foo.” 在本规范中，使用编程语言中常见的">
+  <meta name="description" content="12345678910111213let future &#x3D; Python::with_gil(|py| &amp;#123;    &#x2F;&#x2F; import the module containing the py_sleep function    let example &#x3D; py.import(&quot;example&quot;)?;    &#x2F;&#x2F; calling the py_sleep method">
 <meta property="og:type" content="article">
-<meta property="og:title" content="WebGPU 3.1. Conventions">
-<meta property="og:url" content="https://qianqians.github.io/2021/08/10/WebGPU%203.1.%20Conventions/index.html">
+<meta property="og:title" content="Rust开发小记">
+<meta property="og:url" content="https://qianqians.github.io/2024/01/28/pyo3-asyncio/index.html">
 <meta property="og:site_name" content="qianqians&#39;blog">
-<meta property="og:description" content="3.1.1. Dot Syntax In this specification, the . (“dot”) syntax, common in programming languages, is used. The phrasing “Foo.Bar” means “the Bar member of the value (or interface) Foo.” 在本规范中，使用编程语言中常见的">
+<meta property="og:description" content="12345678910111213let future &#x3D; Python::with_gil(|py| &amp;#123;    &#x2F;&#x2F; import the module containing the py_sleep function    let example &#x3D; py.import(&quot;example&quot;)?;    &#x2F;&#x2F; calling the py_sleep method">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-08-10T02:24:11.529Z">
-<meta property="article:modified_time" content="2021-08-10T03:35:30.121Z">
+<meta property="article:published_time" content="2024-01-28T11:26:19.648Z">
+<meta property="article:modified_time" content="2024-01-28T11:28:28.248Z">
 <meta property="article:author" content="qianqians">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://qianqians.github.io/2021/08/10/WebGPU%203.1.%20Conventions/">
+<link rel="canonical" href="https://qianqians.github.io/2024/01/28/pyo3-asyncio/">
 
 
 <script id="page-configurations">
@@ -47,7 +47,7 @@
   };
 </script>
 
-  <title>WebGPU 3.1. Conventions | qianqians'blog</title>
+  <title>Rust开发小记 | qianqians'blog</title>
   
 
 
@@ -161,7 +161,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2021/08/10/WebGPU%203.1.%20Conventions/">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2024/01/28/pyo3-asyncio/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -174,7 +174,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          WebGPU 3.1. Conventions
+          Rust开发小记
         </h1>
 
         <div class="post-meta">
@@ -185,7 +185,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-08-10 10:24:11 / 修改时间：11:35:30" itemprop="dateCreated datePublished" datetime="2021-08-10T10:24:11+08:00">2021-08-10</time>
+              <time title="创建时间：2024-01-28 19:26:19 / 修改时间：19:28:28" itemprop="dateCreated datePublished" datetime="2024-01-28T19:26:19+08:00">2024-01-28</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -193,7 +193,15 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/WebGPU/" itemprop="url" rel="index"><span itemprop="name">WebGPU</span></a>
+                  <a href="/categories/rust/" itemprop="url" rel="index"><span itemprop="name">rust</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pyo3-asyncio/" itemprop="url" rel="index"><span itemprop="name">pyo3-asyncio</span></a>
                 </span>
             </span>
 
@@ -208,46 +216,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>3.1.1. Dot Syntax</p>
-<p>In this specification, the . (“dot”) syntax, common in programming languages, is used. The phrasing “Foo.Bar” means “the Bar member of the value (or interface) Foo.”</p>
-<p>在本规范中，使用编程语言中常见的(“点”)语法。短语”Foo.Bar”表示”对象(或接口)Foo的Bar成员”</p>
-<p>The ?. (“optional chaining”) syntax, adopted from JavaScript, is also used. The phrasing “Foo?.Bar” means “if Foo is null or undefined, Foo; otherwise, Foo.Bar”.</p>
-<p>采纳自JavaScript的”?.”语法同样被使用。”Foo?.Bar”表示”如果Foo为null或undefined，则为undefined；否则，Foo.Bar”。</p>
-<p>For example, where buffer is a GPUBuffer, buffer?.[[device]].[[adapter]] means “if buffer is null or undefined, then undefined, otherwise, the [[adapter]] internal slot of the [[device]] internal slot of buffer.</p>
-<p>例如，buffer是一个GPUBuffer对象，buffer?.[[device]].[[adapter]]表示”如果buffer为null或undefined，则为undefined，否则buffer的内部插槽[[device]]的内部插槽[[adapter]]”</p>
-<p>3.1.2. Internal Objects</p>
-<p>An internal object is a conceptual, non-exposed WebGPU object. Internal objects track the state of an API object and hold any underlying implementation. If the state of a particular internal object can change in parallel from multiple agents, those changes are always atomic with respect to all agents.</p>
-<p>内部对象是概念性的、未公开的WebGPU对象。内部对象跟踪API对象的状态并保存任何底层实现。如果特定内部对象的状态可以从多个代理并行更改，那么这些更改对于所有代理来说都是原子性的。</p>
-<p>Note: An “agent” refers to a JavaScript “thread” (i.e. main thread, or Web Worker).</p>
-<p>注：”agent”是指JavaScript”线程”(即主线程或Web工作线程)。</p>
-<p>3.1.3. WebGPU Interfaces</p>
-<p>A WebGPU interface is an exposed interface which encapsulates an internal object. It provides the interface through which the internal object’s state is changed.</p>
-<p>WebGPU接口是封装内部对象的公开接口。它提供用于更改内部对象状态的接口。</p>
-<p>As a matter of convention, if a WebGPU interface is referred to as invalid, it means that the internal object it encapsulates is invalid.</p>
-<p>按照惯例，如果WebGPU接口被援引为无效，则意味着它封装的内部对象无效。</p>
-<p>Any interface which includes GPUObjectBase is a WebGPU interface.</p>
-<p>任何包含GPUObjectBase的接口都是WebGPU接口。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">interface mixin GPUObjectBase &#123;</span><br><span class="line">    attribute USVString? label;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+        <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">future</span> = Python::<span class="title function_ invoke__">with_gil</span>(|py| &#123;</span><br><span class="line">    <span class="comment">// import the module containing the py_sleep function</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">example</span> = py.<span class="title function_ invoke__">import</span>(<span class="string">&quot;example&quot;</span>)?;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// calling the py_sleep method like a normal function returns a coroutine</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">coroutine</span> = example.<span class="title function_ invoke__">call_method0</span>(<span class="string">&quot;py_sleep&quot;</span>)?;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// convert the coroutine into a Rust future</span></span><br><span class="line">    pyo3_asyncio::<span class="title function_ invoke__">into_future</span>(coroutine)</span><br><span class="line">&#125;)?;</span><br><span class="line"></span><br><span class="line"><span class="comment">// await the future</span></span><br><span class="line">future.<span class="keyword">await</span>;</span><br></pre></td></tr></table></figure>
 
-<p>GPUObjectBase has the following attributes:</p>
-<p>GPUObjectBase具有以下属性:</p>
-<p>label, of type USVString, nullable<br>A label which can be used by development tools (such as error/warning messages, browser developer tools, or platform debugging utilities) to identify the underlying internal object to the developer. It has no specified format, and therefore cannot be reliably machine-parsed.</p>
-<p>In any given situation, the user agent may or may not choose to use this label.</p>
-<p>label, USVString类型，可为空<br>开发工具（如错误/警告消息、浏览器开发工具或平台调试实用程序）可以使用的标签，用于向开发人员标识底层内部对象。它没有指定的格式，因此无法可靠地进行机器分析。</p>
-<p>在任何给定的情况下，用户代理都可能或可能不选择使用此标签。</p>
-<p>GPUObjectBase has the following internal slots:</p>
-<p>[[device]], of type device, readonly<br>    An internal slot holding the device which owns the internal object.</p>
-<p>[[device]], 类型device, 只读<br>    一个内部插槽持有拥有内部对象的设备</p>
-<p>3.1.4. Object Descriptors</p>
-<p>An object descriptor holds the information needed to create an object, which is typically done via one of the create* methods of GPUDevice.</p>
-<p>对象描述符保存创建对象所需的信息，这通常通过GPUDevice的create*方法之一完成。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dictionary GPUObjectDescriptorBase &#123;</span><br><span class="line">    USVString label;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#[pyfunction]</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">call_rust_sleep</span>(py: Python) <span class="punctuation">-&gt;</span> PyResult&lt;PyObject&gt; &#123;</span><br><span class="line">    pyo3_asyncio::async_std::<span class="title function_ invoke__">into_coroutine</span>(py, <span class="keyword">async</span> <span class="keyword">move</span> &#123;</span><br><span class="line">        <span class="title function_ invoke__">rust_sleep</span>().<span class="keyword">await</span>;</span><br><span class="line">        <span class="title function_ invoke__">Ok</span>(())</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>GPUObjectDescriptorBase has the following members:</p>
-<p>label, of type USVString<br>    The initial value of GPUObjectBase.label.</p>
-<p>GPUObjectDescriptorBase有如下成员:</p>
-<p>label, USVString类型<br>    GPUObjectBase.label的初始值。</p>
-
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pyo3_asyncio::tokio::<span class="title function_ invoke__">future_into_py</span>(py, <span class="keyword">async</span> <span class="keyword">move</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">_server_handle</span> = _server.<span class="title function_ invoke__">as_ref</span>().<span class="title function_ invoke__">lock</span>().<span class="keyword">await</span>;</span><br><span class="line">    _server_handle.<span class="title function_ invoke__">entry_direct_hub_server</span>(hub_name).<span class="keyword">await</span>;</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(())</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -262,7 +235,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://qianqians.github.io/2021/08/10/WebGPU%203.1.%20Conventions/" title="WebGPU 3.1. Conventions">https://qianqians.github.io/2021/08/10/WebGPU 3.1. Conventions/</a>
+    <a href="https://qianqians.github.io/2024/01/28/pyo3-asyncio/" title="Rust开发小记">https://qianqians.github.io/2024/01/28/pyo3-asyncio/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -279,13 +252,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/08/09/WebGPU%202.8.%20Privacy/" rel="prev" title="WebGPU 2.8. Privacy">
-      <i class="fa fa-chevron-left"></i> WebGPU 2.8. Privacy
+    <a href="/2024/01/25/ice_Dictionaries/" rel="prev" title="Dictionaries">
+      <i class="fa fa-chevron-left"></i> Dictionaries
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/08/10/WebGPU%203.2.%20Invalid%20Internal%20Objects%20&%20Contagious%20Invalidity/" rel="next" title="WebGPU 3.2. Invalid Internal Objects & Contagious Invalidity">
-      WebGPU 3.2. Invalid Internal Objects & Contagious Invalidity <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     

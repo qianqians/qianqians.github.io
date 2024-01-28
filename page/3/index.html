@@ -117,12 +117,12 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">38</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">39</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">7</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">10</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -152,6 +152,194 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2021/09/01/Wgpu%20Uniform%20buffers%20and%20a%203d%20camera/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="qianqians">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qianqians'blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/09/01/Wgpu%20Uniform%20buffers%20and%20a%203d%20camera/" class="post-title-link" itemprop="url">Wgpu Uniform buffers and a 3d camera</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-09-01 15:16:02 / 修改时间：16:39:13" itemprop="dateCreated datePublished" datetime="2021-09-01T15:16:02+08:00">2021-09-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Wgpu/" itemprop="url" rel="index"><span itemprop="name">Wgpu</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>While all of our previous work has seemed to be in 2d, we’ve actually been working in 3d the entire time! That’s part of the reason why our Vertex structure has position be an array of 3 floats instead of just 2. We can’t really see the 3d-ness of our scene, because we’re viewing things head on. We’re going to change our point of view by creating a Camera.</p>
+<p>虽然我们之前的所有工作似乎都是二维的，但实际上我们一直都在三维中工作！这就是为什么我们的顶点结构的位置是一个由3个浮点数组成的数组而不是2个浮点数的部分原因。我们无法真正看到场景的3d效果，因为我们是正面观看的。我们将通过创建一个摄影机来改变我们的视角。</p>
+<h1 id="A-perspective-camera"><a href="#A-perspective-camera" class="headerlink" title="A perspective camera"></a>A perspective camera</h1><p>This tutorial is more about learning to use wgpu and less about linear algebra, so I’m going to gloss over a lot of the math involved. There’s plenty of reading material online if you’re interested in what’s going on under the hood. The first thing to know is that we need cgmath = “0.18” in our Cargo.toml.</p>
+<p>本教程更多的是关于学习使用wgpu，而不是关于线性代数，所以我将对涉及的许多数学进行简单讲解。如果你对幕后发生的事情感兴趣，网上有很多阅读材料。首先要知道的是，我们需要在Cargo.toml中使用cgmath=”0.18”。</p>
+<p>Now that we have a math library, let’s put it to use! Create a Camera struct above the State struct.</p>
+<p>现在我们有了一个数学库，让我们使用它吧！在struct State上方创建struct Camera。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Camera</span></span> &#123;</span><br><span class="line">    eye: cgmath::Point3&lt;<span class="built_in">f32</span>&gt;,</span><br><span class="line">    target: cgmath::Point3&lt;<span class="built_in">f32</span>&gt;,</span><br><span class="line">    up: cgmath::Vector3&lt;<span class="built_in">f32</span>&gt;,</span><br><span class="line">    aspect: <span class="built_in">f32</span>,</span><br><span class="line">    fovy: <span class="built_in">f32</span>,</span><br><span class="line">    znear: <span class="built_in">f32</span>,</span><br><span class="line">    zfar: <span class="built_in">f32</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> Camera &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">build_view_projection_matrix</span></span>(&amp;<span class="keyword">self</span>) -&gt; cgmath::Matrix4&lt;<span class="built_in">f32</span>&gt; &#123;</span><br><span class="line">        <span class="comment">// 1.</span></span><br><span class="line">        <span class="keyword">let</span> view = cgmath::Matrix4::look_at_rh(<span class="keyword">self</span>.eye, <span class="keyword">self</span>.target, <span class="keyword">self</span>.up);</span><br><span class="line">        <span class="comment">// 2.</span></span><br><span class="line">        <span class="keyword">let</span> proj = cgmath::perspective(cgmath::Deg(<span class="keyword">self</span>.fovy), <span class="keyword">self</span>.aspect, <span class="keyword">self</span>.znear, <span class="keyword">self</span>.zfar);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3.</span></span><br><span class="line">        <span class="keyword">return</span> OPENGL_TO_WGPU_MATRIX * proj * view;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The build_view_projection_matrix is where the magic happens.</p>
+<p>build_view_projection_matrix就是魔法发生的地方。</p>
+<ol>
+<li>The view matrix moves the world to be at the position and rotation of the camera. It’s essentialy an inverse of whatever the transform matrix of the camera would be.</li>
+<li>The proj matrix wraps the scene to give the effect of depth. Without this, objects up close would be the same size as objects far away.</li>
+<li>The coordinate system in Wgpu is based on DirectX, and Metal’s coordinate systems. That means that in normalized device coordinates the x axis and y axis are in the range of -1.0 to +1.0, and the z axis is 0.0 to +1.0. The cgmath crate (as well as most game math crates) are built for OpenGL’s coordinate system. This matrix will scale and translate our scene from OpenGL’s coordinate sytem to WGPU’s. We’ll define it as follows.</li>
+</ol>
+<div></div>
+
+<ol>
+<li>视图矩阵将世界移动到摄影机的位置并旋转。它本质上是摄像机变换矩阵的逆矩阵。</li>
+<li>proj矩阵包裹场景以提供深度效果。如果不这样做，近处的对象将与远处的对象大小相同。</li>
+<li>Wgpu中的坐标系基于DirectX和Metal的坐标系。这意味着在标准化设备坐标中，x轴和y轴在-1.0到+1.0的范围内，z轴在0.0到+1.0的范围内。cgmath crate(以及大多数游戏数学库)是为OpenGL的坐标系构建的。该矩阵将缩放并将场景从OpenGL坐标系统转换为WGPU坐标系统。我们将对其进行如下定义。</li>
+</ol>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#[rustfmt::skip]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">const</span> OPENGL_TO_WGPU_MATRIX: cgmath::Matrix4&lt;<span class="built_in">f32</span>&gt; = cgmath::Matrix4::new(</span><br><span class="line">    <span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>,</span><br><span class="line">    <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>,</span><br><span class="line">    <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.5</span>, <span class="number">0.0</span>,</span><br><span class="line">    <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.5</span>, <span class="number">1.0</span>,</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Note: We don’t explicitly need the OPENGL_TO_WGPU_MATRIX, but models centered on (0, 0, 0) will be halfway inside the clipping area. This is only an issue if you aren’t using a camera matrix.</li>
+</ul>
+<div></div>
+
+<ul>
+<li>注: 我们并不明确需要OPENGL_TO_WGPU_MATRIX，但是以(0,0,0)为中心的模型将位于剪裁区域的一半。这只是一个问题，如果你不使用相机矩阵。</li>
+</ul>
+<p>Now let’s add a camera field to State.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">State</span></span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    camera: Camera,</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">fn</span> <span class="title">new</span></span>(window: &amp;Window) -&gt; <span class="keyword">Self</span> &#123;</span><br><span class="line">    <span class="comment">// let diffuse_bind_group ...</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> camera = Camera &#123;</span><br><span class="line">        <span class="comment">// position the camera one unit up and 2 units back</span></span><br><span class="line">        <span class="comment">// +z is out of the screen</span></span><br><span class="line">        eye: (<span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">2.0</span>).into(),</span><br><span class="line">        <span class="comment">// have it look at the origin</span></span><br><span class="line">        target: (<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>).into(),</span><br><span class="line">        <span class="comment">// which way is &quot;up&quot;</span></span><br><span class="line">        up: cgmath::Vector3::unit_y(),</span><br><span class="line">        aspect: sc_desc.width <span class="keyword">as</span> <span class="built_in">f32</span> / sc_desc.height <span class="keyword">as</span> <span class="built_in">f32</span>,</span><br><span class="line">        fovy: <span class="number">45.0</span>,</span><br><span class="line">        znear: <span class="number">0.1</span>,</span><br><span class="line">        zfar: <span class="number">100.0</span>,</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">Self</span> &#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        camera,</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Now that we have our camera, and it can make us a view projection matrix, we need somewhere to put it. We also need some way of getting it into our shaders.</p>
+<p>现在我们有了相机，它可以使我们成为一个视图投影矩阵，我们需要把它放在某个地方。我们还需要某种方法将其放入着色器中。</p>
+<h1 id="The-uniform-buffer"><a href="#The-uniform-buffer" class="headerlink" title="The uniform buffer"></a>The uniform buffer</h1><p>Up to this point we’ve used Buffers to store our vertex and index data, and even to load our textures. We are going to use them again to create what’s known as a uniform buffer. A uniform is a blob of data that is available to every invocation of a set of shaders. We’ve technically already used uniforms for our texture and sampler. We’re going to use them again to store our view projection matrix. To start let’s create a struct to hold our uniform.</p>
+<p>到目前为止，我们已经使用缓冲区来存储顶点和索引数据，甚至加载纹理。我们将再次使用它们来创建所谓的uniform缓冲区。uniform是一组着色器的每次调用都可用的数据块。从技术上讲，我们已经为我们的纹理和取样器使用了uniforms。我们将再次使用它们来存储视图投影矩阵。首先，让我们创建一个用于保存uniforms的struct。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// We need this for Rust to store our data correctly for the shaders</span></span><br><span class="line"><span class="meta">#[repr(C)]</span></span><br><span class="line"><span class="comment">// This is so we can store this in a buffer</span></span><br><span class="line"><span class="meta">#[derive(Debug, Copy, Clone, bytemuck::Pod, bytemuck::Zeroable)]</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">CameraUniform</span></span> &#123;</span><br><span class="line">    <span class="comment">// We can&#x27;t use cgmath with bytemuck directly so we&#x27;ll have</span></span><br><span class="line">    <span class="comment">// to convert the Matrix4 into a 4x4 f32 array</span></span><br><span class="line">    view_proj: [[<span class="built_in">f32</span>; <span class="number">4</span>]; <span class="number">4</span>],</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> CameraUniform &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">new</span></span>() -&gt; <span class="keyword">Self</span> &#123;</span><br><span class="line">        <span class="keyword">use</span> cgmath::SquareMatrix;</span><br><span class="line">        <span class="keyword">Self</span> &#123;</span><br><span class="line">            view_proj: cgmath::Matrix4::identity().into(),</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">update_view_proj</span></span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, camera: &amp;Camera) &#123;</span><br><span class="line">        <span class="keyword">self</span>.view_proj = camera.build_view_projection_matrix().into();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Now that we have our data structured, let’s make our camera_buffer.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// in new() after creating `camera`</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">mut</span> camera_uniform = CameraUniform::new();</span><br><span class="line">camera_uniform.update_view_proj(&amp;camera);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> camera_buffer = device.create_buffer_init(</span><br><span class="line">    &amp;wgpu::util::BufferInitDescriptor &#123;</span><br><span class="line">        label: <span class="literal">Some</span>(<span class="string">&quot;Camera Buffer&quot;</span>),</span><br><span class="line">        contents: bytemuck::cast_slice(&amp;[camera_uniform]),</span><br><span class="line">        usage: wgpu::BufferUsage::UNIFORM | wgpu::BufferUsage::COPY_DST,</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h1 id="Uniform-buffers-and-bind-groups"><a href="#Uniform-buffers-and-bind-groups" class="headerlink" title="Uniform buffers and bind groups"></a>Uniform buffers and bind groups</h1><p>Cool, now that we have a uniform buffer, what do we do with it? The answer is we create a bind group for it. First we have to create the bind group layout.</p>
+<p>既然我们有了一个uniform的缓冲区，我们该怎么处理它呢？答案是我们为它创建一个bind group。首先，我们必须创建bind group layout。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> camera_bind_group_layout = device.create_bind_group_layout(&amp;wgpu::BindGroupLayoutDescriptor &#123;</span><br><span class="line">    entries: &amp;[</span><br><span class="line">        wgpu::BindGroupLayoutEntry &#123;</span><br><span class="line">            binding: <span class="number">0</span>,</span><br><span class="line">            visibility: wgpu::ShaderStage::VERTEX,</span><br><span class="line">            ty: wgpu::BindingType::Buffer &#123;</span><br><span class="line">                ty: wgpu::BufferBindingType::Uniform,</span><br><span class="line">                has_dynamic_offset: <span class="literal">false</span>,</span><br><span class="line">                min_binding_size: <span class="literal">None</span>,</span><br><span class="line">            &#125;,</span><br><span class="line">            count: <span class="literal">None</span>,</span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    label: <span class="literal">Some</span>(<span class="string">&quot;camera_bind_group_layout&quot;</span>),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>We only really need camera information in the vertex shader, as that’s what we’ll use to manipulate our vertices.</li>
+<li>The dynamic field indicates whether this buffer will change size or not. This is useful if we want to store an array of things in our uniforms.</li>
+</ol>
+<div></div>
+
+<ol>
+<li>我们只在顶点着色器中需要摄影机信息，因为我们将使用这些信息来操纵顶点。</li>
+<li>dynamic字段指示此缓冲区是否将更改大小。如果我们想在制服中存储一系列的东西，这是很有用的。</li>
+</ol>
+<p>Now we can create the actual bind group.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> camera_bind_group = device.create_bind_group(&amp;wgpu::BindGroupDescriptor &#123;</span><br><span class="line">    layout: &amp;camera_bind_group_layout,</span><br><span class="line">    entries: &amp;[</span><br><span class="line">        wgpu::BindGroupEntry &#123;</span><br><span class="line">            binding: <span class="number">0</span>,</span><br><span class="line">            resource: camera_buffer.as_entire_binding(),</span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    label: <span class="literal">Some</span>(<span class="string">&quot;camera_bind_group&quot;</span>),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>Like with our texture, we need to register our camera_bind_group_layout with the render pipeline.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> render_pipeline_layout = device.create_pipeline_layout(</span><br><span class="line">    &amp;wgpu::PipelineLayoutDescriptor &#123;</span><br><span class="line">        label: <span class="literal">Some</span>(<span class="string">&quot;Render Pipeline Layout&quot;</span>),</span><br><span class="line">        bind_group_layouts: &amp;[</span><br><span class="line">            &amp;texture_bind_group_layout,</span><br><span class="line">            &amp;camera_bind_group_layout,</span><br><span class="line">        ],</span><br><span class="line">        push_constant_ranges: &amp;[],</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>Now we need to add camera_buffer and camera_bind_group to State</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">State</span></span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    camera: Camera,</span><br><span class="line">    camera_uniform: CameraUniform,</span><br><span class="line">    camera_buffer: wgpu::Buffer,</span><br><span class="line">    camera_bind_group: wgpu::BindGroup,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">fn</span> <span class="title">new</span></span>(window: &amp;Window) -&gt; <span class="keyword">Self</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">Self</span> &#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        camera,</span><br><span class="line">        camera_uniform,</span><br><span class="line">        camera_buffer,</span><br><span class="line">        camera_bind_group,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>The final thing we need to do before we get into shaders is use the bind group in render().</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">render_pass.set_pipeline(&amp;<span class="keyword">self</span>.render_pipeline);</span><br><span class="line">render_pass.set_bind_group(<span class="number">0</span>, &amp;<span class="keyword">self</span>.diffuse_bind_group, &amp;[]);</span><br><span class="line"><span class="comment">// NEW!</span></span><br><span class="line">render_pass.set_bind_group(<span class="number">1</span>, &amp;<span class="keyword">self</span>.camera_bind_group, &amp;[]);</span><br><span class="line">render_pass.set_vertex_buffer(<span class="number">0</span>, <span class="keyword">self</span>.vertex_buffer.slice(..));</span><br><span class="line">render_pass.set_index_buffer(<span class="keyword">self</span>.index_buffer.slice(..), wgpu::IndexFormat::Uint16);</span><br><span class="line"></span><br><span class="line">render_pass.draw_indexed(<span class="number">0</span>..<span class="keyword">self</span>.num_indices, <span class="number">0</span>, <span class="number">0</span>..<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<h1 id="Using-the-uniform-in-the-vertex-shader"><a href="#Using-the-uniform-in-the-vertex-shader" class="headerlink" title="Using the uniform in the vertex shader"></a>Using the uniform in the vertex shader</h1><p>Modify the vertex shader to include the following.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Vertex shader</span></span><br><span class="line"></span><br><span class="line">[[block]] <span class="comment">// 1.</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">CameraUniform</span></span> &#123;</span><br><span class="line">    view_proj: mat4x4&lt;<span class="built_in">f32</span>&gt;;</span><br><span class="line">&#125;;</span><br><span class="line">[[group(<span class="number">1</span>), binding(<span class="number">0</span>)]] <span class="comment">// 2.</span></span><br><span class="line">var&lt;uniform&gt; camera: Camera;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">VertexInput</span></span> &#123;</span><br><span class="line">    [[location(<span class="number">0</span>)]] position: vec3&lt;<span class="built_in">f32</span>&gt;;</span><br><span class="line">    [[location(<span class="number">1</span>)]] tex_coords: vec2&lt;<span class="built_in">f32</span>&gt;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">VertexOutput</span></span> &#123;</span><br><span class="line">    [[builtin(position)]] clip_position: vec4&lt;<span class="built_in">f32</span>&gt;;</span><br><span class="line">    [[location(<span class="number">0</span>)]] tex_coords: vec2&lt;<span class="built_in">f32</span>&gt;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">[[stage(vertex)]]</span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>(</span><br><span class="line">    model: VertexInput,</span><br><span class="line">) -&gt; VertexOutput &#123;</span><br><span class="line">    var out: VertexOutput;</span><br><span class="line">    out.tex_coords = model.tex_coords;</span><br><span class="line">    out.clip_position = camera.view_proj * vec4&lt;<span class="built_in">f32</span>&gt;(model.position, <span class="number">1.0</span>); <span class="comment">// 3.</span></span><br><span class="line">    <span class="keyword">return</span> out;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>According to the <a target="_blank" rel="noopener" href="https://gpuweb.github.io/gpuweb/wgsl/">WGSL Spec</a>, The block decorator indicates this structure type represents the contents of a buffer resource occupying a single binding slot in the shader’s resource interface. Any structure used as a uniform must be annotated with [[block]]</li>
+<li>Because we’ve created a new bind group, we need to specify which one we’re using in the shader. The number is determined by our render_pipeline_layout. The texture_bind_group_layout is listed first, thus it’s group(0), and camera_bind_group is second, so it’s group(1).</li>
+<li>Multiplication order is important when it comes to matrices. The vector goes on the right, and the matrices gone on the left in order of importance.</li>
+</ol>
+<div></div>
+
+<ol>
+<li>根据<a target="_blank" rel="noopener" href="https://gpuweb.github.io/gpuweb/wgsl/">WGSL规范</a>，block decorator指示此结构类型表示占用着色器资源接口中单个绑定槽的缓冲区资源的内容。任何用作uniform的结构都必须用[[block]]注释</li>
+<li>因为我们已经创建了一个新的bind group，所以需要指定在着色器中使用的bind group。编号由渲染管道布局决定。纹理绑定组布局列在第一位，因此它是group(0)，摄影机绑定组列在第二位，因此它是group(1)。</li>
+<li>当涉及到矩阵时，乘法顺序很重要。向量在右边，矩阵按顺序在左边。</li>
+</ol>
+<h1 id="A-controller-for-our-camera"><a href="#A-controller-for-our-camera" class="headerlink" title="A controller for our camera"></a>A controller for our camera</h1><p>If you run the code right now, you should get something that looks like this.</p>
+<p><img src="https://sotrh.github.io/learn-wgpu/assets/img/static-tree.e1f31949.png" alt="static-tree"></p>
+<p>The shape’s less stretched now, but it’s still pretty static. You can experiment with moving the camera position around, but most cameras in games move around. Since this tutorial is about using wgpu and not how to process user input, I’m just going to post the CameraController code below.</p>
+<p>该形状现在拉伸程度有所降低，但仍然相当静态。你可以尝试移动摄像机的位置，但游戏中的大多数摄像机都会移动。因为本教程是关于使用wgpu而不是如何处理用户输入的，所以我将在下面直接发布CameraController代码。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">CameraController</span></span> &#123;</span><br><span class="line">    speed: <span class="built_in">f32</span>,</span><br><span class="line">    is_up_pressed: <span class="built_in">bool</span>,</span><br><span class="line">    is_down_pressed: <span class="built_in">bool</span>,</span><br><span class="line">    is_forward_pressed: <span class="built_in">bool</span>,</span><br><span class="line">    is_backward_pressed: <span class="built_in">bool</span>,</span><br><span class="line">    is_left_pressed: <span class="built_in">bool</span>,</span><br><span class="line">    is_right_pressed: <span class="built_in">bool</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> CameraController &#123;</span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">new</span></span>(speed: <span class="built_in">f32</span>) -&gt; <span class="keyword">Self</span> &#123;</span><br><span class="line">        <span class="keyword">Self</span> &#123;</span><br><span class="line">            speed,</span><br><span class="line">            is_up_pressed: <span class="literal">false</span>,</span><br><span class="line">            is_down_pressed: <span class="literal">false</span>,</span><br><span class="line">            is_forward_pressed: <span class="literal">false</span>,</span><br><span class="line">            is_backward_pressed: <span class="literal">false</span>,</span><br><span class="line">            is_left_pressed: <span class="literal">false</span>,</span><br><span class="line">            is_right_pressed: <span class="literal">false</span>,</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">process_events</span></span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, event: &amp;WindowEvent) -&gt; <span class="built_in">bool</span> &#123;</span><br><span class="line">        <span class="keyword">match</span> event &#123;</span><br><span class="line">            WindowEvent::KeyboardInput &#123;</span><br><span class="line">                input: KeyboardInput &#123;</span><br><span class="line">                    state,</span><br><span class="line">                    virtual_keycode: <span class="literal">Some</span>(keycode),</span><br><span class="line">                    ..</span><br><span class="line">                &#125;,</span><br><span class="line">                ..</span><br><span class="line">            &#125; =&gt; &#123;</span><br><span class="line">                <span class="keyword">let</span> is_pressed = *state == ElementState::Pressed;</span><br><span class="line">                <span class="keyword">match</span> keycode &#123;</span><br><span class="line">                    VirtualKeyCode::Space =&gt; &#123;</span><br><span class="line">                        <span class="keyword">self</span>.is_up_pressed = is_pressed;</span><br><span class="line">                        <span class="literal">true</span></span><br><span class="line">                    &#125;</span><br><span class="line">                    VirtualKeyCode::LShift =&gt; &#123;</span><br><span class="line">                        <span class="keyword">self</span>.is_down_pressed = is_pressed;</span><br><span class="line">                        <span class="literal">true</span></span><br><span class="line">                    &#125;</span><br><span class="line">                    VirtualKeyCode::W | VirtualKeyCode::Up =&gt; &#123;</span><br><span class="line">                        <span class="keyword">self</span>.is_forward_pressed = is_pressed;</span><br><span class="line">                        <span class="literal">true</span></span><br><span class="line">                    &#125;</span><br><span class="line">                    VirtualKeyCode::A | VirtualKeyCode::Left =&gt; &#123;</span><br><span class="line">                        <span class="keyword">self</span>.is_left_pressed = is_pressed;</span><br><span class="line">                        <span class="literal">true</span></span><br><span class="line">                    &#125;</span><br><span class="line">                    VirtualKeyCode::S | VirtualKeyCode::Down =&gt; &#123;</span><br><span class="line">                        <span class="keyword">self</span>.is_backward_pressed = is_pressed;</span><br><span class="line">                        <span class="literal">true</span></span><br><span class="line">                    &#125;</span><br><span class="line">                    VirtualKeyCode::D | VirtualKeyCode::Right =&gt; &#123;</span><br><span class="line">                        <span class="keyword">self</span>.is_right_pressed = is_pressed;</span><br><span class="line">                        <span class="literal">true</span></span><br><span class="line">                    &#125;</span><br><span class="line">                    _ =&gt; <span class="literal">false</span>,</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            _ =&gt; <span class="literal">false</span>,</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">update_camera</span></span>(&amp;<span class="keyword">self</span>, camera: &amp;<span class="keyword">mut</span> Camera) &#123;</span><br><span class="line">        <span class="keyword">use</span> cgmath::InnerSpace;</span><br><span class="line">        <span class="keyword">let</span> forward = camera.target - camera.eye;</span><br><span class="line">        <span class="keyword">let</span> forward_norm = forward.normalize();</span><br><span class="line">        <span class="keyword">let</span> forward_mag = forward.magnitude();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Prevents glitching when camera gets too close to the</span></span><br><span class="line">        <span class="comment">// center of the scene.</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">self</span>.is_forward_pressed &amp;&amp; forward_mag &gt; <span class="keyword">self</span>.speed &#123;</span><br><span class="line">            camera.eye += forward_norm * <span class="keyword">self</span>.speed;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">self</span>.is_backward_pressed &#123;</span><br><span class="line">            camera.eye -= forward_norm * <span class="keyword">self</span>.speed;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> right = forward_norm.cross(camera.up);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Redo radius calc in case the up/ down is pressed.</span></span><br><span class="line">        <span class="keyword">let</span> forward = camera.target - camera.eye;</span><br><span class="line">        <span class="keyword">let</span> forward_mag = forward.magnitude();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">self</span>.is_right_pressed &#123;</span><br><span class="line">            <span class="comment">// Rescale the distance between the target and eye so </span></span><br><span class="line">            <span class="comment">// that it doesn&#x27;t change. The eye therefore still </span></span><br><span class="line">            <span class="comment">// lies on the circle made by the target and eye.</span></span><br><span class="line">            camera.eye = camera.target - (forward + right * <span class="keyword">self</span>.speed).normalize() * forward_mag;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">self</span>.is_left_pressed &#123;</span><br><span class="line">            camera.eye = camera.target - (forward - right * <span class="keyword">self</span>.speed).normalize() * forward_mag;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>This code is not perfect. The camera slowly moves back when you rotate it. It works for our purposes though. Feel free to improve it!</p>
+<p>这个代码并不完美。旋转相机时，相机会慢慢向后移动。不过，它对我们的目的是有效的。请随意改进它！</p>
+<p>We still need to plug this into our existing code to make it do anything. Add the controller to State and create it in new().</p>
+<p>我们仍然需要将其插入到现有代码中，使其能够执行任何操作。将控制器添加到State并在new()中创建它。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">State</span></span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    camera: Camera,</span><br><span class="line">    <span class="comment">// NEW!</span></span><br><span class="line">    camera_controller: CameraController,</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">impl</span> State &#123;</span><br><span class="line">    <span class="keyword">async</span> <span class="function"><span class="keyword">fn</span> <span class="title">new</span></span>(window: &amp;Window) -&gt; <span class="keyword">Self</span> &#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        <span class="keyword">let</span> camera_controller = CameraController::new(<span class="number">0.2</span>);</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">Self</span> &#123;</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">            camera_controller,</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>We’re finally going to add some code to input() (assuming you haven’t already)!</p>
+<p>最后，我们将向input()添加一些代码(假设您还没有这样做)！</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">input</span></span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>, event: &amp;WindowEvent) -&gt; <span class="built_in">bool</span> &#123;</span><br><span class="line">    <span class="keyword">self</span>.camera_controller.process_events(event)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Up to this point, the camera controller isn’t actually doing anything. The values in our uniform buffer need to be updated. There are a few main methods to do that.</p>
+<p>到目前为止，相机控制器实际上什么都没有做。我们的uniform缓冲区中的值需要更新。有几种主要的方法可以做到这一点。</p>
+<ol>
+<li>We can create a separate buffer and copy it’s contents to our camera_buffer. The new buffer is known as a staging buffer. This method is usually how it’s done as it allows the contents of the main buffer (in this case camera_buffer) to only be accessible by the gpu. The gpu can do some speed optimizations which it couldn’t if we could access the buffer via the cpu.</li>
+<li>We can call on of the mapping method’s map_read_async, and map_write_async on the buffer itself. These allow us to access a buffer’s contents directly, but requires us to deal with the async aspect of these methods this also requires our buffer to use the BufferUsage::MAP_READ and/or BufferUsage::MAP_WRITE. We won’t talk about it here, but you check out Wgpu without a window tutorial if you want to know more.</li>
+<li>We can use write_buffer on queue.</li>
+</ol>
+<div></div>
+
+<ol>
+<li>我们可以创建一个单独的缓冲区，并将其内容复制到我们的相机缓冲区。新缓冲区称为暂存缓冲区。这种方法通常是这样做的，因为它只允许gpu访问主缓冲区（在本例中为camera_缓冲区）的内容。gpu可以做一些速度优化，如果我们可以通过cpu访问缓冲区，它就无法做到。</li>
+<li>我们可以在缓冲区本身上调用映射方法的map_read_async和map_write_async。这些允许我们直接访问缓冲区的内容，但要求我们处理这些方法的异步问题。这还要求我们的缓冲区使用BufferUsage::MAP_READ读取和BufferUsage::MAP_WRITE。我们这里不讨论它，但是如果您想了解更多，可以在没有窗口教程的情况下查看Wgpu。</li>
+<li>我们可以在队列上使用write_buffer。</li>
+</ol>
+<p>We’re going to use option number 3.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">update</span></span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>) &#123;</span><br><span class="line">    <span class="keyword">self</span>.camera_controller.update_camera(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>.camera);</span><br><span class="line">    <span class="keyword">self</span>.camera_uniform.update_view_proj(&amp;<span class="keyword">self</span>.camera);</span><br><span class="line">    <span class="keyword">self</span>.queue.write_buffer(&amp;<span class="keyword">self</span>.camera_buffer, <span class="number">0</span>, bytemuck::cast_slice(&amp;[<span class="keyword">self</span>.camera_uniform]));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>That’s all we need to do. If you run the code now you should see a pentagon with our tree texture that you can rotate around and zoom into with the wasd/arrow keys.</p>
+<p>这就是我们需要做的。如果你现在运行代码，你会看到一个五边形和我们的树纹理，你可以通过wasd/箭头键旋转和放大。</p>
+<h1 id="Challenge"><a href="#Challenge" class="headerlink" title="Challenge"></a>Challenge</h1><p>让我们的模型独立于相机旋转。提示：您需要另一个矩阵。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/sotrh/learn-wgpu/tree/master/code/beginner/tutorial6-uniforms/">Check out the code!</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1544,99 +1732,6 @@
 <p>label, of type USVString<br>    The initial value of GPUObjectBase.label.</p>
 <p>GPUObjectDescriptorBase有如下成员:</p>
 <p>label, USVString类型<br>    GPUObjectBase.label的初始值。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2021/08/09/WebGPU%202.8.%20Privacy/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="qianqians">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qianqians'blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/09/WebGPU%202.8.%20Privacy/" class="post-title-link" itemprop="url">WebGPU 2.8. Privacy</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-08-09 14:48:47 / 修改时间：15:12:06" itemprop="dateCreated datePublished" datetime="2021-08-09T14:48:47+08:00">2021-08-09</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/WebGPU/" itemprop="url" rel="index"><span itemprop="name">WebGPU</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>2.8.1. Machine-specific limits</p>
-<p>WebGPU can expose a lot of detail on the underlying GPU architecture and the device geometry. This includes available physical adapters, many limits on the GPU and CPU resources that could be used (such as the maximum texture size), and any optional hardware-specific capabilities that are available. </p>
-<p>WebGPU可以公开很多关于底层GPU架构和设备几何结构的细节。这包括可用的物理适配器、对可使用的GPU和CPU资源的许多限制（如最大纹理大小）以及任何可选的硬件特定功能。</p>
-<p>User agents are not obligated to expose the real hardware limits, they are in full contol of how much the machine specifics are exposed. One strategy to reduce fingeprinting is binning all the target platforms into a few number of bins. In general, the privacy impact of exposing the hardware limits matches the one of WebGL.</p>
-<p>用户代理没有义务公开真正的硬件限制，他们完全控制机器细节的公开程度。减少fingeprinting的一个策略是将所有目标平台放入几个箱子中。一般来说，公开硬件限制对隐私的影响与WebGL的影响相匹配。</p>
-<p>The default limits are also deliberately high enough to allow most application to work without requesting higher limits. All the usage of the API is validated according to the requested limits, so the actual hardware capabilities are not exposed to the users by accident.</p>
-<p>默认限制也有意设置得足够高，以允许大多数应用程序在不请求更高限制的情况下工作。API的所有使用都是根据请求的限制进行验证的，因此实际的硬件功能不会意外地暴露给用户。</p>
-<p>2.8.2. Machine-specific artifacts</p>
-<p>There are some machine-specific rasterization/precision artifacts and performance differences that can be observed roughly in the same way as in WebGL. This applies to rasterization coverage and patterns, interpolation precision of the varyings between shader stages, compute unit scheduling, and more aspects of execution.</p>
-<p>存在一些特定于机器的光栅化/精度瑕疵和性能差异，其观察方式与WebGL大致相同。这适用于光栅化覆盖率和模式、着色器阶段之间变量的插值精度、计算单元调度以及执行的更多方面。</p>
-<p>Generally, rasterization and precision fingerprints are identical across most or all of the devices of each vendor. Performance differences are relatively intractable, but also relatively low-signal (as with JS execution performance).</p>
-<p>通常，每个供应商的大部分或所有设备上的光栅化和精确指纹都是相同的。性能差异比较棘手，但信号也相对较低（与JS执行性能一样）。</p>
-<p>Privacy-critical applications and user agents should utilize software implementations to eliminate such artifacts.</p>
-<p>隐私关键型应用程序和用户代理应利用软件实现消除此类组件。</p>
-<p>2.8.3. Machine-specific performance</p>
-<p>Another factor for differentiating users is measuring the performance of specific operations on the GPU. Even with low precision timing, repeated execution of an operation can show if the user’s machine is fast at specific workloads. This is a fairly common vector (present in both WebGL and Javascript), but it’s also low-signal and relatively intractable to truly normalize.</p>
-<p>区分用户的另一个因素是衡量GPU上特定操作的性能。即使使用低精度计时，重复执行操作也可以显示用户的机器在特定工作负载下是否快速。这是一个相当常见的向量（存在于WebGL和Javascript中），但它也是一个低信号，要真正规范化它相对困难。</p>
-<p>WebGPU compute pipelines expose access to GPU unobstructed by the fixed-function hardware. This poses an additional risk for unique device fingerprinting. User agents can take steps to dissociate logical GPU invocations with actual compute units to reduce this risk.</p>
-<p>WebGPU计算管道公开对GPU的访问，不受固定功能硬件的阻碍。这给独特的设备指纹识别带来了额外的风险。用户代理可以采取步骤将逻辑GPU调用与实际计算单元分离，以降低这种风险。</p>
-<p>2.8.4. User Agent State</p>
-<p>This specification doesn’t define any additional user-agent state for an origin. However it is expected that user agents will have compilation caches for the result of expensive compilation like GPUShaderModule, GPURenderPipeline and GPUComputePipeline. These caches are important to improve the loading time of WebGPU applications after the first visit.</p>
-<p>此规范没有为源定义任何其他用户代理状态。但是，预计用户代理将为昂贵的编译结果（如GPUShaderModule、GPURenderPipeline和GPUComputePipeline）提供编译缓存。这些缓存对于提高首次访问后WebGPU应用程序的加载时间非常重要。</p>
-<p>For the specification, these caches are indifferentiable from incredibly fast compilation, but for applications it would be easy to measure how long createComputePipelineAsync() takes to resolve. This can leak information across origins (like “did the user access a site with this specific shader”) so user agents should follow the best practices in storage partitioning.</p>
-<p>对于规范来说，这些缓存与异常快速的编译是不可区分的，但是对于应用程序来说，很容易测量createComputePipelineAsync()解析所需的时间。这可能会跨源泄漏信息（如“用户是否使用此特定着色器访问了站点”），因此用户代理应遵循存储分区中的最佳做法。</p>
-<p>The system’s GPU driver may also have its own cache of compiled shaders and pipelines. User agents may want to disable these when at all possible, or add per-partition data to shaders in ways that will make the GPU driver consider them different.</p>
-<p>系统的GPU驱动程序也可能有自己的编译着色器和管道缓存。用户代理可能想在所有可能的情况下禁用这些，或者将每个分区数据添加到着色器中，这将使GPU驱动程序认为它们是不同的。</p>
 
       
     </div>

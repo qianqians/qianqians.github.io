@@ -117,12 +117,12 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">38</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">39</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">7</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">10</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -152,6 +152,85 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2024/01/28/pyo3-asyncio/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="qianqians">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qianqians'blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/01/28/pyo3-asyncio/" class="post-title-link" itemprop="url">Rust开发小记</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-01-28 19:26:19 / 修改时间：19:28:28" itemprop="dateCreated datePublished" datetime="2024-01-28T19:26:19+08:00">2024-01-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/rust/" itemprop="url" rel="index"><span itemprop="name">rust</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pyo3-asyncio/" itemprop="url" rel="index"><span itemprop="name">pyo3-asyncio</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">future</span> = Python::<span class="title function_ invoke__">with_gil</span>(|py| &#123;</span><br><span class="line">    <span class="comment">// import the module containing the py_sleep function</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">example</span> = py.<span class="title function_ invoke__">import</span>(<span class="string">&quot;example&quot;</span>)?;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// calling the py_sleep method like a normal function returns a coroutine</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">coroutine</span> = example.<span class="title function_ invoke__">call_method0</span>(<span class="string">&quot;py_sleep&quot;</span>)?;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// convert the coroutine into a Rust future</span></span><br><span class="line">    pyo3_asyncio::<span class="title function_ invoke__">into_future</span>(coroutine)</span><br><span class="line">&#125;)?;</span><br><span class="line"></span><br><span class="line"><span class="comment">// await the future</span></span><br><span class="line">future.<span class="keyword">await</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#[pyfunction]</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">call_rust_sleep</span>(py: Python) <span class="punctuation">-&gt;</span> PyResult&lt;PyObject&gt; &#123;</span><br><span class="line">    pyo3_asyncio::async_std::<span class="title function_ invoke__">into_coroutine</span>(py, <span class="keyword">async</span> <span class="keyword">move</span> &#123;</span><br><span class="line">        <span class="title function_ invoke__">rust_sleep</span>().<span class="keyword">await</span>;</span><br><span class="line">        <span class="title function_ invoke__">Ok</span>(())</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pyo3_asyncio::tokio::<span class="title function_ invoke__">future_into_py</span>(py, <span class="keyword">async</span> <span class="keyword">move</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">_server_handle</span> = _server.<span class="title function_ invoke__">as_ref</span>().<span class="title function_ invoke__">lock</span>().<span class="keyword">await</span>;</span><br><span class="line">    _server_handle.<span class="title function_ invoke__">entry_direct_hub_server</span>(hub_name).<span class="keyword">await</span>;</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(())</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1068,89 +1147,6 @@
 <p>将 Slice 编译集成到构建系统中的一种方法是手动编译 Slice 文件，然后像其他源文件一样保留（签入）生成的文件。 以后，每次更改 Slice 文件时，都必须记住重新编译该 Slice 文件并更新生成的文件。 虽然简单，但如果您忘记重新编译修改后的 Slice 文件，这种方法可能会导致不一致和错误。</p>
 <p>We recommend you use instead an Ice Builder for your build environment to manage the compilation of your Slice files. An Ice Builder is a simple plug-in or task for your build environment that compiles or recompiles Slice files when it detects the corresponding generated files are missing or out of date. A Builder performs this Slice compilation by invoking the Slice compiler for the target programming language–it does compile the files itself and usually supports several versions of Ice.</p>
 <p>我们建议您在构建环境中使用 Ice Builder 来管理 Slice 文件的编译。 Ice Builder 是一个适用于构建环境的简单插件或任务，当它检测到相应的生成文件丢失或过期时，它会编译或重新编译 Slice 文件。 Builder 通过调用目标编程语言的 Slice 编译器来执行此 Slice 编译 - 它本身会编译文件，并且通常支持多个版本的 Ice。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2023/11/21/ice_slice/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="qianqians">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qianqians'blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/11/21/ice_slice/" class="post-title-link" itemprop="url">Slice</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-11-21 22:26:12 / 修改时间：22:33:46" itemprop="dateCreated datePublished" datetime="2023-11-21T22:26:12+08:00">2023-11-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ice/" itemprop="url" rel="index"><span itemprop="name">ice</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Slice (Specification Language for Ice)</p>
-<p>Each Ice object has an interface with a number of operations. Interfaces, operations, and the types of data that are exchanged between client and server are defined using the Slice language. Slice allows you to define the client-server contract in a way that is independent of a specific programming language, such as C++, Java, or C#. The Slice definitions are compiled by a compiler into an API for a specific programming language, that is, the part of the API that is specific to the interfaces and types you have defined consists of generated code.</p>
-<p>每个 Ice 对象都有一个包含许多操作的接口。 客户端和服务器之间交换的接口、操作和数据类型都是使用 Slice 语言定义的。 Slice 允许您以独立于特定编程语言（例如 C++、Java 或 C#）的方式定义客户端-服务器协定。 Slice 定义由编译器编译为特定编程语言的 API，即 API 中特定于您定义的接口和类型的部分由生成的代码组成。</p>
-<p>The Slice Language</p>
-<p>Slice (Specification Language for Ice) is the fundamental abstraction mechanism for separating object interfaces from their implementations. Slice establishes a contract between client and server that describes the interfaces, operations and parameter types used by an application. This description is independent of the implementation language, so it does not matter whether the client is written in the same language as the server.</p>
-<p>Even though Slice is an acronym, it is pronounced as a single syllable, like a slice of bread.</p>
-<p>Slice definitions are compiled for a particular implementation language by a compiler. The language-specific Slice compiler translates the language-independent Slice definitions into language-specific type definitions and APIs. These types and APIs are used by the developer to provide application functionality and to interact with Ice. The translation algorithms for various implementation languages are known as language mappings, and Ice provides a number of language mappings (for C++, C#, Java, JavaScript, Python and more).</p>
-<p>Because Slice describes interfaces and types (but not implementations), it is a purely declarative language; there is no way to write executable statements in Slice.</p>
-<p>Slice definitions focus on object interfaces, the operations supported by those interfaces, and exceptions that may be raised by operations. This requires quite a bit of supporting machinery; in particular, much of Slice is concerned with the definition of data types. This is because data can be exchanged between client and server only if their types are defined in Slice. You cannot exchange arbitrary C++ data between a client and a server because it would destroy the language independence of Ice. However, you can always create a Slice type definition that corresponds to the C++ data you want to send, and then you can transmit the Slice type.</p>
-<p>We present the full syntax and semantics of Slice here. Because much of Slice is based on C++ and Java, we focus on those areas where Slice differs from C++ or Java or constrains the equivalent C++ or Java feature in some way. Slice features that are identical to C++ and Java are mentioned mostly by example.</p>
-<p>Slice（Ice 规范语言）是将对象接口与其实现分离的基本抽象机制。 Slice 在客户端和服务器之间建立契约，描述应用程序使用的接口、操作和参数类型。 这种描述与实现语言无关，因此客户端是否与服务器使用相同的语言编写并不重要。</p>
-<p>尽管 Slice 是一个缩写词，但它的发音是一个音节，就像一片面包一样。</p>
-<p>Slice定义由编译器针对特定的实现语言进行编译。 特定于语言的 Slice 编译器将独立于语言的 Slice 定义转换为特定于语言的类型定义和 API。 开发人员使用这些类型和 API 来提供应用程序功能并与 Ice 进行交互。 各种实现语言的翻译算法称为语言映射，Ice 提供了多种语言映射（针对 C++、C#、Java、JavaScript、Python 等）。</p>
-<p>因为 Slice 描述了接口和类型（但不描述实现），所以它是一种纯粹的声明性语言； 无法在 Slice 中编写可执行语句。</p>
-<p>Slice定义重点关注对象接口、这些接口支持的操作以及操作可能引发的异常。 这需要相当多的配套机械； 特别是，Slice 的大部分内容都与数据类型的定义有关。 这是因为只有在 Slice 中定义了数据类型，客户端和服务器之间才能交换数据。 您不能在客户端和服务器之间交换任意 C++ 数据，因为这会破坏 Ice 的语言独立性。 但是，您始终可以创建与要发送的 C++ 数据相对应的 Slice 类型定义，然后就可以传输该 Slice 类型。</p>
-<p>我们在这里展示 Slice 的完整语法和语义。 由于 Slice 的大部分内容都基于 C++ 和 Java，因此我们重点关注 Slice 与 C++ 或 Java 不同的领域，或者以某种方式限制等效的 C++ 或 Java 功能的领域。 与 C++ 和 Java 相同的 Slice 功能主要通过示例来提及。</p>
 
       
     </div>
