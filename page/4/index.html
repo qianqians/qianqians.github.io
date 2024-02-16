@@ -117,7 +117,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">39</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">40</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -152,6 +152,112 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2021/08/10/WebGPU%203.1.%20Conventions/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="qianqians">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qianqians'blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/10/WebGPU%203.1.%20Conventions/" class="post-title-link" itemprop="url">WebGPU 3.1. Conventions</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-08-10 10:24:11 / 修改时间：11:35:30" itemprop="dateCreated datePublished" datetime="2021-08-10T10:24:11+08:00">2021-08-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WebGPU/" itemprop="url" rel="index"><span itemprop="name">WebGPU</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>3.1.1. Dot Syntax</p>
+<p>In this specification, the . (“dot”) syntax, common in programming languages, is used. The phrasing “Foo.Bar” means “the Bar member of the value (or interface) Foo.”</p>
+<p>在本规范中，使用编程语言中常见的(“点”)语法。短语”Foo.Bar”表示”对象(或接口)Foo的Bar成员”</p>
+<p>The ?. (“optional chaining”) syntax, adopted from JavaScript, is also used. The phrasing “Foo?.Bar” means “if Foo is null or undefined, Foo; otherwise, Foo.Bar”.</p>
+<p>采纳自JavaScript的”?.”语法同样被使用。”Foo?.Bar”表示”如果Foo为null或undefined，则为undefined；否则，Foo.Bar”。</p>
+<p>For example, where buffer is a GPUBuffer, buffer?.[[device]].[[adapter]] means “if buffer is null or undefined, then undefined, otherwise, the [[adapter]] internal slot of the [[device]] internal slot of buffer.</p>
+<p>例如，buffer是一个GPUBuffer对象，buffer?.[[device]].[[adapter]]表示”如果buffer为null或undefined，则为undefined，否则buffer的内部插槽[[device]]的内部插槽[[adapter]]”</p>
+<p>3.1.2. Internal Objects</p>
+<p>An internal object is a conceptual, non-exposed WebGPU object. Internal objects track the state of an API object and hold any underlying implementation. If the state of a particular internal object can change in parallel from multiple agents, those changes are always atomic with respect to all agents.</p>
+<p>内部对象是概念性的、未公开的WebGPU对象。内部对象跟踪API对象的状态并保存任何底层实现。如果特定内部对象的状态可以从多个代理并行更改，那么这些更改对于所有代理来说都是原子性的。</p>
+<p>Note: An “agent” refers to a JavaScript “thread” (i.e. main thread, or Web Worker).</p>
+<p>注：”agent”是指JavaScript”线程”(即主线程或Web工作线程)。</p>
+<p>3.1.3. WebGPU Interfaces</p>
+<p>A WebGPU interface is an exposed interface which encapsulates an internal object. It provides the interface through which the internal object’s state is changed.</p>
+<p>WebGPU接口是封装内部对象的公开接口。它提供用于更改内部对象状态的接口。</p>
+<p>As a matter of convention, if a WebGPU interface is referred to as invalid, it means that the internal object it encapsulates is invalid.</p>
+<p>按照惯例，如果WebGPU接口被援引为无效，则意味着它封装的内部对象无效。</p>
+<p>Any interface which includes GPUObjectBase is a WebGPU interface.</p>
+<p>任何包含GPUObjectBase的接口都是WebGPU接口。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">interface mixin GPUObjectBase &#123;</span><br><span class="line">    attribute USVString? label;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>GPUObjectBase has the following attributes:</p>
+<p>GPUObjectBase具有以下属性:</p>
+<p>label, of type USVString, nullable<br>A label which can be used by development tools (such as error/warning messages, browser developer tools, or platform debugging utilities) to identify the underlying internal object to the developer. It has no specified format, and therefore cannot be reliably machine-parsed.</p>
+<p>In any given situation, the user agent may or may not choose to use this label.</p>
+<p>label, USVString类型，可为空<br>开发工具（如错误/警告消息、浏览器开发工具或平台调试实用程序）可以使用的标签，用于向开发人员标识底层内部对象。它没有指定的格式，因此无法可靠地进行机器分析。</p>
+<p>在任何给定的情况下，用户代理都可能或可能不选择使用此标签。</p>
+<p>GPUObjectBase has the following internal slots:</p>
+<p>[[device]], of type device, readonly<br>    An internal slot holding the device which owns the internal object.</p>
+<p>[[device]], 类型device, 只读<br>    一个内部插槽持有拥有内部对象的设备</p>
+<p>3.1.4. Object Descriptors</p>
+<p>An object descriptor holds the information needed to create an object, which is typically done via one of the create* methods of GPUDevice.</p>
+<p>对象描述符保存创建对象所需的信息，这通常通过GPUDevice的create*方法之一完成。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dictionary GPUObjectDescriptorBase &#123;</span><br><span class="line">    USVString label;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>GPUObjectDescriptorBase has the following members:</p>
+<p>label, of type USVString<br>    The initial value of GPUObjectBase.label.</p>
+<p>GPUObjectDescriptorBase有如下成员:</p>
+<p>label, USVString类型<br>    GPUObjectBase.label的初始值。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
