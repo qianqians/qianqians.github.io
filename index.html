@@ -117,7 +117,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">40</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">41</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -152,6 +152,212 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2024/04/06/ice_Constants_and_Literals/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="qianqians">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qianqians'blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/04/06/ice_Constants_and_Literals/" class="post-title-link" itemprop="url">Constants and Literals</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-04-06 18:44:04 / 修改时间：19:10:24" itemprop="dateCreated datePublished" datetime="2024-04-06T18:44:04+08:00">2024-04-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ice/" itemprop="url" rel="index"><span itemprop="name">ice</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Allowable Types for Constants<br>常量允许的类型</p>
+<p>Slice allows you to define constants for the following types:</p>
+<p>An integral type (bool, byte, short, int, long)<br>A floating point type (float or double)<br>string<br>enum</p>
+<p>Slice 允许定义以下类型的常量：<br>整型（bool、byte、short、int、long）<br>浮点类型（float 或 double）<br>字符串<br>枚举</p>
+<p>Here are a few examples:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> M</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">const</span> <span class="type">bool</span>      AppendByDefault = <span class="literal">true</span>;</span><br><span class="line">    <span class="type">const</span> byte      LowerNibble = <span class="number">0x0f</span>;</span><br><span class="line">    <span class="type">const</span> string    Advice = <span class="string">&quot;Don&#x27;t Panic!&quot;</span>;</span><br><span class="line">    <span class="type">const</span> <span class="type">short</span>     TheAnswer = <span class="number">42</span>;</span><br><span class="line">    <span class="type">const</span> <span class="type">double</span>    PI = <span class="number">3.1416</span>;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">enum</span> <span class="title class_">Fruit</span> &#123; Apple, Pear, Orange &#125;</span><br><span class="line">    <span class="type">const</span> Fruit     FavoriteFruit = Pear;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The syntax for literals is the same as for C++ and Java (with a few minor exceptions).<br>文字的语法与 C++ 和 Java 相同（有一些小例外）。</p>
+<p>Boolean constants<br>Boolean constants can only be initialized with the keywords false and true. (You cannot use 0 and 1 to represent false and true.)<br>布尔常量只能使用关键字 false 和 true 进行初始化。 （不能用 0 和 1 来表示 false 和 true。）</p>
+<p>Integer literals<br>Integer literals can be specified in decimal, octal, or hexadecimal notation.<br>整数可以用十进制、八进制或十六进制表示法指定。</p>
+<p>For example:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> byte TheAnswer = <span class="number">42</span>;</span><br><span class="line"><span class="type">const</span> byte TheAnswerInOctal = <span class="number">052</span>;</span><br><span class="line"><span class="type">const</span> byte TheAnswerInHex = <span class="number">0x2A</span>;       </span><br></pre></td></tr></table></figure>
+
+<p>Be aware that, if you interpret byte as a number instead of a bit pattern, you may get different results in different languages. For example, for C++, byte maps to unsigned char whereas, for Java, byte maps to byte, which is a signed type.</p>
+<p>Note that suffixes to indicate long and unsigned constants (l, L, u, U, used by C++) are illegal:</p>
+<p>请注意，如果将字节解释为数字而不是位模式，则在不同语言中可能会得到不同的结果。 例如，对于 C++，字节映射到 unsigned char，而对于 Java，字节映射到 byte，这是一种有符号类型。<br>请注意，表示长整型和无符号常量（C++ 使用的 l、L、u、U）的后缀是非法的：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">long</span> Wrong = <span class="number">0u</span>;          <span class="comment">// Syntax error</span></span><br><span class="line"><span class="type">const</span> <span class="type">long</span> WrongToo = <span class="number">1000000L</span>; <span class="comment">// Syntax error</span></span><br></pre></td></tr></table></figure>
+
+<p>The value of an integer literal must be within the range of its constant type, as shown in the Built-In Basic Types table; otherwise the compiler will issue a diagnostic.<br>整数的值必须在其常量类型的范围内，如内置基本类型表所示； 否则编译器将发出诊断信息。</p>
+<p>Floating-point literals<br>Floating-point literals use C++ syntax, except that you cannot use an l or L suffix to indicate an extended floating-point constant; however, f and F are legal (but are ignored).<br>浮点文字使用 C++ 语法，但不能使用 l 或 L 后缀来指示扩展浮点常量； 然而，f 和 F 是合法的（但被忽略）。<br>Here are a few examples:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">float</span> P1 = <span class="number">-3.14f</span>;    <span class="comment">// Integer &amp; fraction, with suffix</span></span><br><span class="line"><span class="type">const</span> <span class="type">float</span> P2 = +<span class="number">3.1e-3</span>;   <span class="comment">// Integer, fraction, and exponent</span></span><br><span class="line"><span class="type">const</span> <span class="type">float</span> P3 = <span class="number">.1</span>;        <span class="comment">// Fraction part only</span></span><br><span class="line"><span class="type">const</span> <span class="type">float</span> P4 = <span class="number">1.</span>;        <span class="comment">// Integer part only</span></span><br><span class="line"><span class="type">const</span> <span class="type">float</span> P5 = <span class="number">.9E5</span>;      <span class="comment">// Fraction part and exponent</span></span><br><span class="line"><span class="type">const</span> <span class="type">float</span> P6 = <span class="number">5e2</span>;       <span class="comment">// Integer part and exponent</span></span><br></pre></td></tr></table></figure>
+
+<p>Floating-point literals must be within the range of the constant type (float or double); otherwise, the compiler will issue a diagnostic.<br>浮点变量必须在常量类型（float 或 double）的范围内； 否则，编译器将发出诊断信息。</p>
+<p>String literals<br>Slice string literals support the same escape sequences as C++, with the exception of hexadecimal escape sequences that are limited to two hexadecimal digits.<br>Slice字符串变量支持与 C++ 相同的转义序列，但十六进制转义序列除外，该序列仅限于两个十六进制数字。</p>
+<table>
+<thead>
+<tr>
+<th align="left">Escape Sequence</th>
+<th align="left">Name</th>
+<th align="left">Corresponding ASCII or Unicode Code Point</th>
+<th align="left">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">&#39;</td>
+<td align="left">single quote</td>
+<td align="left">0x27</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">&quot;</td>
+<td align="left">double quote</td>
+<td align="left">0x22</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">?</td>
+<td align="left">question mark</td>
+<td align="left">0x3f</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">\</td>
+<td align="left">backslash</td>
+<td align="left">0x5c</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">\a</td>
+<td align="left">audible bell</td>
+<td align="left">0x07</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">\b</td>
+<td align="left">backspace</td>
+<td align="left">0x08</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">\f</td>
+<td align="left">form feed</td>
+<td align="left">0x0c</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">\n</td>
+<td align="left">line feed</td>
+<td align="left">0x0a</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">\r</td>
+<td align="left">carriage return</td>
+<td align="left">0x0d</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">\t</td>
+<td align="left">horizontal tab</td>
+<td align="left">0x09</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">\v</td>
+<td align="left">vertical tab</td>
+<td align="left">0x0b</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">\nnn</td>
+<td align="left">octal escape sequence</td>
+<td align="left"></td>
+<td align="left">1 to 3 octal digits (0-7) that represent a byte value between 0 and 255</td>
+</tr>
+<tr>
+<td align="left">\xnn</td>
+<td align="left">hexadecimal escape sequence</td>
+<td align="left"></td>
+<td align="left">1 to 2 hexadecimal digits (0-9, a-f, A-F)</td>
+</tr>
+<tr>
+<td align="left">\unnnn</td>
+<td align="left">universal character name</td>
+<td align="left">U+nnnn</td>
+<td align="left">Exactly 4 hexadecimal digits. Use the \Unnnnnnnn notation for astral characters.</td>
+</tr>
+<tr>
+<td align="left">\Unnnnnnnn</td>
+<td align="left">universal character name</td>
+<td align="left">U+nnnnnnnn Exactly 8 hexadecimal digits.</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p>A backslash () followed by another character is simply preserved as is.</p>
+<p>Octal and hexadecimal escape sequences can represent ASCII characters (ordinal value 0 to 127) or the UTF-8 encoding of non-ASCII characters.</p>
+<p>A string literal can contain printable ASCII characters (including the escape sequences presented above) and non-ASCII characters; non-printable ASCII characters (such as an unescaped tab) are not allowed.</p>
+<p>反斜杠 () 后跟另一个字符将按原样保留。<br>八进制和十六进制转义序列可以表示 ASCII 字符（序数值 0 到 127）或非 ASCII 字符的 UTF-8 编码。<br>字符串文字可以包含可打印的 ASCII 字符（包括上面介绍的转义序列）和非 ASCII 字符； 不允许使用不可打印的 ASCII 字符（例如未转义的制表符）。</p>
+<p>Here are some examples:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> string AnOrdinaryString = <span class="string">&quot;Hello World!&quot;</span>;</span><br><span class="line"> </span><br><span class="line"><span class="type">const</span> string DoubleQuote =      <span class="string">&quot;\&quot;&quot;</span>;</span><br><span class="line"><span class="type">const</span> string TwoSingleQuotes =  <span class="string">&quot;&#x27;\&#x27;&quot;</span>;     <span class="comment">// &#x27; and \&#x27; are OK</span></span><br><span class="line"><span class="type">const</span> string QuestionMark =     <span class="string">&quot;\?&quot;</span>;</span><br><span class="line"><span class="type">const</span> string Backslash =        <span class="string">&quot;\\&quot;</span>;</span><br><span class="line"><span class="type">const</span> string AudibleBell =      <span class="string">&quot;\a&quot;</span>;</span><br><span class="line"><span class="type">const</span> string Backspace =        <span class="string">&quot;\b&quot;</span>;</span><br><span class="line"><span class="type">const</span> string FormFeed =         <span class="string">&quot;\f&quot;</span>;</span><br><span class="line"><span class="type">const</span> string Newline =          <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"><span class="type">const</span> string CarriageReturn =   <span class="string">&quot;\r&quot;</span>;</span><br><span class="line"><span class="type">const</span> string HorizontalTab =    <span class="string">&quot;\t&quot;</span>;</span><br><span class="line"><span class="type">const</span> string VerticalTab =      <span class="string">&quot;\v&quot;</span>;</span><br><span class="line"> </span><br><span class="line"><span class="type">const</span> string OctalEscape =    <span class="string">&quot;\007&quot;</span>;     <span class="comment">// Same as \a</span></span><br><span class="line"><span class="type">const</span> string HexEscape1  =    <span class="string">&quot;\x07&quot;</span>;     <span class="comment">// Ditto</span></span><br><span class="line"><span class="type">const</span> string HexEscape2 =     <span class="string">&quot;\x41F&quot;</span>;    <span class="comment">// Same as AF</span></span><br><span class="line"><span class="type">const</span> string Universal1 =     <span class="string">&quot;\u0041&quot;</span>;   <span class="comment">// Same as A</span></span><br><span class="line"><span class="type">const</span> string Universal2 = <span class="string">&quot;\U00000041&quot;</span>;   <span class="comment">// Ditto</span></span><br><span class="line">  </span><br><span class="line"><span class="type">const</span> string EuroSign1 =           <span class="string">&quot;€&quot;</span>;   <span class="comment">// Euro sign (U+20AC)</span></span><br><span class="line"><span class="type">const</span> string EuroSign2 =      <span class="string">&quot;\u20AC&quot;</span>;   <span class="comment">// Euro sign as a short universal character name</span></span><br><span class="line"><span class="type">const</span> string EuroSign3 =  <span class="string">&quot;\U000020ac&quot;</span>;   <span class="comment">// Euro sign as a long universal character name</span></span><br><span class="line"><span class="type">const</span> string EuroSign4 = <span class="string">&quot;\xe2\x82\xAC&quot;</span>;  <span class="comment">// Euro sign in UTF-8 encoding, using hex escape sequences</span></span><br><span class="line"><span class="type">const</span> string EuroSign5 = <span class="string">&quot;\342\202\254&quot;</span>;  <span class="comment">// Euro sign in UTF-8 encoding, using octal escape sequences</span></span><br><span class="line"><span class="type">const</span> string EuroSign6 = <span class="string">&quot;\342\x82\254&quot;</span>;  <span class="comment">// Euro sign in UTF-8 encoding, using a mix or hex and octal escape sequences</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> string NullString = null;    <span class="comment">// Illegal!</span></span><br></pre></td></tr></table></figure>
+
+<p>Null strings simply do not exist in Slice and, therefore, do not exist as a legal value for a string anywhere in the Ice platform. The reason for this decision is that null strings do not exist in many programming languages.<br>空字符串根本不存在于 Slice 中，因此在 Ice 平台中的任何位置都不作为字符串的合法值存在。 做出此决定的原因是许多编程语言中不存在空字符串。</p>
+<p>Constant Expressions<br>A constant definition may also refer to another constant. It is not necessary for both constants to have the same Slice type, but the value of the existing constant must be compatible with the type of the constant being defined.</p>
+<p>常量定义也可以引用另一个常量。 两个常量不必具有相同的 Slice 类型，但现有常量的值必须与正在定义的常量的类型兼容。</p>
+<p>Consider the examples below:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> SIZE = <span class="number">500</span>;</span><br><span class="line"> </span><br><span class="line"><span class="type">const</span> <span class="type">int</span> DEFAULT_SIZE = SIZE; <span class="comment">// OK</span></span><br><span class="line"><span class="type">const</span> <span class="type">short</span> SHORT_SIZE = SIZE; <span class="comment">// OK</span></span><br><span class="line"><span class="type">const</span> byte BYTE_SIZE = SIZE;   <span class="comment">// ERROR</span></span><br></pre></td></tr></table></figure>
+
+<p>The DEFAULT_SIZE constant is legal because it has the same type as SIZE, and SHORT_SIZE is legal because the value of SIZE (500) is within the range of the Slice short type. However, BYTE_SIZE is illegal because the value of SIZE is outside the range of the byte type.<br>DEFAULT_SIZE 常量是合法的，因为它与 SIZE 具有相同的类型，SHORT_SIZE 是合法的，因为 SIZE (500) 的值在 Slice Short 类型的范围内。 但是，BYTE_SIZE 是非法的，因为 SIZE 的值超出了字节类型的范围。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1026,127 +1232,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2023/11/24/ice_Slice_Source_Files/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="qianqians">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qianqians'blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/11/24/ice_Slice_Source_Files/" class="post-title-link" itemprop="url">Slice Source Files</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-11-24 22:04:03 / 修改时间：22:31:58" itemprop="dateCreated datePublished" datetime="2023-11-24T22:04:03+08:00">2023-11-24</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ice/" itemprop="url" rel="index"><span itemprop="name">ice</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Slice defines a number of rules for the naming and contents of Slice source files.</p>
-<p>Slice 定义了许多 Slice 源文件的命名和内容的规则。</p>
-<p>File Naming<br>Files containing Slice definitions must end in a .ice file extension, for example, Clock.ice is a valid file name. Other file extensions are rejected by the compilers.</p>
-<p>For case-insensitive file systems, the file extension may be written as uppercase or lowercase, so Clock.ICE is legal. For case-sensitive file systems (such as Unix), Clock.ICE is illegal. (The extension must be in lowercase.)</p>
-<p>文件命名<br>包含Slice定义的文件必须以 .ice 文件扩展名结尾，例如，Clock.ice 是有效的文件名。 其他文件扩展名会被编译器拒绝。</p>
-<p>对于不区分大小写的文件系统，文件扩展名可以写为大写或小写，因此 Clock.ICE 是合法的。 对于区分大小写的文件系统（例如Unix），Clock.ICE 是非法的。 （扩展名必须为小写。）</p>
-<p>File Format<br>Slice is a free-form language so you can use spaces, horizontal and vertical tab stops, form feeds, and newline characters to lay out your code in any way you wish. (White space characters are token separators). Slice does not attach semantics to the layout of a definition. You may wish to follow the style we have used for the Slice examples throughout this book.</p>
-<p>Slice files can be ASCII text files or use the UTF-8 character encoding with an optional byte order marker (BOM) at the beginning of each file. However, Slice identifiers are limited to ASCII letters and digits; non-ASCII letters can appear only in comments and string literals.</p>
-<p>文件格式<br>Slice 是一种自由格式的语言，因此您可以使用空格、水平和垂直制表位、换页符和换行符以您希望的任何方式布局代码。 （空白字符是标记分隔符）。 Slice 不会将语义附加到定义的布局上。 您可能希望遵循我们在本书中使用的 Slice 示例的风格。</p>
-<p>Slice文件可以是 ASCII 文本文件，也可以使用 UTF-8 字符编码，并在每个文件的开头带有可选的字节顺序标记 (BOM)。 然而，Slice标识符仅限于 ASCII 字母和数字； 非 ASCII 字母只能出现在注释和字符串文字中。</p>
-<p>Preprocessing<br>Slice supports the same preprocessor directives as C++, so you can use directives such as #include and macro definitions. However, Slice permits #include directives only at the beginning of a file, before any Slice definitions.</p>
-<p>If you use #include directives, it is a good idea to protect them with guards to prevent double inclusion of a file:</p>
-<p>预处理<br>Slice 支持与 C++ 相同的预处理器指令，因此您可以使用 #include 和宏定义等指令。 但是，Slice 只允许在文件开头、任何 Slice 定义之前使用 #include 指令。</p>
-<p>如果您使用 #include 指令，最好使用防护装置来保护它们，以防止文件的双重包含：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// File Clock.ice</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> _CLOCK_ICE</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _CLOCK_ICE</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">// #include directives here...</span></span><br><span class="line"><span class="comment">// Definitions here...</span></span><br><span class="line"> </span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> _CLOCK_ICE</span></span><br></pre></td></tr></table></figure>
-
-<p>The following #pragma directive offers a simpler way to achieve the same result:</p>
-<p>以下 #pragma 指令提供了一种更简单的方法来实现相同的结果：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// File Clock.ice</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">// #include directives here...</span></span><br><span class="line"><span class="comment">// Definitions here...</span></span><br></pre></td></tr></table></figure>
-
-<p>#include directives permit a Slice definition to use types defined in a different source file. The Slice compilers parse all of the code in a source file, including the code in subordinate #include files. However, the compilers generate code only for the top-level file(s) nominated on the command line. You must separately compile subordinate #include files to obtain generated code for all the files that make up your Slice definition.</p>
-<p>Note that you should avoid #include with double quotes:</p>
-<p>#include 指令允许 Slice 定义使用不同源文件中定义的类型。 Slice 编译器解析源文件中的所有代码，包括从属 #include 文件中的代码。 但是，编译器仅为命令行上指定的顶级文件生成代码。 您必须单独编译从属 #include 文件，以获得构成 Slice 定义的所有文件的生成代码。</p>
-<p>请注意，您应该避免使用双引号#include：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Clock.ice&quot;</span> <span class="comment">// Not recommended!</span></span></span><br></pre></td></tr></table></figure>
-
-<p>While double quotes will work, the directory in which the preprocessor tries to locate the file can vary depending on the operating system, so the included file may not always be found where you expect it. Instead, use angle brackets (&lt;&gt;); you can control which directories are searched for the file with the -I option of the Slice compiler.</p>
-<p>Also note that, if you include a path separator in a #include directive, you must use a forward slash:</p>
-<p>虽然双引号可以工作，但预处理器尝试在其中查找文件的目录可能会因操作系统而异，因此可能并不总是能在您期望的位置找到包含的文件。 相反，请使用尖括号 (&lt;&gt;)； 您可以使用 Slice 编译器的 -I 选项来控制在哪些目录中搜索文件。</p>
-<p>另请注意，如果在 #include 指令中包含路径分隔符，则必须使用正斜杠：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;SliceDefs/Clock.ice&gt;</span>  <span class="comment">// OK</span></span></span><br></pre></td></tr></table></figure>
-
-<p>You cannot use a backslash in #include directives:</p>
-<p>您不能在 #include 指令中使用反斜杠：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;SliceDefs\Clock.ice&gt;</span>  <span class="comment">// Illegal</span></span></span><br></pre></td></tr></table></figure>
-
-<p>Detecting Ice Versions<br>The Slice compilers define the preprocessor macro <strong>ICE_VERSION</strong> with a numeric representation of the Ice version. The value of this macro is the same as the C++ macro ICE_INT_VERSION. You can use this macro to make your Slice definitions backward-compatible with older Ice releases, while still taking advantage of newer Ice features when possible. For example, the Slice definition shown below makes use of custom enumerator values:</p>
-<p>检测 Ice 版本<br>Slice 编译器使用 Ice 版本的数字表示来定义预处理器宏 <strong>ICE_VERSION</strong> 。 该宏的值与 C++ 宏 ICE_INT_VERSION 相同。 您可以使用此宏使您的 Slice 定义向后兼容较旧的 Ice 版本，同时尽可能利用较新的 Ice 功能。 例如，下面显示的 Slice 定义使用自定义枚举值：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">if</span> defined(__ICE_VERSION__) &amp;&amp; __ICE_VERSION__ &gt;= 030500</span></span><br><span class="line"><span class="keyword">enum</span> <span class="title class_">Fruit</span> &#123; Apple, Pear = <span class="number">3</span>, Orange &#125;</span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line"><span class="keyword">enum</span> Fruit &#123; Apple, Pear, Orange &#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<p>Although this example is intended to show how to use the ICE_VERSION macro, it also highlights a potential pitfall that you must be aware of when trying to maintain backward compatibility: the two definitions of Fruit are not wire-compatible. </p>
-<p>尽管此示例旨在展示如何使用 ICE_VERSION 宏，但它也强调了在尝试保持向后兼容性时必须注意的潜在陷阱：Fruit 的两个定义不兼容。</p>
-<p>Detecting Slice Compilers<br>Each Slice compiler defines its own macro so that you can customize your Slice code for certain language mappings. The macro name is <strong><compiler name in upper case></strong>, such as <strong>SLICE2CPP</strong> and <strong>SLICE2MATLAB</strong> for slice2cpp resp. slice2matlab.</p>
-<p>检测Slice编译器<br>每个 Slice 编译器都定义自己的宏，以便您可以针对某些语言映射自定义 Slice 代码。 宏名称为 __&lt;大写的编译器名称&gt;__，例如 slice2cpp 的宏名称为 <strong>SLICE2CPP</strong> 和 __SLICE2MATLAB__。 slice2matlab。</p>
-<p>For example, .NET developers may elect to avoid the use of default values for structure members because the presence of default values changes the C# mapping of the structure from struct to class:</p>
-<p>例如，.NET 开发人员可能会选择避免对结构成员使用默认值，因为默认值的存在会更改结构从结构到类的 C# 映射：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Record</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"><span class="meta">#<span class="keyword">if</span> __SLICE2CS__</span></span><br><span class="line">    <span class="type">bool</span> active;</span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line">    <span class="type">bool</span> active = <span class="literal">true</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>Definition Order<br>Slice constructs, such as modules, interfaces, or type definitions, can appear in any order you prefer. However, identifiers must be declared before they can be used.</p>
-<p>定义顺序<br>Slice构造（例如模块、接口或类型定义）可以按您喜欢的任何顺序出现。 但是，标识符在使用之前必须先声明。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 

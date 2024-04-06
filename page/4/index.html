@@ -117,7 +117,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">40</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">41</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -152,6 +152,79 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2021/08/10/WebGPU%203.2.%20Invalid%20Internal%20Objects%20&%20Contagious%20Invalidity/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="qianqians">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qianqians'blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/08/10/WebGPU%203.2.%20Invalid%20Internal%20Objects%20&%20Contagious%20Invalidity/" class="post-title-link" itemprop="url">WebGPU 3.2. Invalid Internal Objects & Contagious Invalidity</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-08-10 14:46:03 / 修改时间：15:29:14" itemprop="dateCreated datePublished" datetime="2021-08-10T14:46:03+08:00">2021-08-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WebGPU/" itemprop="url" rel="index"><span itemprop="name">WebGPU</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>If an object is successfully created, it is valid at that moment. An internal object may be invalid. It may become invalid during its lifetime, but it will never become valid again.</p>
+<p>如果成功创建了一个对象，则该对象此时有效。内部对象可能无效。它可能在其生命周期内失效，并且永远不会再次生效。</p>
+<p>Invalid objects result from a number of situations, including:<br>&nbsp;If there is an error in the creation of an object, it is immediately invalid. This can happen, for example, if the object descriptor doesn’t describe a valid object, or if there is not enough memory to allocate a resource.<br>&nbsp;If an object is explicitly destroyed (e.g. GPUBuffer.destroy()), it becomes invalid.<br>&nbsp;If the device that owns an object is lost, the object becomes invalid.</p>
+<p>无效对象由多种情况造成，包括：<br>&nbsp;如果在创建对象时出错，则该对象立即无效。例如，如果对象描述符没有描述有效的对象，或者没有足够的内存来分配资源，就会发生这种情况。<br>&nbsp;如果对象被显式销毁(例如GPUBuffer.destroy())，则该对象将无效。<br>&nbsp;如果拥有对象的设备丢失，该对象将无效。</p>
+<p>To determine if a given GPUObjectBase object is valid to use with a targetObject, run the following steps:<br>&nbsp;1.If any of the following conditions are unsatisfied return false:<br>&nbsp;&nbsp;object is valid<br>&nbsp;&nbsp;object.[[device]] is valid.<br>&nbsp;&nbsp;object.[[device]] is targetObject.[[device]].<br>&nbsp;2.Return true.</p>
+<p>要确定给定的GPUObjectBase对象是否可与targetObject一起使用，请运行以下步骤：<br>&nbsp;1.如果以下任一条件不满足，则返回false：<br>&nbsp;&nbsp;对象是有效的<br>&nbsp;&nbsp;object.[[device]]是有效的<br>&nbsp;&nbsp;object.[[device]]是targetObject.[[device]].<br>&nbsp;2.返回true.</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -882,83 +955,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2021/08/06/WebGPU%201.%20Introduction/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="qianqians">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qianqians'blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/06/WebGPU%201.%20Introduction/" class="post-title-link" itemprop="url">WebGPU 1. Introduction</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-08-06 15:58:00 / 修改时间：20:21:56" itemprop="dateCreated datePublished" datetime="2021-08-06T15:58:00+08:00">2021-08-06</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/WebGPU/" itemprop="url" rel="index"><span itemprop="name">WebGPU</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Graphics Processing Units, or GPUs for short, have been essential in enabling rich rendering and computational applications in personal computing. WebGPU is an API that exposes the capabilities of GPU hardware for the Web. The API is designed from the ground up to efficiently map to the Vulkan, Direct3D 12, and Metal native GPU APIs. WebGPU is not related to WebGL and does not explicitly target OpenGL ES.</p>
-<p>图形处理单元，简称GPU，对于在个人计算中实现丰富的渲染和计算应用至关重要。WebGPU是一种API，它暴露了用于Web的GPU硬件的功能。该API从头设计，能够高效地映射到Vulkan、Direct3D 12和Metal原生GPU API。WebGPU与WebGL无关，也不明确对应OpenGL ES。</p>
-<p>WebGPU sees physical GPU hardware as GPUAdapters. It provides a connection to an adapter via GPUDevice, which manages resources, and the device’s GPUQueues, which execute commands. GPUDevice may have its own memory with high-speed access to the processing units. GPUBuffer and GPUTexture are the physical resources backed by GPU memory. GPUCommandBuffer and GPURenderBundle are containers for user-recorded commands. GPUShaderModule contains shader code. The other resources, such as GPUSampler or GPUBindGroup, configure the way physical resources are used by the GPU.</p>
-<p>WebGPU将物理GPU硬件视为GPU适配器。它通过GPUDevice（管理资源）和设备的gpu队列（执行命令）提供到适配器的连接。GPUDevice可能有自己的内存，可以对处理单元进行高速访问。GPUBuffer和GPUTexture是GPU内存支持的物理资源。GPUCommandBuffer和GPURenderBundle是用户记录命令的容器。GPUShaderModule包含着色器代码。其他资源，如GPUSampler或GPUBindGroup，配置GPU使用物理资源的方式。</p>
-<p>GPUs execute commands encoded in GPUCommandBuffers by feeding data through a pipeline, which is a mix of fixed-function and programmable stages. Programmable stages execute shaders, which are special programs designed to run on GPU hardware. Most of the state of a pipeline is defined by a GPURenderPipeline or a GPUComputePipeline object. The state not included in these pipeline objects is set during encoding with commands, such as beginRenderPass() or setBlendConstant().</p>
-<p>GPU执行GPUCommandBuffers中编码的命令，方法是通过管道传送数据，这是固定功能和可编程阶段的混合。可编程阶段执行着色器，着色器是专为在GPU硬件上运行而设计的特殊程序。管道的大部分状态由GPURenderPipeline或GPUComputePipeline对象定义。这些管道对象中未包含的状态是在使用命令（如beginRenderPass()或setBlendConstant()进行编码时设置的。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 

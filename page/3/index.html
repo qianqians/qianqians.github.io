@@ -117,7 +117,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">40</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">41</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -152,6 +152,145 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2021/09/03/Wgpu%20The%20Depth%20Buffer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="qianqians">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qianqians'blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/09/03/Wgpu%20The%20Depth%20Buffer/" class="post-title-link" itemprop="url">Wgpu The Depth Buffer</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-09-03 14:42:13 / 修改时间：15:49:03" itemprop="dateCreated datePublished" datetime="2021-09-03T14:42:13+08:00">2021-09-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Wgpu/" itemprop="url" rel="index"><span itemprop="name">Wgpu</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Let’s take a closer look at the last example.</p>
+<p>让我们仔细看看最后一个例子。</p>
+<p><img src="https://sotrh.github.io/learn-wgpu/assets/img/forest_with_zoom.a43286ea.png" alt="forest_with_zoom"></p>
+<p>Models that should be in the back are getting rendered ahead of ones that should be in the front. This is caused by the draw order. By default, pixel data from a new object will replace old pixel data.</p>
+<p>应该在后面的模型将在应该在前面的模型之前进行渲染。这是由提取顺序引起的。默认情况下，来自新对象的像素数据将替换旧像素数据。</p>
+<p>There are two ways to solve this: sort the data from back to front, use what’s known as a depth buffer.</p>
+<p>有两种方法可以解决这个问题：从后到前对数据进行排序，使用深度缓冲区。</p>
+<h1 id="Sorting-from-back-to-front"><a href="#Sorting-from-back-to-front" class="headerlink" title="Sorting from back to front"></a>Sorting from back to front</h1><p>This is the go to method for 2d rendering as it’s pretty easier to know what’s supposed to go in front of what. You can just use the z order. In 3d rendering it gets a little more tricky because the order of the objects changes based on the camera angle.</p>
+<p>这是2d渲染的方法，因为它很容易知道在什么之前应该做什么。你可以使用z顺序。在3d渲染中，由于对象的顺序会根据摄影机角度发生变化，因此会变得有点棘手。</p>
+<p>A simple way of doing this is to sort all the objects by their distance to the cameras position. There are flaws with this method though as when a large object is behind a small object, parts of the large object that should be in front of the small object will be rendered behind. We’ll also run into issues with objects that overlap themselves.</p>
+<p>执行此操作的一种简单方法是根据对象到摄影机位置的距离对所有对象进行排序。这种方法存在缺陷，尽管当一个大对象在一个小对象后面时，应该在小对象前面的大对象部分将在后面渲染。我们还将遇到对象重叠的问题。</p>
+<p>If want to do this properly we need to have pixel level precision. That’s where a depth buffer comes in.</p>
+<p>如果要正确地做到这一点，我们需要有像素级的精度。这就是深度缓冲区的作用。</p>
+<h1 id="A-pixels-depth"><a href="#A-pixels-depth" class="headerlink" title="A pixels depth"></a>A pixels depth</h1><p>A depth buffer is a black and white texture that stores the z-coordinate of rendered pixels. Wgpu can use this when drawing new pixels to determine whether to replace the data or keep it. This technique is called depth testing. This will fix our draw order problem without needing us to sort our objects!</p>
+<p>深度缓冲区是存储渲染像素z坐标的黑白纹理。Wgpu可以在绘制新像素时使用此选项来确定是替换数据还是保留数据。这种技术称为深度测试。这将解决我们的绘图顺序问题，而不需要我们对对象进行排序！</p>
+<p>Let’s make a function to create the depth texture in texture.rs.</p>
+<p>让我们制作一个函数，在texture.rs中创建深度纹理。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">impl</span> Texture &#123;</span><br><span class="line">    <span class="keyword">pub</span> <span class="keyword">const</span> DEPTH_FORMAT: wgpu::TextureFormat = wgpu::TextureFormat::Depth32Float; <span class="comment">// 1.</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">create_depth_texture</span></span>(device: &amp;wgpu::Device, sc_desc: &amp;wgpu::SwapChainDescriptor, label: &amp;<span class="built_in">str</span>) -&gt; <span class="keyword">Self</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> size = wgpu::Extent3d &#123; <span class="comment">// 2.</span></span><br><span class="line">            width: sc_desc.width,</span><br><span class="line">            height: sc_desc.height,</span><br><span class="line">            depth_or_array_layers: <span class="number">1</span>,</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">let</span> desc = wgpu::TextureDescriptor &#123;</span><br><span class="line">            label: <span class="literal">Some</span>(label),</span><br><span class="line">            size,</span><br><span class="line">            mip_level_count: <span class="number">1</span>,</span><br><span class="line">            sample_count: <span class="number">1</span>,</span><br><span class="line">            dimension: wgpu::TextureDimension::D2,</span><br><span class="line">            format: Self::DEPTH_FORMAT,</span><br><span class="line">            usage: wgpu::TextureUsage::RENDER_ATTACHMENT <span class="comment">// 3.</span></span><br><span class="line">                | wgpu::TextureUsage::SAMPLED,</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="keyword">let</span> texture = device.create_texture(&amp;desc);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> view = texture.create_view(&amp;wgpu::TextureViewDescriptor::default());</span><br><span class="line">        <span class="keyword">let</span> sampler = device.create_sampler(</span><br><span class="line">            &amp;wgpu::SamplerDescriptor &#123; <span class="comment">// 4.</span></span><br><span class="line">                address_mode_u: wgpu::AddressMode::ClampToEdge,</span><br><span class="line">                address_mode_v: wgpu::AddressMode::ClampToEdge,</span><br><span class="line">                address_mode_w: wgpu::AddressMode::ClampToEdge,</span><br><span class="line">                mag_filter: wgpu::FilterMode::Linear,</span><br><span class="line">                min_filter: wgpu::FilterMode::Linear,</span><br><span class="line">                mipmap_filter: wgpu::FilterMode::Nearest,</span><br><span class="line">                compare: <span class="literal">Some</span>(wgpu::CompareFunction::LessEqual), <span class="comment">// 5.</span></span><br><span class="line">                lod_min_clamp: -<span class="number">100.0</span>,</span><br><span class="line">                lod_max_clamp: <span class="number">100.0</span>,</span><br><span class="line">                ..<span class="built_in">Default</span>::default()</span><br><span class="line">            &#125;</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        <span class="keyword">Self</span> &#123; texture, view, sampler &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>We need the DEPTH_FORMAT for when we create the depth stage of the render_pipeline and creating the depth texture itself.</li>
+<li>Our depth texture needs to be the same size as our screen if we want things to render correctly. We can use our sc_desc to make sure that our depth texture is the same size as our swap chain images.</li>
+<li>Since we are rendering to this texture, we need to add the RENDER_ATTACHMENT flag to it.</li>
+<li>We technically don’t need a sampler for a depth texture, but our Texture struct requires it, and we need one if we ever want to sample it.</li>
+<li>If we do decide to render our depth texture, we need to use CompareFunction::LessEqual. This is due to how the samplerShadow and sampler2DShadow() interacts with the texture() function in GLSL.</li>
+</ol>
+<div></div>
+
+<ol>
+<li>当我们创建render_pipeline的depth stage和创建depth texture本身时，我们需要DEPTH_FORMAT。</li>
+<li>如果我们想正确渲染，我们的深度纹理需要与屏幕大小相同。我们可以使用sc_desc确保深度纹理与swap chain图像的大小相同。</li>
+<li>由于我们正在渲染此纹理，因此需要向其添加RENDER_ATTACHMENT标志。</li>
+<li>从技术上讲，我们不需要深度纹理的采样器，但我们的纹理结构需要它，如果我们想对它进行采样，我们需要一个采样器。</li>
+<li>如果我们决定渲染深度纹理，我们需要使用CompareFunction::LessEqual。这将决定samplerShadow和sampler2DShadow()如何与GLSL中的texture()函数交互。</li>
+</ol>
+<p>We create our depth_texture in State::new().</p>
+<p>我们在State::new()中创建深度纹理。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> depth_texture = texture::Texture::create_depth_texture(&amp;device, &amp;sc_desc, <span class="string">&quot;depth_texture&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>We need to modify our render_pipeline to allow depth testing.</p>
+<p>我们需要修改渲染管线以允许深度测试。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> render_pipeline = device.create_render_pipeline(&amp;wgpu::RenderPipelineDescriptor &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    depth_stencil: <span class="literal">Some</span>(wgpu::DepthStencilState &#123;</span><br><span class="line">        format: texture::Texture::DEPTH_FORMAT,</span><br><span class="line">        depth_write_enabled: <span class="literal">true</span>,</span><br><span class="line">        depth_compare: wgpu::CompareFunction::Less, <span class="comment">// 1.</span></span><br><span class="line">        stencil: wgpu::StencilState::default(), <span class="comment">// 2.</span></span><br><span class="line">        bias: wgpu::DepthBiasState::default(),</span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>The depth_compare function tells us when to discard a new pixel. Using LESS means pixels will be drawn front to back. Here are all the values you can use.</p>
+<p>深度比较功能告诉我们何时丢弃新像素。使用LESS的方法将前后绘制像素。以下是您可以使用的所有值。</p>
+</li>
+</ol>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#[repr(C)]</span></span><br><span class="line"><span class="meta">#[derive(Copy, Clone, Debug, Hash, Eq, PartialEq)]</span></span><br><span class="line"><span class="meta">#[cfg_attr(feature = <span class="meta-string">&quot;serde&quot;</span>, derive(Serialize, Deserialize))]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">enum</span> <span class="title">CompareFunction</span></span> &#123;</span><br><span class="line">    Undefined = <span class="number">0</span>,</span><br><span class="line">    Never = <span class="number">1</span>,</span><br><span class="line">    Less = <span class="number">2</span>,</span><br><span class="line">    Equal = <span class="number">3</span>,</span><br><span class="line">    LessEqual = <span class="number">4</span>,</span><br><span class="line">    Greater = <span class="number">5</span>,</span><br><span class="line">    NotEqual = <span class="number">6</span>,</span><br><span class="line">    GreaterEqual = <span class="number">7</span>,</span><br><span class="line">    Always = <span class="number">8</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>There’s another type of buffer called a stencil buffer. It’s common practice to store the stencil buffer and depth buffer in the same texture. This fields control values for stencil testing. Since we aren’t using a stencil buffer, we’ll use default values. We’ll cover stencil buffers later.</p>
+<p>还有另一种类型的缓冲区称为stencil缓冲区。通常的做法是将stencil缓冲区和深度缓冲区存储在同一纹理中。此字段控制stencil测试的值。因为我们不使用stencil缓冲区，所以我们将使用默认值。稍后我们将讨论stencil缓冲区。</p>
+</li>
+</ol>
+<p>Don’t forget to store the depth_texture in State.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Self</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    depth_texture,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>We need to remember to change the resize() method to create a new depth_texture and depth_texture_view.</p>
+<p>我们需要记住更改resize()方法以创建新的depth_texture和depth_texture_view。</p>
+<p>Make sure you update the depth_texture after you update sc_desc. If you don’t, your program will crash as the depth_texture will be a different size than the swap_chain texture.</p>
+<p>请确保在更新sc_desc后更新depth_texture。如果不更新，程序将崩溃，因为depth_texture的大小将不同于swap_chain texture。</p>
+<p>The last change we need to make is in the render() function. We’ve created the depth_texture, but we’re not currently using it. We use it by attaching it to the depth_stencil_attachment of a render pass.</p>
+<p>我们需要做的最后一个更改是在render()函数中。我们已经创建了depth_texture，但目前没有使用它。我们通过将其附加到渲染过程的depth_stencil_attachment来使用它。</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">mut</span> render_pass = encoder.begin_render_pass(&amp;wgpu::RenderPassDescriptor &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    depth_stencil_attachment: <span class="literal">Some</span>(wgpu::RenderPassDepthStencilAttachment &#123;</span><br><span class="line">        view: &amp;<span class="keyword">self</span>.depth_texture.view,</span><br><span class="line">        depth_ops: <span class="literal">Some</span>(wgpu::Operations &#123;</span><br><span class="line">            load: wgpu::LoadOp::Clear(<span class="number">1.0</span>),</span><br><span class="line">            store: <span class="literal">true</span>,</span><br><span class="line">        &#125;),</span><br><span class="line">        stencil_ops: <span class="literal">None</span>,</span><br><span class="line">    &#125;),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>And that’s all we have to do! No shader code needed! If you run the application, the depth issues will be fixed.</p>
+<p>这就是我们要做的！不需要着色器代码！如果运行应用程序，深度问题将得到修复。</p>
+<p><img src="https://sotrh.github.io/learn-wgpu/assets/img/forest_fixed.a77f70f6.png" alt="forest_fixed"></p>
+<h1 id="Challenge"><a href="#Challenge" class="headerlink" title="Challenge"></a>Challenge</h1><p>Since the depth buffer is a texture, we can sample it in the shader. Because it’s a depth texture, we’ll have to use the samplerShadow uniform type and the sampler2DShadow function instead of sampler, and sampler2D respectively. Create a bind group for the depth texture (or reuse an existing one), and render it to the screen.</p>
+<p>由于深度缓冲区是一个纹理，我们可以在着色器中对其进行采样。因为它是一个深度纹理，所以我们必须分别使用samplerShadow uniform类型和sampler2DShadow函数，而不是sampler和sampler2D。为深度纹理创建bind group(或重用现有组)，并将其渲染到屏幕上。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/sotrh/learn-wgpu/tree/master/code/beginner/tutorial8-depth/">Check out the code!</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1718,83 +1857,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2021/08/10/WebGPU%203.2.%20Invalid%20Internal%20Objects%20&%20Contagious%20Invalidity/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="qianqians">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qianqians'blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/10/WebGPU%203.2.%20Invalid%20Internal%20Objects%20&%20Contagious%20Invalidity/" class="post-title-link" itemprop="url">WebGPU 3.2. Invalid Internal Objects & Contagious Invalidity</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-08-10 14:46:03 / 修改时间：15:29:14" itemprop="dateCreated datePublished" datetime="2021-08-10T14:46:03+08:00">2021-08-10</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/WebGPU/" itemprop="url" rel="index"><span itemprop="name">WebGPU</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>If an object is successfully created, it is valid at that moment. An internal object may be invalid. It may become invalid during its lifetime, but it will never become valid again.</p>
-<p>如果成功创建了一个对象，则该对象此时有效。内部对象可能无效。它可能在其生命周期内失效，并且永远不会再次生效。</p>
-<p>Invalid objects result from a number of situations, including:<br>&nbsp;If there is an error in the creation of an object, it is immediately invalid. This can happen, for example, if the object descriptor doesn’t describe a valid object, or if there is not enough memory to allocate a resource.<br>&nbsp;If an object is explicitly destroyed (e.g. GPUBuffer.destroy()), it becomes invalid.<br>&nbsp;If the device that owns an object is lost, the object becomes invalid.</p>
-<p>无效对象由多种情况造成，包括：<br>&nbsp;如果在创建对象时出错，则该对象立即无效。例如，如果对象描述符没有描述有效的对象，或者没有足够的内存来分配资源，就会发生这种情况。<br>&nbsp;如果对象被显式销毁(例如GPUBuffer.destroy())，则该对象将无效。<br>&nbsp;如果拥有对象的设备丢失，该对象将无效。</p>
-<p>To determine if a given GPUObjectBase object is valid to use with a targetObject, run the following steps:<br>&nbsp;1.If any of the following conditions are unsatisfied return false:<br>&nbsp;&nbsp;object is valid<br>&nbsp;&nbsp;object.[[device]] is valid.<br>&nbsp;&nbsp;object.[[device]] is targetObject.[[device]].<br>&nbsp;2.Return true.</p>
-<p>要确定给定的GPUObjectBase对象是否可与targetObject一起使用，请运行以下步骤：<br>&nbsp;1.如果以下任一条件不满足，则返回false：<br>&nbsp;&nbsp;对象是有效的<br>&nbsp;&nbsp;object.[[device]]是有效的<br>&nbsp;&nbsp;object.[[device]]是targetObject.[[device]].<br>&nbsp;2.返回true.</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 

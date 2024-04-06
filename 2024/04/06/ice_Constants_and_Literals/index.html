@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="manifest" href="/images/manifest.json">
+  <meta name="msapplication-config" content="/images/browserconfig.xml">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"qianqians.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"remove","padding":18,"offset":12,"onmobile":true},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Allowable Types for Constants常量允许的类型 Slice allows you to define constants for the following types: An integral type (bool, byte, short, int, long)A floating point type (float or double)stringenum Slic">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Constants and Literals">
+<meta property="og:url" content="https://qianqians.github.io/2024/04/06/ice_Constants_and_Literals/index.html">
+<meta property="og:site_name" content="qianqians&#39;blog">
+<meta property="og:description" content="Allowable Types for Constants常量允许的类型 Slice allows you to define constants for the following types: An integral type (bool, byte, short, int, long)A floating point type (float or double)stringenum Slic">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-04-06T10:44:04.897Z">
+<meta property="article:modified_time" content="2024-04-06T11:10:24.540Z">
+<meta property="article:author" content="qianqians">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://qianqians.github.io/2024/04/06/ice_Constants_and_Literals/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Constants and Literals | qianqians'blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">qianqians'blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">41</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">9</span></a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/qianqians" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2024/04/06/ice_Constants_and_Literals/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="qianqians">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qianqians'blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Constants and Literals
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-04-06 18:44:04 / 修改时间：19:10:24" itemprop="dateCreated datePublished" datetime="2024-04-06T18:44:04+08:00">2024-04-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ice/" itemprop="url" rel="index"><span itemprop="name">ice</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Allowable Types for Constants<br>常量允许的类型</p>
+<p>Slice allows you to define constants for the following types:</p>
+<p>An integral type (bool, byte, short, int, long)<br>A floating point type (float or double)<br>string<br>enum</p>
+<p>Slice 允许定义以下类型的常量：<br>整型（bool、byte、short、int、long）<br>浮点类型（float 或 double）<br>字符串<br>枚举</p>
+<p>Here are a few examples:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> M</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">const</span> <span class="type">bool</span>      AppendByDefault = <span class="literal">true</span>;</span><br><span class="line">    <span class="type">const</span> byte      LowerNibble = <span class="number">0x0f</span>;</span><br><span class="line">    <span class="type">const</span> string    Advice = <span class="string">&quot;Don&#x27;t Panic!&quot;</span>;</span><br><span class="line">    <span class="type">const</span> <span class="type">short</span>     TheAnswer = <span class="number">42</span>;</span><br><span class="line">    <span class="type">const</span> <span class="type">double</span>    PI = <span class="number">3.1416</span>;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">enum</span> <span class="title class_">Fruit</span> &#123; Apple, Pear, Orange &#125;</span><br><span class="line">    <span class="type">const</span> Fruit     FavoriteFruit = Pear;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The syntax for literals is the same as for C++ and Java (with a few minor exceptions).<br>文字的语法与 C++ 和 Java 相同（有一些小例外）。</p>
+<p>Boolean constants<br>Boolean constants can only be initialized with the keywords false and true. (You cannot use 0 and 1 to represent false and true.)<br>布尔常量只能使用关键字 false 和 true 进行初始化。 （不能用 0 和 1 来表示 false 和 true。）</p>
+<p>Integer literals<br>Integer literals can be specified in decimal, octal, or hexadecimal notation.<br>整数可以用十进制、八进制或十六进制表示法指定。</p>
+<p>For example:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> byte TheAnswer = <span class="number">42</span>;</span><br><span class="line"><span class="type">const</span> byte TheAnswerInOctal = <span class="number">052</span>;</span><br><span class="line"><span class="type">const</span> byte TheAnswerInHex = <span class="number">0x2A</span>;       </span><br></pre></td></tr></table></figure>
+
+<p>Be aware that, if you interpret byte as a number instead of a bit pattern, you may get different results in different languages. For example, for C++, byte maps to unsigned char whereas, for Java, byte maps to byte, which is a signed type.</p>
+<p>Note that suffixes to indicate long and unsigned constants (l, L, u, U, used by C++) are illegal:</p>
+<p>请注意，如果将字节解释为数字而不是位模式，则在不同语言中可能会得到不同的结果。 例如，对于 C++，字节映射到 unsigned char，而对于 Java，字节映射到 byte，这是一种有符号类型。<br>请注意，表示长整型和无符号常量（C++ 使用的 l、L、u、U）的后缀是非法的：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">long</span> Wrong = <span class="number">0u</span>;          <span class="comment">// Syntax error</span></span><br><span class="line"><span class="type">const</span> <span class="type">long</span> WrongToo = <span class="number">1000000L</span>; <span class="comment">// Syntax error</span></span><br></pre></td></tr></table></figure>
+
+<p>The value of an integer literal must be within the range of its constant type, as shown in the Built-In Basic Types table; otherwise the compiler will issue a diagnostic.<br>整数的值必须在其常量类型的范围内，如内置基本类型表所示； 否则编译器将发出诊断信息。</p>
+<p>Floating-point literals<br>Floating-point literals use C++ syntax, except that you cannot use an l or L suffix to indicate an extended floating-point constant; however, f and F are legal (but are ignored).<br>浮点文字使用 C++ 语法，但不能使用 l 或 L 后缀来指示扩展浮点常量； 然而，f 和 F 是合法的（但被忽略）。<br>Here are a few examples:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">float</span> P1 = <span class="number">-3.14f</span>;    <span class="comment">// Integer &amp; fraction, with suffix</span></span><br><span class="line"><span class="type">const</span> <span class="type">float</span> P2 = +<span class="number">3.1e-3</span>;   <span class="comment">// Integer, fraction, and exponent</span></span><br><span class="line"><span class="type">const</span> <span class="type">float</span> P3 = <span class="number">.1</span>;        <span class="comment">// Fraction part only</span></span><br><span class="line"><span class="type">const</span> <span class="type">float</span> P4 = <span class="number">1.</span>;        <span class="comment">// Integer part only</span></span><br><span class="line"><span class="type">const</span> <span class="type">float</span> P5 = <span class="number">.9E5</span>;      <span class="comment">// Fraction part and exponent</span></span><br><span class="line"><span class="type">const</span> <span class="type">float</span> P6 = <span class="number">5e2</span>;       <span class="comment">// Integer part and exponent</span></span><br></pre></td></tr></table></figure>
+
+<p>Floating-point literals must be within the range of the constant type (float or double); otherwise, the compiler will issue a diagnostic.<br>浮点变量必须在常量类型（float 或 double）的范围内； 否则，编译器将发出诊断信息。</p>
+<p>String literals<br>Slice string literals support the same escape sequences as C++, with the exception of hexadecimal escape sequences that are limited to two hexadecimal digits.<br>Slice字符串变量支持与 C++ 相同的转义序列，但十六进制转义序列除外，该序列仅限于两个十六进制数字。</p>
+<table>
+<thead>
+<tr>
+<th align="left">Escape Sequence</th>
+<th align="left">Name</th>
+<th align="left">Corresponding ASCII or Unicode Code Point</th>
+<th align="left">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">&#39;</td>
+<td align="left">single quote</td>
+<td align="left">0x27</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">&quot;</td>
+<td align="left">double quote</td>
+<td align="left">0x22</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">?</td>
+<td align="left">question mark</td>
+<td align="left">0x3f</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">\</td>
+<td align="left">backslash</td>
+<td align="left">0x5c</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">\a</td>
+<td align="left">audible bell</td>
+<td align="left">0x07</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">\b</td>
+<td align="left">backspace</td>
+<td align="left">0x08</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">\f</td>
+<td align="left">form feed</td>
+<td align="left">0x0c</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">\n</td>
+<td align="left">line feed</td>
+<td align="left">0x0a</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">\r</td>
+<td align="left">carriage return</td>
+<td align="left">0x0d</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">\t</td>
+<td align="left">horizontal tab</td>
+<td align="left">0x09</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">\v</td>
+<td align="left">vertical tab</td>
+<td align="left">0x0b</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">\nnn</td>
+<td align="left">octal escape sequence</td>
+<td align="left"></td>
+<td align="left">1 to 3 octal digits (0-7) that represent a byte value between 0 and 255</td>
+</tr>
+<tr>
+<td align="left">\xnn</td>
+<td align="left">hexadecimal escape sequence</td>
+<td align="left"></td>
+<td align="left">1 to 2 hexadecimal digits (0-9, a-f, A-F)</td>
+</tr>
+<tr>
+<td align="left">\unnnn</td>
+<td align="left">universal character name</td>
+<td align="left">U+nnnn</td>
+<td align="left">Exactly 4 hexadecimal digits. Use the \Unnnnnnnn notation for astral characters.</td>
+</tr>
+<tr>
+<td align="left">\Unnnnnnnn</td>
+<td align="left">universal character name</td>
+<td align="left">U+nnnnnnnn Exactly 8 hexadecimal digits.</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p>A backslash () followed by another character is simply preserved as is.</p>
+<p>Octal and hexadecimal escape sequences can represent ASCII characters (ordinal value 0 to 127) or the UTF-8 encoding of non-ASCII characters.</p>
+<p>A string literal can contain printable ASCII characters (including the escape sequences presented above) and non-ASCII characters; non-printable ASCII characters (such as an unescaped tab) are not allowed.</p>
+<p>反斜杠 () 后跟另一个字符将按原样保留。<br>八进制和十六进制转义序列可以表示 ASCII 字符（序数值 0 到 127）或非 ASCII 字符的 UTF-8 编码。<br>字符串文字可以包含可打印的 ASCII 字符（包括上面介绍的转义序列）和非 ASCII 字符； 不允许使用不可打印的 ASCII 字符（例如未转义的制表符）。</p>
+<p>Here are some examples:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> string AnOrdinaryString = <span class="string">&quot;Hello World!&quot;</span>;</span><br><span class="line"> </span><br><span class="line"><span class="type">const</span> string DoubleQuote =      <span class="string">&quot;\&quot;&quot;</span>;</span><br><span class="line"><span class="type">const</span> string TwoSingleQuotes =  <span class="string">&quot;&#x27;\&#x27;&quot;</span>;     <span class="comment">// &#x27; and \&#x27; are OK</span></span><br><span class="line"><span class="type">const</span> string QuestionMark =     <span class="string">&quot;\?&quot;</span>;</span><br><span class="line"><span class="type">const</span> string Backslash =        <span class="string">&quot;\\&quot;</span>;</span><br><span class="line"><span class="type">const</span> string AudibleBell =      <span class="string">&quot;\a&quot;</span>;</span><br><span class="line"><span class="type">const</span> string Backspace =        <span class="string">&quot;\b&quot;</span>;</span><br><span class="line"><span class="type">const</span> string FormFeed =         <span class="string">&quot;\f&quot;</span>;</span><br><span class="line"><span class="type">const</span> string Newline =          <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"><span class="type">const</span> string CarriageReturn =   <span class="string">&quot;\r&quot;</span>;</span><br><span class="line"><span class="type">const</span> string HorizontalTab =    <span class="string">&quot;\t&quot;</span>;</span><br><span class="line"><span class="type">const</span> string VerticalTab =      <span class="string">&quot;\v&quot;</span>;</span><br><span class="line"> </span><br><span class="line"><span class="type">const</span> string OctalEscape =    <span class="string">&quot;\007&quot;</span>;     <span class="comment">// Same as \a</span></span><br><span class="line"><span class="type">const</span> string HexEscape1  =    <span class="string">&quot;\x07&quot;</span>;     <span class="comment">// Ditto</span></span><br><span class="line"><span class="type">const</span> string HexEscape2 =     <span class="string">&quot;\x41F&quot;</span>;    <span class="comment">// Same as AF</span></span><br><span class="line"><span class="type">const</span> string Universal1 =     <span class="string">&quot;\u0041&quot;</span>;   <span class="comment">// Same as A</span></span><br><span class="line"><span class="type">const</span> string Universal2 = <span class="string">&quot;\U00000041&quot;</span>;   <span class="comment">// Ditto</span></span><br><span class="line">  </span><br><span class="line"><span class="type">const</span> string EuroSign1 =           <span class="string">&quot;€&quot;</span>;   <span class="comment">// Euro sign (U+20AC)</span></span><br><span class="line"><span class="type">const</span> string EuroSign2 =      <span class="string">&quot;\u20AC&quot;</span>;   <span class="comment">// Euro sign as a short universal character name</span></span><br><span class="line"><span class="type">const</span> string EuroSign3 =  <span class="string">&quot;\U000020ac&quot;</span>;   <span class="comment">// Euro sign as a long universal character name</span></span><br><span class="line"><span class="type">const</span> string EuroSign4 = <span class="string">&quot;\xe2\x82\xAC&quot;</span>;  <span class="comment">// Euro sign in UTF-8 encoding, using hex escape sequences</span></span><br><span class="line"><span class="type">const</span> string EuroSign5 = <span class="string">&quot;\342\202\254&quot;</span>;  <span class="comment">// Euro sign in UTF-8 encoding, using octal escape sequences</span></span><br><span class="line"><span class="type">const</span> string EuroSign6 = <span class="string">&quot;\342\x82\254&quot;</span>;  <span class="comment">// Euro sign in UTF-8 encoding, using a mix or hex and octal escape sequences</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> string NullString = null;    <span class="comment">// Illegal!</span></span><br></pre></td></tr></table></figure>
+
+<p>Null strings simply do not exist in Slice and, therefore, do not exist as a legal value for a string anywhere in the Ice platform. The reason for this decision is that null strings do not exist in many programming languages.<br>空字符串根本不存在于 Slice 中，因此在 Ice 平台中的任何位置都不作为字符串的合法值存在。 做出此决定的原因是许多编程语言中不存在空字符串。</p>
+<p>Constant Expressions<br>A constant definition may also refer to another constant. It is not necessary for both constants to have the same Slice type, but the value of the existing constant must be compatible with the type of the constant being defined.</p>
+<p>常量定义也可以引用另一个常量。 两个常量不必具有相同的 Slice 类型，但现有常量的值必须与正在定义的常量的类型兼容。</p>
+<p>Consider the examples below:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> SIZE = <span class="number">500</span>;</span><br><span class="line"> </span><br><span class="line"><span class="type">const</span> <span class="type">int</span> DEFAULT_SIZE = SIZE; <span class="comment">// OK</span></span><br><span class="line"><span class="type">const</span> <span class="type">short</span> SHORT_SIZE = SIZE; <span class="comment">// OK</span></span><br><span class="line"><span class="type">const</span> byte BYTE_SIZE = SIZE;   <span class="comment">// ERROR</span></span><br></pre></td></tr></table></figure>
+
+<p>The DEFAULT_SIZE constant is legal because it has the same type as SIZE, and SHORT_SIZE is legal because the value of SIZE (500) is within the range of the Slice short type. However, BYTE_SIZE is illegal because the value of SIZE is outside the range of the byte type.<br>DEFAULT_SIZE 常量是合法的，因为它与 SIZE 具有相同的类型，SHORT_SIZE 是合法的，因为 SIZE (500) 的值在 Slice Short 类型的范围内。 但是，BYTE_SIZE 是非法的，因为 SIZE 的值超出了字节类型的范围。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>qianqians
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://qianqians.github.io/2024/04/06/ice_Constants_and_Literals/" title="Constants and Literals">https://qianqians.github.io/2024/04/06/ice_Constants_and_Literals/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/02/16/rust_icon/" rel="prev" title="Rust窗口图标">
+      <i class="fa fa-chevron-left"></i> Rust窗口图标
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">qianqians</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
