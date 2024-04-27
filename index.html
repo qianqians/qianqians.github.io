@@ -117,12 +117,12 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">41</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">42</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">9</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">10</span></a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -152,6 +152,81 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2024/04/27/pyo3%E4%B8%8Erust_build/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="qianqians">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qianqians'blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/04/27/pyo3%E4%B8%8Erust_build/" class="post-title-link" itemprop="url">python pyo3 Rust编译</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-04-27 21:22:07 / 修改时间：21:30:52" itemprop="dateCreated datePublished" datetime="2024-04-27T21:22:07+08:00">2024-04-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Rust/" itemprop="url" rel="index"><span itemprop="name">Rust</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index"><span itemprop="name">python</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pyo3/" itemprop="url" rel="index"><span itemprop="name">pyo3</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">maturin build -r -i</span><br><span class="line">cargo build -release</span><br><span class="line">rc icon.rc</span><br><span class="line">cargo rustc --release -- -C link-arg=./src/icon.res</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1109,114 +1184,6 @@
 <p>We will incrementally explore the contents of the Ice module throughout this manual.</p>
 <p>Ice 运行时的 API，除了少数无法在 Ice 中表达的特定于语言的调用之外，均在 Ice 模块中定义。 换句话说，大部分 Ice API 实际上都是表达为 Slice 定义的。 这样做的优点是单个 Slice 定义足以为所有支持的语言定义 Ice 运行时的 API。 然后，相应的语言映射规则确定每种实现语言的每个 Ice API 的确切形态。</p>
 <p>我们将在本手册中逐步探索 Ice 模块的内容。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2023/11/26/ice_Lexical_Rules/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="qianqians">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qianqians'blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/11/26/ice_Lexical_Rules/" class="post-title-link" itemprop="url">Lexical Rules</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-11-26 22:46:10 / 修改时间：23:01:50" itemprop="dateCreated datePublished" datetime="2023-11-26T22:46:10+08:00">2023-11-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ice/" itemprop="url" rel="index"><span itemprop="name">ice</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Lexical Rules</p>
-<p>Slice’s lexical rules are very similar to those of C++ and Java, except for some differences for identifiers.</p>
-<p>Slice 的词法规则与 C++ 和 Java 的非常相似，除了标识符的一些差异之外。</p>
-<p>Comments</p>
-<p>Slice definitions permit both the C and the C++ style of writing comments:</p>
-<p>Slice定义允许使用 C 和 C++ 风格编写注释：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * C-style comment.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">// C++-style comment extending to the end of this line.</span></span><br></pre></td></tr></table></figure>
-
-<p>Keywords<br>Slice uses a number of keywords, which must be spelled in lowercase. For example, class and dictionary are keywords and must be spelled as shown. There are three exceptions to this lowercase rule: LocalObject, Object and Value are keywords and must be capitalized as shown.</p>
-<p>Slice 使用许多关键字，这些关键字必须以小写形式拼写。 例如，class 和dictionary 是关键字，必须按所示拼写。 此小写规则有三个例外：LocalObject、Object 和 Value 是关键字，必须大写，如图所示。</p>
-<p>Identifiers</p>
-<p>Identifiers begin with an alphabetic character followed by any number of alphabetic characters or digits. Underscores are also permitted in identifiers with the following limitations:</p>
-<p>an identifier cannot begin or end with an underscore<br>an identifier cannot contain multiple consecutive underscores<br>Given these rules, the identifier get_account_name is legal but not <em>account, account</em>, or get__account.</p>
-<p>Slice identifiers are restricted to the ASCII range of alphabetic characters and cannot contain non-English letters, such as Å. (Supporting non-ASCII identifiers would make it very difficult to map Slice to target languages that lack support for this feature.)</p>
-<p>标识符以字母字符开头，后跟任意数量的字母字符或数字。 标识符中也允许使用下划线，但有以下限制：</p>
-<p>标识符不能以下划线开头或结尾<br>标识符不能包含多个连续的下划线<br>根据这些规则，标识符 get_account_name 合法，但 <em>account、account</em> 或 get__account 不合法。</p>
-<p>Slice标识符仅限于 ASCII 范围内的字母字符，不能包含非英文字母，例如 Å。 （支持非 ASCII 标识符将使将 Slice 映射到不支持此功能的目标语言变得非常困难。）</p>
-<p>Case Sensitivity</p>
-<p>Identifiers are case-insensitive but must be capitalized consistently. For example, TimeOfDay and TIMEOFDAY are considered the same identifier within a naming scope. However, Slice enforces consistent capitalization. After you have introduced an identifier, you must capitalize it consistently throughout; otherwise, the compiler will reject it as illegal. This rule exists to permit mappings of Slice to languages that ignore case in identifiers as well as to languages that treat differently capitalized identifiers as distinct.</p>
-<p>标识符不区分大小写，但大小写必须一致。 例如，TimeOfDay 和 TIMEOFDAY 在命名范围内被视为相同的标识符。 然而，Slice 强制使用一致的大小写。 引入标识符后，必须始终将其大写； 否则，编译器将认为它是非法的而拒绝它。 存在此规则是为了允许将 Slice 映射到忽略标识符大小写的语言以及将不同大写标识符视为不同的语言。</p>
-<p>Identifiers That Are Keywords</p>
-<p>You can define Slice identifiers that are keywords in one or more implementation languages. For example, switch is a perfectly good Slice identifier but is a C++ and Java keyword. Each language mapping defines rules for dealing with such identifiers. The solution typically involves using a prefix to map away from the keyword. For example, the Slice identifier switch is mapped to _cpp_switch in C++ and _switch in Java.</p>
-<p>The rules for dealing with keywords can result in hard-to-read source code. Identifiers such as native, throw, or export will clash with C++ or Java keywords (or both). To make life easier for yourself and others, try to avoid Slice identifiers that are implementation language keywords. Keep in mind that mappings for new languages may be added to Ice in the future. While it is not reasonable to expect you to compile a list of all keywords in all popular programming languages, you should make an attempt to avoid at least common keywords. Slice identifiers such as self, import, and while are definitely not a good idea.</p>
-<p>您可以定义作为一种或多种实现语言中的关键字的Slice标识符。 例如，switch 是一个非常好的 Slice 标识符，但却是一个 C++ 和 Java 关键字。 每种语言映射都定义了处理此类标识符的规则。 该解决方案通常涉及使用前缀来映射关键字。 例如，Slice 标识符 switch 在 C++ 中映射为 _cpp_switch，在 Java 中映射为 _switch。</p>
-<p>处理关键字的规则可能会导致源代码难以阅读。 诸如native、 throw 或export 之类的标识符将与C++ 或Java 关键字（或两者）发生冲突。 为了让您和他人的生活更轻松，请尽量避免使用作为实现语言关键字的Slice标识符。 请记住，将来可能会将新语言的映射添加到 Ice 中。 虽然期望您编译所有流行编程语言中的所有关键字的列表是不合理的，但您应该尝试至少避免常见关键字。 self、import 和 while 等Slice标识符绝对不是一个好主意。</p>
-<p>Escaped Identifiers</p>
-<p>It is possible to use a Slice keyword as an identifier by prefixing the keyword with a backslash, for example:</p>
-<p>可以通过在关键字前面加上反斜杠来使用 Slice 关键字作为标识符，例如：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">dictionary</span>     <span class="comment">// Error!</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">struct</span> \dictionary    <span class="comment">// OK</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">struct</span> \foo           <span class="comment">// Legal, same as &quot;struct foo&quot;</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>The backslash escapes the usual meaning of a keyword; in the preceding example, \dictionary is treated as the identifier dictionary. The escape mechanism exists to permit keywords to be added to the Slice language over time with minimal disruption to existing specifications: if a pre-existing specification happens to use a newly-introduced keyword, that specification can be fixed by simply prepending a backslash to the new keyword. Note that, as a matter of style, you should avoid using Slice keywords as identifiers (even though the backslash escapes allow you to do this).</p>
-<p>It is legal (though redundant) to precede an identifier that is not a keyword with a backslash — the backslash is ignored in that case.</p>
-<p>反斜杠转义了关键字的通常含义； 在前面的示例中，\dictionary 被视为标识符dictionary 。 转义机制的存在是为了允许关键字随着时间的推移添加到 Slice 语言中，同时对现有规范的干扰最小：如果预先存在的规范碰巧使用了新引入的关键字，则只需在该规范前面添加一个反斜杠即可修复该规范。 新的关键字。 请注意，就风格而言，您应该避免使用 Slice 关键字作为标识符（即使反斜杠转义允许您这样做）。</p>
-<p>在不是关键字的标识符前面加上反斜杠是合法的（尽管是多余的）——在这种情况下，反斜杠将被忽略。</p>
-<p>Reserved Identifiers</p>
-<p>Slice reserves the identifier Ice and all identifiers beginning with Ice (in any capitalization) for the Ice implementation. For example, if you try to define a type named Icecream, the Slice compiler will issue an error message.</p>
-<p>Slice 为 Ice 实现保留了标识符 Ice 和所有以 Ice 开头的标识符（任何大小写）。 例如，如果您尝试定义名为 Icecream 的类型，Slice 编译器将发出错误消息。</p>
-<p>You can suppress this behavior by using the ice-prefix Slice metadata directive, which enables definition of identifiers beginning with Ice. However, do not use this directive unless you are compiling the Slice definitions for the Ice run time itself.</p>
-<p>您可以使用ice-prefix Slice元数据指令来抑制此行为，该指令允许定义以Ice开头的标识符。 但是，除非您正在为 Ice 运行时本身编译 Slice 定义，否则不要使用此指令。</p>
-<p>Slice identifiers ending in any of the suffixes Async, Disp, Helper, Holder, Prx, and Ptr are also reserved. These endings are used by the various language mappings and are reserved to prevent name clashes in the generated code.</p>
-<p>以任何后缀 Async、Disp、Helper、Holder、Prx 和 Ptr 结尾的Slice标识符也被保留。 这些结尾由各种语言映射使用，并被保留以防止生成的代码中发生名称冲突。</p>
 
       
     </div>
