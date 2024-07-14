@@ -117,7 +117,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">42</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">43</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -152,6 +152,89 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2024/07/14/ice_Interfaces_Operations_Exceptions/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="qianqians">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="qianqians'blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/07/14/ice_Interfaces_Operations_Exceptions/" class="post-title-link" itemprop="url">Interfaces, Operations, and Exceptions</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2024-07-14 20:19:35 / 修改时间：20:29:08" itemprop="dateCreated datePublished" datetime="2024-07-14T20:19:35+08:00">2024-07-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ice/" itemprop="url" rel="index"><span itemprop="name">ice</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>The central focus of Slice is on defining interfaces, for example:</p>
+<p>Slice 的重点是定义接口，例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> M</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">TimeOfDay</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">short</span> hour;         <span class="comment">// 0 - 23</span></span><br><span class="line">        <span class="type">short</span> minute;       <span class="comment">// 0 - 59</span></span><br><span class="line">        <span class="type">short</span> second;       <span class="comment">// 0 - 59</span></span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    interface Clock</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function">TimeOfDay <span class="title">getTime</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">setTime</span><span class="params">(TimeOfDay time)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>This definition defines an interface type called Clock. The interface supports two operations: getTime and setTime. Clients access an object supporting the Clock interface by invoking an operation on the proxy for the object: to read the current time, the client invokes the getTime operation; to set the current time, the client invokes the setTime operation, passing an argument of type TimeOfDay.</p>
+<p>此定义定义了一种称为 Clock 的接口类型。该接口支持两种操作：getTime 和 setTime。客户端通过在对象的代理上调用操作来访问支持 Clock 接口的对象：为了读取当前时间，客户端调用 getTime 操作;若要设置当前时间，客户端将调用 setTime 操作，并传递 TimeOfDay 类型的参数。</p>
+<p>Invoking an operation on a proxy instructs the Ice run time to send a message to the target object. The target object can be in another address space or can be collocated (in the same process) as the caller — the location of the target object is transparent to the client. If the target object is in another (possibly remote) address space, the Ice run time invokes the operation via a remote procedure call; if the target is collocated with the client, the Ice run time bypasses the network stack altogether to deliver the request more efficiently.</p>
+<p>在proxy上调用操作会指示 Ice 运行时向目标对象发送消息。目标对象可以位于另一个地址空间中，也可以与调用方并置（在同一进程中） — 目标对象的位置对客户端是透明的。如果目标对象位于另一个（可能是远程）地址空间中，则 Ice 运行时通过远程过程调用调用该操作;如果目标与客户端并置，则 Ice 运行时将完全绕过网络堆栈，以更有效地传递请求。</p>
+<p>You can think of an interface definition as the equivalent of the public part of a C++ class definition or as the equivalent of a Java interface, and of operation definitions as (virtual) member functions. Note that nothing but operation definitions are allowed to appear inside an interface definition. In particular, you cannot define a type, an exception, or a data member inside an interface. This does not mean that your object implementation cannot contain state — it can, but how that state is implemented (in the form of data members or otherwise) is hidden from the client and, therefore, need not appear in the object’s interface definition.</p>
+<p>您可以将接口定义视为 C++ 类定义的公共部分的等效项，或者是 Java 接口的等效项，并将操作定义视为（虚拟）成员函数。请注意，接口定义中只允许显示操作定义。具体而言，不能在接口内部定义类型、异常或数据成员。这并不意味着您的对象实现不能包含状态 — 它可以，但是该状态的实现方式（以数据成员或其他形式）对客户端是隐藏的，因此不需要出现在对象的接口定义中。</p>
+<p>An Ice object has exactly one (most derived) Slice interface type. Of course, you can create multiple Ice objects that have the same type; to draw the analogy with C++, a Slice interface corresponds to a C++ class definition, whereas an Ice object corresponds to a C++ class instance (but Ice objects can be implemented in multiple different address spaces).</p>
+<p>一个 Ice 对象只有一个（大多数派生的）Slice 接口类型。当然，您可以创建多个具有相同类型的 Ice 对象;为了与 C++ 进行类比，Slice 接口对应于 C++ 类定义，而 Ice 对象对应于 C++ 类实例（但 Ice 对象可以在多个不同的地址空间中实现）。</p>
+<p>Ice also provides multiple interfaces for the same Ice object via a feature called facets.</p>
+<p>Ice 还通过称为 facets 的功能为同一 Ice 对象提供多个接口。</p>
+<p>A Slice interface defines the smallest grain of distribution in Ice: each Ice object has a unique identity (encapsulated in its proxy) that distinguishes it from all other Ice objects; for communication to take place, you must invoke operations on an object’s proxy. There is no other notion of an addressable entity in Ice. You cannot, for example, instantiate a Slice structure and have clients manipulate that structure remotely. To make the structure accessible, you must create an interface that allows clients to access the structure.</p>
+<p>Slice 接口定义了 Ice 中最小的分布粒度：每个 Ice 对象都有一个唯一的身份（封装在其代理中），将其与所有其他 Ice 对象区分开来;要进行通信，必须在对象的代理上调用操作。Ice 中没有其他可寻址实体的概念。例如，您不能实例化 Slice 结构并让客户端远程操作该结构。要使结构易于访问，您必须创建一个允许客户端访问结构的接口。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1086,104 +1169,6 @@
 <p>Bytes</p>
 <p>The Slice type byte is an (at least) 8-bit type that is guaranteed not to undergo any changes in representation as it is transmitted between address spaces. This guarantee permits exchange of binary data such that it is not tampered with in transit. All other Slice types are subject to changes in representation during transmission.</p>
 <p>Slice 类型字节是（至少）8 位类型，保证在地址空间之间传输时不会发生任何表示形式的变化。 此保证允许交换二进制数据，使其在传输过程中不会被篡改。 所有其他切片类型在传输过程中的表示形式都会发生变化。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://qianqians.github.io/2023/12/04/ice_Modules/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="qianqians">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="qianqians'blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/12/04/ice_Modules/" class="post-title-link" itemprop="url">Modules</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-12-04 20:51:43 / 修改时间：20:58:47" itemprop="dateCreated datePublished" datetime="2023-12-04T20:51:43+08:00">2023-12-04</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ice/" itemprop="url" rel="index"><span itemprop="name">ice</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Modules Reduce Clutter</p>
-<p>A common problem in large systems is pollution of the global namespace: over time, as isolated systems are integrated, name clashes become quite likely. Slice provides the module construct to alleviate this problem:</p>
-<p>大型系统中的一个常见问题是全局名称空间的污染：随着时间的推移，随着孤立的系统的集成，名称冲突变得很可能。 Slice 提供了模块构造来缓解这个问题：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> ZeroC </span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">module</span> Client </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Definitions here...</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">module</span> Server </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Definitions here...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>A module can contain any legal Slice construct, including other module definitions. Using modules to group related definitions together avoids polluting the global namespace and makes accidental name clashes quite unlikely. (You can use a well-known name, such as a company or product name, as the name of the outermost module.)</p>
-<p>模块可以包含任何合法的 Slice 构造，包括其他模块定义。 使用模块将相关定义分组在一起可以避免污染全局名称空间，并且不太可能发生意外的名称冲突。 （您可以使用众所周知的名称，例如公司或产品名称，作为最外层模块的名称。）</p>
-<p>Modules are Mandatory</p>
-<p>Slice requires all definitions to be nested inside a module, that is, you cannot define anything other than a module at global scope. For example, the following is illegal:</p>
-<p>Slice 要求所有定义都嵌套在模块内，也就是说，您不能在全局范围内定义除模块之外的任何内容。 例如，以下行为是非法的：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">interface I   <span class="comment">// Error: only modules can appear at global scope</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>Definitions at global scope are prohibited because they cause problems with some implementation languages (such as Python, which does not have a true global scope).</p>
-<p>禁止在全局范围内进行定义，因为它们会导致某些实现语言（例如 Python，它没有真正的全局范围）出现问题。</p>
-<p>Throughout the Ice manual, you will occasionally see Slice definitions that are not nested inside a module. This is to keep the examples short and free of clutter. Whenever you see such a definition, assume that it is nested in module M.</p>
-<p>在整个 Ice 手册中，您偶尔会看到未嵌套在模块内的 Slice 定义。 这是为了保持示例简短且整洁。 每当您看到这样的定义时，请假设它嵌套在模块 M 中。</p>
-<p>Reopening Modules</p>
-<p>Modules can be reopened:</p>
-<p>可以重新打开模块：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">module</span> ZeroC</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Definitions here...</span></span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// Possibly in a different source file:</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">module</span> ZeroC <span class="comment">// OK, reopened module</span></span><br><span class="line">&#123;  </span><br><span class="line">    <span class="comment">// More definitions here...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>Reopened modules are useful for larger projects: they allow you to split the contents of a module over several different source files. The advantage of doing this is that, when a developer makes a change to one part of the module, only files dependent on the changed part need be recompiled (instead of having to recompile all files that use the module).</p>
-<p>重新打开的模块对于较大的项目很有用：它们允许您将模块的内容拆分为多个不同的源文件。 这样做的好处是，当开发人员对模块的一部分进行更改时，只需重新编译依赖于更改部分的文件（而不需要重新编译使用该模块的所有文件）。</p>
-<p>Module Mapping</p>
-<p>Modules map to a corresponding scoping construct in each programming language. (For example, for C++ and C#, Slice modules map to namespaces whereas, for Java, they map to packages.) This allows you to use an appropriate C++ using or Java import declaration to avoid excessively long identifiers in your source code.</p>
-<p>模块映射到每种编程语言中相应的作用域构造。 （例如，对于 C++ 和 C#，Slice 模块映射到命名空间，而对于 Java，它们映射到包。）这允许您使用适当的 C++ using 或 Java import 声明来避免源代码中的标识符过长。</p>
-<p>The Ice Module</p>
-<p>APIs for the Ice run time, apart from a small number of language-specific calls that cannot be expressed in Ice, are defined in the Ice module. In other words, most of the Ice API is actually expressed as Slice definitions. The advantage of doing this is that a single Slice definition is sufficient to define the API for the Ice run time for all supported languages. The respective language mapping rules then determine the exact shape of each Ice API for each implementation language.</p>
-<p>We will incrementally explore the contents of the Ice module throughout this manual.</p>
-<p>Ice 运行时的 API，除了少数无法在 Ice 中表达的特定于语言的调用之外，均在 Ice 模块中定义。 换句话说，大部分 Ice API 实际上都是表达为 Slice 定义的。 这样做的优点是单个 Slice 定义足以为所有支持的语言定义 Ice 运行时的 API。 然后，相应的语言映射规则确定每种实现语言的每个 Ice API 的确切形态。</p>
-<p>我们将在本手册中逐步探索 Ice 模块的内容。</p>
 
       
     </div>
