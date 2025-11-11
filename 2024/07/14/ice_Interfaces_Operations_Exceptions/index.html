@@ -30,7 +30,7 @@
 <meta property="og:description" content="The central focus of Slice is on defining interfaces, for example: Slice 的重点是定义接口，例如： 123456789101112131415module M&amp;#123;    struct TimeOfDay    &amp;#123;        short hour;         &#x2F;&#x2F; 0 - 23        shor">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-07-14T12:19:35.173Z">
-<meta property="article:modified_time" content="2024-07-14T12:29:08.609Z">
+<meta property="article:modified_time" content="2025-07-25T09:16:46.893Z">
 <meta property="article:author" content="qianqians">
 <meta name="twitter:card" content="summary">
 
@@ -183,10 +183,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2024-07-14 20:19:35 / 修改时间：20:29:08" itemprop="dateCreated datePublished" datetime="2024-07-14T20:19:35+08:00">2024-07-14</time>
+              <time title="创建时间：2024-07-14 20:19:35" itemprop="dateCreated datePublished" datetime="2024-07-14T20:19:35+08:00">2024-07-14</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-07-25 17:16:46" itemprop="dateModified" datetime="2025-07-25T17:16:46+08:00">2025-07-25</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -224,6 +230,8 @@
 <p>Ice 还通过称为 facets 的功能为同一 Ice 对象提供多个接口。</p>
 <p>A Slice interface defines the smallest grain of distribution in Ice: each Ice object has a unique identity (encapsulated in its proxy) that distinguishes it from all other Ice objects; for communication to take place, you must invoke operations on an object’s proxy. There is no other notion of an addressable entity in Ice. You cannot, for example, instantiate a Slice structure and have clients manipulate that structure remotely. To make the structure accessible, you must create an interface that allows clients to access the structure.</p>
 <p>Slice 接口定义了 Ice 中最小的分布粒度：每个 Ice 对象都有一个唯一的身份（封装在其代理中），将其与所有其他 Ice 对象区分开来;要进行通信，必须在对象的代理上调用操作。Ice 中没有其他可寻址实体的概念。例如，您不能实例化 Slice 结构并让客户端远程操作该结构。要使结构易于访问，您必须创建一个允许客户端访问结构的接口。</p>
+<p>The partition of an application into interfaces therefore has profound influence on the overall architecture. Distribution boundaries must follow interface boundaries; you can spread the implementation of interfaces over multiple address spaces (and you can implement multiple interfaces in the same address space), but you cannot implement parts of interfaces in different address spaces.</p>
+<p>因此，将应用程序划分为接口对整体架构具有深远的影响。分布边界必须遵循接口边界;您可以将接口的实现分布在多个地址空间上（并且可以在同一地址空间中实现多个接口），但不能在不同的地址空间中实现部分接口。</p>
 
     </div>
 
@@ -308,7 +316,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2024</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
